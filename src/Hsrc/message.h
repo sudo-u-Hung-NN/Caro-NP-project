@@ -12,7 +12,6 @@ struct message {
 
 typedef struct message message;
 
-msg_data *create_data(char *input);
 int check_valid(sts_type status, msg_type command);
 message *create_msg(char *input, sts_type curr_status);
 
