@@ -1,7 +1,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../Hsrc/error.h"
+#include "error.h"
 
 #define NUM_OF_ERRORS 2
 

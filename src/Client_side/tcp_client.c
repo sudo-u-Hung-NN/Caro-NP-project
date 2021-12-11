@@ -1,17 +1,5 @@
-#include <stdio.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <string.h>
-#include <stdlib.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <unistd.h>
+#include "client_helper.h"
 
-#define SERVER_ADDR "127.0.0.1"
-#define SERVER_PORT 5500
-#define BUFF_SIZE 1024
 
 int main(){
 	int client_sock;

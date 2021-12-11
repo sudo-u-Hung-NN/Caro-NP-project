@@ -1,27 +1,48 @@
 CC = gcc
 FLAGS = -Wall -g -c
 
-SOURCEDIR = src
-CSOURCEDIR = $(SOURCEDIR)/Csrc
-HSOURCEDIR = $(SOURCEDIR)/Hsrc
+CLIENTSIDE = src/Client_side
+SERVERSIDE = src/Server_side
+UTILS = src/Utils
 
 BUILDDIR = build
 
 EXEDIR = exec
 
-all: $(EXEDIR)/server $(EXEDIR)/client
+UTILS_FILE := $(BUILDDIR)/error.o $(BUILDDIR)/message.o
 
-$(EXEDIR)/server: $(BUILDDIR)/tcp_server.o
-	$(CC) $(BUILDDIR)/tcp_server.o -o $(EXEDIR)/server
+all: $(EXEDIR)/server $(EXEDIR)/client $(UTILS_FILE)
 
-$(BUILDDIR)/tcp_server.o: $(CSOURCEDIR)/tcp_server.c $(HSOURCEDIR)/server.h
-	$(CC) $(FLAGS) $(CSOURCEDIR)/tcp_server.c -o $(BUILDDIR)/tcp_server.o
+#==========================< Server >===============================
+$(EXEDIR)/server: $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(UTILS_FILE)
+	$(CC) $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(UTILS_FILE) -o $(EXEDIR)/server
 
-$(EXEDIR)/client: $(BUILDDIR)/tcp_client.o
-	$(CC) $(BUILDDIR)/tcp_client.o -o $(EXEDIR)/client
+$(BUILDDIR)/tcp_server.o: $(SERVERSIDE)/tcp_server.c
+	$(CC) $(FLAGS) $(SERVERSIDE)/tcp_server.c -o $(BUILDDIR)/tcp_server.o
 
-$(BUILDDIR)/tcp_client.o: $(CSOURCEDIR)/tcp_client.c
-	$(CC) $(FLAGS) $(CSOURCEDIR)/tcp_client.c -o $(BUILDDIR)/tcp_client.o
+$(BUILDDIR)/server_helper.o: $(SERVERSIDE)/server_helper.c
+	$(CC) $(FLAGS) $(SERVERSIDE)/server_helper.c -o $(BUILDDIR)/server_helper.o
+
+
+#==========================< Client >===============================
+$(EXEDIR)/client: $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(UTILS_FILE)
+	$(CC) $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(UTILS_FILE) -o $(EXEDIR)/client
+
+$(BUILDDIR)/tcp_client.o: $(CLIENTSIDE)/tcp_client.c
+	$(CC) $(FLAGS) $(CLIENTSIDE)/tcp_client.c -o $(BUILDDIR)/tcp_client.o
+
+$(BUILDDIR)/client_helper.o: $(CLIENTSIDE)/client_helper.c
+	$(CC) $(FLAGS) $(CLIENTSIDE)/client_helper.c -o $(BUILDDIR)/client_helper.o
+
+
+#==========================< Utils >=================================
+$(BUILDDIR)/error.o: $(UTILS)/error.c
+	$(CC) $(FLAGS) $(UTILS)/error.c -o $(BUILDDIR)/error.o
+
+$(BUILDDIR)/message.o: $(UTILS)/message.c
+	$(CC) $(FLAGS) $(UTILS)/message.c -o $(BUILDDIR)/message.o
+
+
 
 clean:
 	rm -f $(BUILDDIR)/*.o

@@ -1,33 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
-#include <sys/wait.h>
-#include <errno.h>
-#include <arpa/inet.h>
-#include <fcntl.h>
+#include "server_helper.h"
 
-#include "../Hsrc/server.h"
-
-#define PORT 5500
-#define BACKLOG 20
-#define BUFF_SIZE 1024
-
-/* Handler process signal*/
-void sig_chld(int signo);
-
-/*
-* Receive and echo message to client
-* [IN] sockfd: socket descriptor that connects to client 	
-*/
-void echo(int sockfd);
 
 int main(){
-	
 	int listen_sock, conn_sock; /* file descriptors */
 	struct sockaddr_in server; /* server's address information */
 	struct sockaddr_in client; /* client's address information */
@@ -84,41 +58,4 @@ int main(){
 	}
 	close(listen_sock);
 	return 0;
-}
-
-void sig_chld(int signo){
-	pid_t pid;
-	int stat;
-	
-	/* Wait the child process terminate */
-	while((pid = waitpid(-1, &stat, WNOHANG))>0)
-		printf("\nChild %d terminated\n",pid);
-}
-
-void echo(int sockfd) {
-	char buff[BUFF_SIZE];
-	int bytes_sent, bytes_received;
-	
-    int keep_on = 1;
-    while(keep_on) {
-        bytes_received = recv(sockfd, buff, BUFF_SIZE, 0); //blocking
-        printf("Received <%s>\n", buff);
-        if (bytes_received < 0)
-            perror("\nError: ");
-        else if (bytes_received == 0)
-            printf("Connection closed.");
-
-        char *echo_string = uppercase(buff);
-
-        if (strcasecmp(echo_string, "q") == 0) {
-            printf("Terminate signal detected, close connection\n");
-            keep_on = 0;
-        } else {
-            bytes_sent = send(sockfd, echo_string, bytes_received, 0); /* echo to the client */
-            if (bytes_sent < 0)
-                perror("\nError: ");
-        }
-        free(echo_string);
-    }
-	close(sockfd);
 }

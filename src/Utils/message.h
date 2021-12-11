@@ -3,6 +3,12 @@
 
 #include "types.h"
 #include "data.h"
+#include "error.h"
+
+#include "stdlib.h"
+#include "string.h"
+#include "stdio.h"
+
 
 struct message {
     msg_type command;
