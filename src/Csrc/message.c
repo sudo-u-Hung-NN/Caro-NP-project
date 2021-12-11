@@ -93,7 +93,7 @@ message *create_msg(char *input, sts_type curr_status) {
     }
 
     new_msg->command = mtype;
-    new_msg->status = curr_status;
+    // new_msg->status = curr_status;
     strcpy(new_msg->data.target, target);
     strcpy(new_msg->data.data, data);
 

@@ -6,7 +6,7 @@
 
 struct message {
     msg_type command;
-    sts_type status;
+    // sts_type status;
     msg_data data;
 };
 
