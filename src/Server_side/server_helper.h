@@ -22,6 +22,16 @@
 #define BACKLOG 20
 #define BUFF_SIZE 1024
 
+
+
+struct user {
+    int id;
+    char name[50];
+    char account[50];
+    char password[50];
+};
+
+
 char *uppercase(char* input);
 
 /* Handler process signal*/
@@ -32,6 +42,14 @@ void sig_chld(int signo);
 * [IN] sockfd: socket descriptor that connects to client 	
 */
 void echo(int sockfd);
+
+
+
+
+
+void sign_up();
+int sign_in();
+
 
 
 #endif
