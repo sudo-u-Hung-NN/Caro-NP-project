@@ -124,6 +124,15 @@ message *create_msg(char *input, sts_type curr_status) {
 }
 
 
+char *getTarget(message *msg) {
+    return msg->data.target;
+}
+
+char *getData(message *msg) {
+    return msg->data.data;
+}
+
+
 // int main(int argc, char const *argv[])
 // {
 //     // sts_type s = console;

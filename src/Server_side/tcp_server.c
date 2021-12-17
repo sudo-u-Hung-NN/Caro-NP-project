@@ -49,8 +49,7 @@ int main(){
 		if(pid == 0){
 			close(listen_sock);
 			printf("You got a connection from %s\n", inet_ntoa(client.sin_addr)); /* prints client's IP */
-			echo(conn_sock);					
-			exit(0);
+			serve(conn_sock);					
 		}
 		
 		/* The parent closes the connected socket since the child handles the new client */

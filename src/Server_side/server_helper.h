@@ -18,10 +18,12 @@
 #include "ctype.h"
 #include "stdlib.h"
 
+#include "../Utils/message.h"
+#include "./Users/user.h"
+
 #define PORT 5500
 #define BACKLOG 20
 #define BUFF_SIZE 1024
-
 
 
 struct user {
@@ -37,18 +39,26 @@ char *uppercase(char* input);
 /* Handler process signal*/
 void sig_chld(int signo);
 
-/*
-* Receive and echo message to client
+/**
+* Receive and serve client
 * [IN] sockfd: socket descriptor that connects to client 	
 */
-void echo(int sockfd);
+void serve(int sockfd);
 
+/**
+ * @brief Process sign up on socket that connects to client
+ * @param conn_sock the socket connects to client
+ * @param root the root of User tree
+ * @return User*
+ */
+User* process_sign_up(int conn_sock);
 
-
-
-
-void sign_up();
-int sign_in();
+/**
+ * @brief 
+ * @param conn_sock 
+ * @return int 
+ */
+User* process_sign_in(int conn_sock);
 
 
 

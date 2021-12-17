@@ -90,7 +90,23 @@ NodeUser* loadUserTree(NodeUser* root) {
 };
 
 
-void dumpUserTree(NodeUser* root);
+void treeToFile(NodeUser* root, FILE* fptr) {
+    if (root == NULL) {
+        return;
+    }
+    treeToFile(root->left, fptr);
+    fprintf(fptr, "%d %s %s %s\n", root->user->id, root->user->name, root->user->account, root->user->password);
+    treeToFile(root->right, fptr);
+};
+
+
+void dumpUserTree(NodeUser* root) {
+    FILE *fptr = fopen(USER_DATABASE, "r");
+    INFORLOG("Writing database...");
+    treeToFile(root, fptr);
+    INFORLOG("Finished writing database");
+    fclose(fptr);
+};
 
 
 int test_fromLineToData() {
@@ -102,21 +118,15 @@ int test_fromLineToData() {
     fromLineToData(input, &id, name, account, password);
     printf("Output: <%d> <%s> <%s> <%s>\n", id, name, account, password);
     return 0;
-}
+};
 
 
 int test_loadUserTree() {
-    NodeUser *s;
+    NodeUser *s = NULL;
+    int count = 0;
     loadUserTree(s);
-    inOrderTraversal(s);
+    inOrderTraversal(s, &count, 1);
     freeUserTree(s);
-    return 0;
-}
-
-
-int main(int argc, char const *argv[])
-{
-    test_loadUserTree();
     return 0;
 }
 

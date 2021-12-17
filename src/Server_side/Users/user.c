@@ -1,5 +1,6 @@
 #include "user.h"
 
+
 User* create_User(int id, char* name, char* account, char* password) {
     User *tmp = (User*) malloc(sizeof(User));
     tmp->id = id;
@@ -39,13 +40,29 @@ NodeUser *insert_NodeUser(NodeUser *root, User *user, int is_stored_in_database)
     return root;
 }
 
-void inOrderTraversal(NodeUser *root) {
+NodeUser *search_NodeUser(NodeUser *root, User *user) {
+    if (root == NULL) {
+        return NULL;
+    }
+    if (user->id > root->user->id) {
+        return search_NodeUser(root->right, user);
+    } else if (user->id < root->user->id) {
+        return search_NodeUser(root->left, user);
+    } else {
+        return root;
+    }
+}
+
+void inOrderTraversal(NodeUser *root, int *count, int verbose) {
     if (root == NULL) {
         return;
     }
-    inOrderTraversal(root->left);
-    printf("TRAVERSE: id<%d> user<%s> account<%s> passwd<%s>\n", root->user->id, root->user->name, root->user->account, root->user->password);
-    inOrderTraversal(root->right);
+    inOrderTraversal(root->left, count, verbose);
+    (*count) = (*count) + 1;
+    if (verbose) {
+        printf("TRAVERSE: id<%d> user<%s> account<%s> passwd<%s>\n", root->user->id, root->user->name, root->user->account, root->user->password);
+    }
+    inOrderTraversal(root->right, count, verbose);
 }
 
 void delete_NodeUser(NodeUser *root, User *user) {

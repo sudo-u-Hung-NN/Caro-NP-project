@@ -1,6 +1,6 @@
 #include "server_helper.h"
-#include "../Utils/message.h"
 
+NodeUser *root = NULL;
 
 char *uppercase(char* input) {
     char* output = (char*) malloc(strlen(input) * sizeof(char));
@@ -8,24 +8,6 @@ char *uppercase(char* input) {
         output[i] = toupper(input[i]);
     }
     return output;
-}
-
-int process_sign_up(message *msg) {
-    printf("target: %s\ncontent: %s\n", msg->data.target, msg->data.data);
-    return 1;
-}
-
-void client_sign_up(int conn_sock) {
-    send(conn_sock, "REQUEST_ID", 50, 0);
-    
-    message *msg = (message *) malloc(sizeof(message));
-    recv(conn_sock, msg, 1024, 0);
-    int success = process_sign_up(msg);
-    if (success) {
-        send(conn_sock, "ACC_TRUE", 50, 0);
-    } else {
-        send(conn_sock, "ACC_FALSE", 50, 0);
-    }
 }
 
 
@@ -62,6 +44,65 @@ void echo(int sockfd) {
                 perror("\nError: ");
         }
         free(echo_string);
+    }
+	close(sockfd);
+}
+
+void serve(int sockfd) {
+	message *msg = (message *) malloc(sizeof(message));
+	int bytes_sent, bytes_received;
+    User *current_user = NULL;
+	
+    int keep_on = 1;
+    while(keep_on) {
+        
+        if (current_user == NULL) {
+            current_user = process_sign_up(sockfd);
+        }
+
+        bzero(msg, sizeof(msg));
+        bytes_received = recv(sockfd, msg, sizeof(msg), 0); //blocking
+
+        printf("Received message\n");
+
+        if (bytes_received < 0)
+            perror("\nError: ");
+        else if (bytes_received == 0) {
+            printf("Connection closed.");
+            keep_on = 0;
+            break;
+        }
+
+        switch (msg->command)
+        {
+        case play:
+        case go:
+        case acpt:
+        case deny:
+        case cancel:
+        case draw:
+        case rematch:
+        case chat:
+        case quit:
+        case spec:
+        case schat:
+        case squit:
+        case hist:
+        case histp:
+        case hista:
+        case ret:
+        case listp:
+        case listg:
+        case setname:
+        case signin:
+        case signpwd:
+        case login:
+        case logpwd:
+        case not_identified:
+            break;
+        default:
+            break;
+        }
     }
 	close(sockfd);
 }

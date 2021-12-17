@@ -1,27 +1,57 @@
 CC = gcc
 FLAGS = -Wall -g -c
+BUILDDIR = build
+EXEDIR = exec
 
+
+# ====================== DEFINE CLIENT =============================
 CLIENTSIDE = src/Client_side
 SERVERSIDE = src/Server_side
 UTILS = src/Utils
 
-BUILDDIR = build
 
-EXEDIR = exec
+# ====================== DEFINE SERVER =============================
+SERVER_USERS = src/Server_side/Users
+SERVER_GAMEPLAY = src/Server_side/Gameplays
+SERVER_FUNCTIONS = src/Server_side/Functions
 
-UTILS_FILE := $(BUILDDIR)/error.o $(BUILDDIR)/message.o
+SERVER_USERS_FILE := $(BUILDDIR)/user.o $(BUILDDIR)/utils.o
+SERVER_FUNCTIONS_FILE := $(BUILDDIR)/sign_in_up.o
+SERVERSIDE_REQUIREMENTS := $(SERVER_FUNCTIONS_FILE) $(SERVER_USERS_FILE)
+
+
+# ====================== DEFINE UTILS ==============================
+UTILS_FILE := $(BUILDDIR)/error.o $(BUILDDIR)/message.o $(BUILDDIR)/logger.o
+
+
 
 all: $(EXEDIR)/server $(EXEDIR)/client $(UTILS_FILE)
 
+
+#========================== COMPILATION ============================
 #==========================< Server >===============================
-$(EXEDIR)/server: $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(UTILS_FILE)
-	$(CC) $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(UTILS_FILE) -o $(EXEDIR)/server
+$(EXEDIR)/server: $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(SERVERSIDE_REQUIREMENTS) $(UTILS_FILE)
+	$(CC) $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(SERVERSIDE_REQUIREMENTS) $(UTILS_FILE) -o $(EXEDIR)/server
 
 $(BUILDDIR)/tcp_server.o: $(SERVERSIDE)/tcp_server.c
 	$(CC) $(FLAGS) $(SERVERSIDE)/tcp_server.c -o $(BUILDDIR)/tcp_server.o
 
 $(BUILDDIR)/server_helper.o: $(SERVERSIDE)/server_helper.c
 	$(CC) $(FLAGS) $(SERVERSIDE)/server_helper.c -o $(BUILDDIR)/server_helper.o
+
+#=====================< Server User files >=========================
+$(BUILDDIR)/user.o: $(SERVER_USERS)/user.c
+	$(CC) $(FLAGS) $(SERVER_USERS)/user.c -o $(BUILDDIR)/user.o
+
+$(BUILDDIR)/utils.o: $(SERVER_USERS)/utils.c
+	$(CC) $(FLAGS) $(SERVER_USERS)/utils.c -o $(BUILDDIR)/utils.o
+
+#=====================< Server Functions >==========================
+$(BUILDDIR)/sign_in_up.o: $(SERVER_FUNCTIONS)/sign_in_up.c
+	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/sign_in_up.c -o $(BUILDDIR)/sign_in_up.o
+
+
+
 
 
 #==========================< Client >===============================
@@ -42,6 +72,8 @@ $(BUILDDIR)/error.o: $(UTILS)/error.c
 $(BUILDDIR)/message.o: $(UTILS)/message.c
 	$(CC) $(FLAGS) $(UTILS)/message.c -o $(BUILDDIR)/message.o
 
+$(BUILDDIR)/logger.o: $(UTILS)/logger.c
+	$(CC) $(FLAGS) $(UTILS)/logger.c -o $(BUILDDIR)/logger.o
 
 
 clean:
