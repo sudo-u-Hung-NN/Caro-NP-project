@@ -2,15 +2,9 @@
 #define LOGGER_H
 
 #include "stdio.h"
-#include <stdarg.h>
 
-void INFORLOG(char *infor) {
-    printf("INFOR: %s\n", infor);
-}
+void INFORLOG(char *infor);
 
-void WARNING(char *infor) {
-    printf("WARNING: %s\n", infor);
-}
-
+void WARNING(char *infor);
 
 #endif

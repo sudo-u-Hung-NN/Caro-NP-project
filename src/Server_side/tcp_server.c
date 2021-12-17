@@ -1,7 +1,13 @@
 #include "server_helper.h"
 
+NodeUser *root = NULL;
 
 int main(){
+	// Load User tree
+	INFORLOG("Loading user tree");
+	root = loadUserTree(root);
+	INFORLOG("Loaded user tree");
+
 	int listen_sock, conn_sock; /* file descriptors */
 	struct sockaddr_in server; /* server's address information */
 	struct sockaddr_in client; /* client's address information */
@@ -37,7 +43,7 @@ int main(){
 			if (errno == EINTR)
 				continue;
 			else{
-				perror("\nError: ");			
+				perror("\nError");			
 				return 0;
 			}
 		}
@@ -49,12 +55,14 @@ int main(){
 		if(pid == 0){
 			close(listen_sock);
 			printf("You got a connection from %s\n", inet_ntoa(client.sin_addr)); /* prints client's IP */
-			serve(conn_sock);					
+			serve(conn_sock);
 		}
 		
 		/* The parent closes the connected socket since the child handles the new client */
 		close(conn_sock);
 	}
 	close(listen_sock);
+
+	dumpUserTree(root);
 	return 0;
 }

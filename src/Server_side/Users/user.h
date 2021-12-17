@@ -5,7 +5,7 @@
 #include "stdlib.h"
 #include "string.h"
 
-#define USER_DATABASE "../Database/Users.dat"
+#define USER_DATABASE "src/Server_side/Database/Users.csv"
 
 typedef struct User {
     int id;
@@ -68,6 +68,7 @@ NodeUser *search_NodeUser(NodeUser *root, User *user);
 
 /**
  * @brief This function load user database file into a binary tree.
+ * This function is called first when running server.
  * The database file path is defined in Users/user.h
  * @param root 
  * @return root

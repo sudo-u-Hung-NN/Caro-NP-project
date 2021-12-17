@@ -19,6 +19,7 @@
 #include "stdlib.h"
 
 #include "../Utils/message.h"
+#include "../Utils/logger.h"
 #include "./Users/user.h"
 
 #define PORT 5500
@@ -51,14 +52,14 @@ void serve(int sockfd);
  * @param root the root of User tree
  * @return User*
  */
-User* process_sign_up(int conn_sock);
+User* process_sign_up(int conn_sock, message *msg);
 
 /**
- * @brief 
- * @param conn_sock 
+ * @brief Process login on socket that connects to client
+ * @param conn_sock the socket connects to client
  * @return int 
  */
-User* process_sign_in(int conn_sock);
+User* process_sign_in(int conn_sock,  message *msg);
 
 
 

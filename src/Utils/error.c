@@ -11,14 +11,14 @@ struct ErrorMessage {
 } errors[NUM_OF_ERRORS] = {
   {ERROR_COMMAND_NOT_FOUND, "Command not found!"},
   {ERROR_INVALID_STATUS_COMMAND, "Command can't execute in this status"},
-  {ERROR_USER_DATABASE_NOTFOUND, "404: User databse not found"}
+  {ERROR_USER_DATABASE_NOTFOUND, "User database not found"}
 };
 
 void error(ErrorCode err) {
   int i;
   for (i = 0 ; i < NUM_OF_ERRORS; i ++) {
     if (errors[i].errorCode == err) {
-      printf("%s\n", errors[i].message);
+      printf("ERROR: %s\n", errors[i].message);
       break;
     }
   }

@@ -46,6 +46,7 @@ $(BUILDDIR)/user.o: $(SERVER_USERS)/user.c
 $(BUILDDIR)/utils.o: $(SERVER_USERS)/utils.c
 	$(CC) $(FLAGS) $(SERVER_USERS)/utils.c -o $(BUILDDIR)/utils.o
 
+
 #=====================< Server Functions >==========================
 $(BUILDDIR)/sign_in_up.o: $(SERVER_FUNCTIONS)/sign_in_up.c
 	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/sign_in_up.c -o $(BUILDDIR)/sign_in_up.o

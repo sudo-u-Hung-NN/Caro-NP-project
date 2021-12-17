@@ -1,6 +1,6 @@
 #include "message.h"
 
-struct {
+struct KEY {
   char string[25];
   msg_type mtype;
   sts_type usable_in_status[4];
@@ -25,7 +25,7 @@ struct {
   {"listp", listp, {console}, 1},
   {"listg", listg, {console}, 1},
   {"setname", setname, {console}, 1},
-  {"signin", signin, {console}, 1},
+  {"signup", signup, {console}, 1},
   {"signpwd", signpwd, {console}, 1},
   {"login", login, {console}, 1},
   {"logpwd", logpwd, {console}, 1}
@@ -63,6 +63,7 @@ msg_type command_char2type(char *command) {
 
 message *create_msg(char *input, sts_type curr_status) {
     message *new_msg = (message *) malloc(sizeof(message));
+    bzero(new_msg, sizeof(message));
 
     char command[25] = "\0", target[TARGET_LEN] = "\0", data[DATA_LEN] = "\0";
 
@@ -83,15 +84,16 @@ message *create_msg(char *input, sts_type curr_status) {
 
     switch (mtype)
     {
-    case play:
-    case go:
-    case spec:
-    case histp:
-    case setname:
-    case signin:
-    case signpwd:
-    case login:
-    case logpwd:
+    // case play:
+    // case go:
+    // case spec:
+    // case histp:
+    // case setname:
+    // case signup:
+    // case signpwd:
+    // case login:
+    // case logpwd:
+    case chat:
         for (j = i + 1; j < TARGET_LEN && input[j] != ' '; j++) {
             target[j - (i+1)] = input[j];
         }
@@ -120,6 +122,8 @@ message *create_msg(char *input, sts_type curr_status) {
     strcpy(new_msg->data.target, target);
     strcpy(new_msg->data.data, data);
 
+    printf("Create message:\nCommand: <%s>\nTarget: <%s>\nData: <%s>\n",
+            keywords[new_msg->command].string, new_msg->data.target, new_msg->data.data);
     return new_msg;
 }
 
@@ -132,17 +136,7 @@ char *getData(message *msg) {
     return msg->data.data;
 }
 
-
-// int main(int argc, char const *argv[])
-// {
-//     // sts_type s = console;
-//     // msg_type m = chat;
-//     // int i = check_valid(s, m);
-//     // printf("%d\n", i);
-
-//     message *mess = create_msg("CHAT 0x11 choi khong", console);
-//     if (mess == NULL) {
-//         printf("Message not created");
-//     }
-//     return 0;
-// }
+void displayMessage(message *msg, char *announce) {
+    printf("%s:\nCommand: <%s>\nTarget: <%s>\nData: <%s>\n",
+            announce, keywords[msg->command].string, msg->data.target, msg->data.data);
+}

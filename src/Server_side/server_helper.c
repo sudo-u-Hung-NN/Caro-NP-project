@@ -1,6 +1,7 @@
 #include "server_helper.h"
 
-NodeUser *root = NULL;
+extern NodeUser *root;
+
 
 char *uppercase(char* input) {
     char* output = (char*) malloc(strlen(input) * sizeof(char));
@@ -20,57 +21,26 @@ void sig_chld(int signo){
 		printf("\nChild %d terminated\n",pid);
 }
 
-void echo(int sockfd) {
-	char buff[BUFF_SIZE];
-	int bytes_sent, bytes_received;
-	
-    int keep_on = 1;
-    while(keep_on) {
-        bytes_received = recv(sockfd, buff, BUFF_SIZE, 0); //blocking
-        printf("Received <%s>\n", buff);
-        if (bytes_received < 0)
-            perror("\nError: ");
-        else if (bytes_received == 0)
-            printf("Connection closed.");
-
-        char *echo_string = uppercase(buff);
-
-        if (strcasecmp(echo_string, "q") == 0) {
-            printf("Terminate signal detected, close connection\n");
-            keep_on = 0;
-        } else {
-            bytes_sent = send(sockfd, echo_string, bytes_received, 0); /* echo to the client */
-            if (bytes_sent < 0)
-                perror("\nError: ");
-        }
-        free(echo_string);
-    }
-	close(sockfd);
-}
 
 void serve(int sockfd) {
 	message *msg = (message *) malloc(sizeof(message));
-	int bytes_sent, bytes_received;
     User *current_user = NULL;
+    int bytes_received;
 	
     int keep_on = 1;
     while(keep_on) {
         
         if (current_user == NULL) {
-            current_user = process_sign_up(sockfd);
+            send(sockfd, "REQUEST_ID", 50, 0);
         }
 
-        bzero(msg, sizeof(msg));
-        bytes_received = recv(sockfd, msg, sizeof(msg), 0); //blocking
+        bzero(msg, sizeof(message));
+        bytes_received = recv(sockfd, msg, sizeof(message), 0); //blocking
 
-        printf("Received message\n");
+        displayMessage(msg, "RECV message");
 
-        if (bytes_received < 0)
+        if (bytes_received < 0) {
             perror("\nError: ");
-        else if (bytes_received == 0) {
-            printf("Connection closed.");
-            keep_on = 0;
-            break;
         }
 
         switch (msg->command)
@@ -84,6 +54,8 @@ void serve(int sockfd) {
         case rematch:
         case chat:
         case quit:
+            keep_on = 0;
+            break;
         case spec:
         case schat:
         case squit:
@@ -94,15 +66,19 @@ void serve(int sockfd) {
         case listp:
         case listg:
         case setname:
-        case signin:
-        case signpwd:
+        case signup:
+            INFORLOG("Process sign up signal");
+            current_user = process_sign_up(sockfd, msg);
+            break;
         case login:
-        case logpwd:
+            current_user = process_sign_in(sockfd, msg);
+            break;
         case not_identified:
             break;
         default:
             break;
         }
     }
+    free(msg);
 	close(sockfd);
 }

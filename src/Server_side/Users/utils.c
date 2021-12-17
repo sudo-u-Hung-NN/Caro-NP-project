@@ -5,18 +5,19 @@
 /**
  * @brief This function exploit a line in database, returns information for User's creation
  * @param input [INPUT] a line text
+ * @param sep [INPUT] separator character
  * @param id [OUTPUT] user's id
  * @param name [OUTPUT] user's name, must be initialized already
  * @param account [OUTPUT] user's account, must be initialized already
  * @param password [OUTPUT] user's password, must be initialized already
  */
-void fromLineToData(char* input, int* id, char *name, char *account, char *password) {
+void fromLineToData(char* input, char sep, int* id, char *name, char *account, char *password) {
     int i = 0;
     char data[50] = "";
     char cut[2] = "";
 
     bzero(data, sizeof(data));
-    for(; input[i] != ' '; i++) {
+    for(; input[i] != sep; i++) {
         cut[0] = input[i];
         cut[1] = '\0';
         strcat(data, cut);
@@ -24,7 +25,7 @@ void fromLineToData(char* input, int* id, char *name, char *account, char *passw
     *id = atoi(data);
     
     bzero(data, sizeof(data));
-    for(i = i + 1; input[i] != ' '; i++) {
+    for(i = i + 1; input[i] != sep; i++) {
         cut[0] = input[i];
         cut[1] = '\0';
         strcat(data, cut);
@@ -32,7 +33,7 @@ void fromLineToData(char* input, int* id, char *name, char *account, char *passw
     strcpy(name, data);
 
     bzero(data, sizeof(data));
-    for(i = i + 1; input[i] != ' '; i++) {
+    for(i = i + 1; input[i] != sep; i++) {
         cut[0] = input[i];
         cut[1] = '\0';
         strcat(data, cut);
@@ -55,11 +56,13 @@ void fromLineToData(char* input, int* id, char *name, char *account, char *passw
  * @return root
  */
 NodeUser* loadUserTree(NodeUser* root) {
+    INFORLOG(USER_DATABASE);
     FILE *fptr = fopen(USER_DATABASE, "r");
     char *line = NULL;
     size_t len = 0;
     ssize_t read;
 
+    char sep = ',';
     int id = 0;
     char name[50]="\0";
     char account[50]="\0";
@@ -74,7 +77,7 @@ NodeUser* loadUserTree(NodeUser* root) {
             strcpy(account, "\0");
             strcpy(password, "\0");
 
-            fromLineToData(line, &id, name, account, password);
+            fromLineToData(line, sep, &id, name, account, password);
             printf("IO: id<%d> user<%s> account<%s> passwd<%s>\n", id, name, account, password);
 
             User *user = create_User(id, name, account, password);
@@ -115,7 +118,7 @@ int test_fromLineToData() {
     char account[50]="\0";
     char password[50]="\0";
     char input[152] = "15 HungNguyen sudo-u-Hung-NN hung2000";
-    fromLineToData(input, &id, name, account, password);
+    fromLineToData(input, ',', &id, name, account, password);
     printf("Output: <%d> <%s> <%s> <%s>\n", id, name, account, password);
     return 0;
 };

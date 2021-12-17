@@ -21,7 +21,7 @@
 #define SERVER_PORT 5500
 #define BUFF_SIZE 1024
 
-void apply_transaction(msg_type recv_command, msg_type send_command);
+void apply_transaction(msg_type recv_command);
 
 
 

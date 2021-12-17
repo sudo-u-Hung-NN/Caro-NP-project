@@ -1,7 +1,8 @@
 #include "client_helper.h"
 
-sts_type prev_status = console;
-sts_type curr_status = console;
+extern sts_type prev_status;
+extern sts_type curr_status;
+extern msg_type recv_command;
 
 struct {
 	sts_type prev_status;
@@ -33,7 +34,8 @@ struct {
 	{spectating,	rematch,			deny,			spectating}
 };
 
-void apply_transaction(msg_type recv_command, msg_type send_command) {
+
+void apply_transaction(msg_type send_command) {
     for (int i = 0; i < NUM_TRANSITION; i++) {
         if (transitions[i].prev_status == prev_status && 
             transitions[i].recv_command == recv_command &&
@@ -42,3 +44,5 @@ void apply_transaction(msg_type recv_command, msg_type send_command) {
         }
     }
 }
+
+

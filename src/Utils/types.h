@@ -7,7 +7,7 @@ typedef enum {
 	play, go, acpt, deny, cancel, draw, rematch, chat, quit, 
 	spec, schat, squit,
 	hist, histp, hista,
-	ret, listp, listg, setname, signin, signpwd, login, logpwd,
+	ret, listp, listg, setname, signup, signpwd, login, logpwd,
   not_identified
 } msg_type;
 
