@@ -26,7 +26,7 @@ void serve(int sockfd) {
         bzero(msg, sizeof(message));
         bytes_received = recv(sockfd, msg, sizeof(message), 0); //blocking
 
-        displayMessage(msg, "RECV message");
+        // displayMessage(msg, "RECV message");
 
         if (bytes_received < 0) {
             perror("\nError: ");
@@ -34,31 +34,66 @@ void serve(int sockfd) {
 
         switch (msg->command) {
             case play:
+                INFORLOG("Process play");
+                break;
             case go:
+                INFORLOG("Process squit");
+                break;
             case acpt:
+                INFORLOG("Process squit");
+                break;
             case deny:
+                INFORLOG("Process squit");
+                break;
             case cancel:
+                INFORLOG("Process cancel");
+                break;
             case draw:
+                INFORLOG("Process draw");
+                break;
             case rematch:
+                INFORLOG("Process rematch");
+                break;
             case chat:
+                INFORLOG("Process chat");
+                break;
             case quit:
+                INFORLOG("Process quit");
                 keep_on = 0;
                 break;
             case spec:
+                INFORLOG("Process spec");
+                break;
             case schat:
+                INFORLOG("Process schat");
+                break;
             case squit:
+                INFORLOG("Process squit");
+                break;
             case hist:
+                INFORLOG("Process hist signal");
+                process_hist(sockfd, msg, current_user);
+                break;
             case histp:
+                INFORLOG("Process histp signal");
+                process_histp(sockfd, msg);
+                break;
             case hista:
+                INFORLOG("Process hista signal");
+                process_hista(sockfd, msg);
+                break;
             case ret:
                 break;
             case listp:
+                INFORLOG("Process listp signal");
                 process_listp(sockfd, msg);
                 break;
             case listg:
+                INFORLOG("Process listg signal");
                 process_listg(sockfd, msg);
                 break;
             case setname:
+                INFORLOG("Process setname signal");
                 process_setname(sockfd, msg, current_user);
                 break;
             case signup:

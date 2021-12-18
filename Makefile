@@ -17,7 +17,7 @@ SERVER_GAMEPLAY = src/Server_side/Gameplays
 SERVER_FUNCTIONS = src/Server_side/Functions
 
 SERVER_USERS_FILE := $(BUILDDIR)/user.o $(BUILDDIR)/utils.o
-SERVER_FUNCTIONS_FILE := $(BUILDDIR)/sign_in_up.o $(BUILDDIR)/setname.o $(BUILDDIR)/list.o
+SERVER_FUNCTIONS_FILE := $(BUILDDIR)/sign_in_up.o $(BUILDDIR)/setname.o $(BUILDDIR)/list.o $(BUILDDIR)/hist.o
 SERVERSIDE_REQUIREMENTS := $(SERVER_FUNCTIONS_FILE) $(SERVER_USERS_FILE)
 
 
@@ -58,6 +58,8 @@ $(BUILDDIR)/setname.o: $(SERVER_FUNCTIONS)/setname.c
 $(BUILDDIR)/list.o: $(SERVER_FUNCTIONS)/list.c
 	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/list.c -o $(BUILDDIR)/list.o
 
+$(BUILDDIR)/hist.o: $(SERVER_FUNCTIONS)/hist.c
+	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/hist.c -o $(BUILDDIR)/hist.o
 
 
 #==========================< Client >===============================
@@ -94,4 +96,5 @@ $(BUILDDIR)/test_user.o: $(SERVER_USERS)/test_user.c
 
 clean:
 	rm -f $(BUILDDIR)/*.o
-	rm -f $(EXEDIR)/server $(EXEDIR)/client
+	rm -f $(EXEDIR)/*
+	rm -f $(TEST)/*

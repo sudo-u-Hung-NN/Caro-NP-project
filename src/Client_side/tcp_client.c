@@ -40,6 +40,8 @@ int main(){
 		if (msg == NULL) {
 			continue;
 		} else if (msg->command == quit) {
+			send(client_sock, msg, msg_len, 0);
+			free(msg);
 			break;
 		} else {
 			apply_transition(msg->command);
@@ -64,6 +66,8 @@ int main(){
 			buff[bytes_received] = '\0';
 			printf("%s", translate(buff));
 		}
+
+		free(msg);
     }
 	
 	//Step 4: Close socket

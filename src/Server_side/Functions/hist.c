@@ -1,0 +1,162 @@
+#include "../server_helper.h"
+
+#define ACCOUNT_PATH "src/Server_side/Database/Accounts"
+
+/**
+ * @brief This function read a line and get game record information
+ * @param input [INPUT] a string
+ * @param sep [INPUT] separator
+ * @param game_id [OUTPUT] game_id
+ * @param opponent_account [OUTPUT] the account of the opponent
+ * @param win [OUTPUT] the result, 1 if win, 0 if lose
+ */
+void fromLineToHist(char* input, char sep, int* game_id, char *opponent_account, int *win) {
+    int i = 0;
+    char data[50] = "";
+    char cut[2] = "";
+
+    bzero(data, sizeof(data));
+    for(; input[i] != sep; i++) {
+        cut[0] = input[i];
+        cut[1] = '\0';
+        strcat(data, cut);
+    }
+    *game_id = atoi(data);
+    
+    bzero(data, sizeof(data));
+    for(i = i + 1; input[i] != sep; i++) {
+        cut[0] = input[i];
+        cut[1] = '\0';
+        strcat(data, cut);
+    }
+    strcpy(opponent_account, data);
+
+    bzero(data, sizeof(data));
+    for(; input[i] != sep; i++) {
+        cut[0] = input[i];
+        cut[1] = '\0';
+        strcat(data, cut);
+    }
+    *win = atoi(data);
+}
+
+
+/**
+ * @brief This function read history file and return formated string
+ * @param account The user to be checked
+ * @return char* 
+ */
+char* read_account_file(char *account) {
+    char *history = (char*) malloc(BUFF_SIZE * sizeof(char));
+    bzero(history, BUFF_SIZE);
+
+    char filename[50];
+    bzero(filename, 50);
+
+    sprintf(filename, "%s/%s.profile", ACCOUNT_PATH, account);
+    FILE *fptr = fopen(filename, "r");
+
+    if (fptr == NULL) {
+        WARNING("Profile not found!");
+        return NULL;
+    } else {
+        char line[50] = "";
+        fgets(line, 50, fptr);
+
+        int game_id = 0;
+        int win = 0;
+        char opponent_account[50] = "\0";
+
+        char rendered_line[100];
+
+        while ((fgets(line, 50, fptr) != NULL) && strlen(history) < BUFF_SIZE - 1) {
+            fromLineToHist(line, ',', &game_id, opponent_account, &win);
+
+            bzero(line, 50);
+            bzero(rendered_line, 100);
+            
+            if (win) {
+                sprintf(rendered_line, "%s played with %s :-: game id<%d> :-: \033[1;34mwin\033[0m\n", account, opponent_account, game_id);
+            } else {
+                sprintf(rendered_line, "%s played with %s :-: game id<%d> :-: \033[0;31mlose\033[0m\n", account, opponent_account, game_id);
+            }
+            strcat(history, rendered_line);
+        }
+
+        fclose(fptr);
+        return history;
+    }
+}
+
+
+/** History
+ * @brief This function shows the current user his own history.
+ * This function is defined in "src/Server_side/Functions/hist.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ * @param current_user 
+ */
+void process_hist(int conn_sock, message *msg, User* current_user) {
+    char *history = read_account_file(current_user->account);
+    if(history == NULL) {
+        send(conn_sock, "NULL_HISTORY", 50, 0);
+    } else {
+        send(conn_sock, history, BUFF_SIZE, 0);
+        free(history);
+    }
+}
+
+
+/**
+ * @brief This function shows the current user a nother player's history.
+ * This function is defined in "src/Server_side/Functions/hist.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ */
+void process_histp(int conn_sock, message *msg) {
+    char *account = getData(msg);
+    char *history = read_account_file(account);
+    if(history == NULL) {
+        send(conn_sock, "NULL_HISTORY", 50, 0);
+    } else {
+        send(conn_sock, history, BUFF_SIZE, 0);
+        free(history);
+    }
+}
+
+
+/**
+ * @brief This function shows the rankings.
+ * This function is defined is "src/Server_side/Functions/hist.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ */
+void process_hista(int conn_sock, message *msg) {
+    char *ranking = (char*) malloc(BUFF_SIZE * sizeof(char));
+    bzero(ranking, BUFF_SIZE);
+
+    char filename[50];
+    bzero(filename, 50);
+
+    sprintf(filename, "%s/all.ranking", ACCOUNT_PATH);
+    FILE *fptr = fopen(filename, "r");
+
+    int rank = 0;
+    if (fptr == NULL) {
+        WARNING("Ranking file not found!");
+        send(conn_sock, "NULL_RANKING", 50, 0);
+
+    } else {
+        char line[50] = "";
+        fgets(line, 50, fptr);
+
+        while ((fgets(line, 50, fptr) != NULL) && (strlen(ranking) < BUFF_SIZE - 1) && (rank < 15)) {
+            strcat(ranking, line);
+            bzero(line, 50);
+        }
+        
+        send(conn_sock, ranking, BUFF_SIZE, 0);
+    }
+
+    free(ranking);
+}
