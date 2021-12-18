@@ -17,12 +17,25 @@
 
 
 #define NUM_TRANSITION 20
+#define NUM_TRANSLATE 7
+
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_PORT 5500
 #define BUFF_SIZE 1024
 
-void apply_transaction(msg_type recv_command);
+/**
+ * @brief This function is called whenever user create a command
+ * @param recv_command 
+ */
+void apply_transition(msg_type recv_command);
 
+
+/**
+ * @brief This function translate Server's message into comprehensive sentences
+ * @param server_reply 
+ * @return char* 
+ */
+char *translate(char *server_reply);
 
 
 #endif

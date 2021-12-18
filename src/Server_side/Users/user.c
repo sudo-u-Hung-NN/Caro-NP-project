@@ -1,5 +1,8 @@
 #include "user.h"
 
+int compare(User *a, User* b) {
+    return strcmp(a->name, b->name);
+}
 
 User* create_User(int id, char* name, char* account, char* password) {
     User *tmp = (User*) malloc(sizeof(User));
@@ -28,9 +31,9 @@ NodeUser *insert_NodeUser(NodeUser *root, User *user, int is_stored_in_database)
     if (root == NULL) {
         root = create_NodeUser(user, is_stored_in_database);
     } else {
-        if (user->id > root->user->id) {
+        if (compare(user, root->user) > 0) {
             root->right = insert_NodeUser(root->right, user, is_stored_in_database);
-        } else if (user->id < root->user->id) {
+        } else if (compare(user, root->user) < 0) {
             root->left = insert_NodeUser(root->left, user, is_stored_in_database);
         } else {
             root->is_active = 1;
@@ -44,10 +47,23 @@ NodeUser *search_NodeUser(NodeUser *root, User *user) {
     if (root == NULL) {
         return NULL;
     }
-    if (user->id > root->user->id) {
+    if (compare(user, root->user) > 0) {
         return search_NodeUser(root->right, user);
-    } else if (user->id < root->user->id) {
+    } else if (compare(user, root->user) < 0) {
         return search_NodeUser(root->left, user);
+    } else {
+        return root;
+    }
+}
+
+NodeUser *search_NodeUser_withAccount(NodeUser *root, char *account) {
+    if (root == NULL) {
+        return NULL;
+    }
+    if (strcmp(account, root->user->account) > 0) {
+        return search_NodeUser_withAccount(root->right, account);
+    } else if (strcmp(account, root->user->account) < 0) {
+        return search_NodeUser_withAccount(root->left, account);
     } else {
         return root;
     }
@@ -68,9 +84,9 @@ void inOrderTraversal(NodeUser *root, int *count, int verbose) {
 void delete_NodeUser(NodeUser *root, User *user) {
     if(root == NULL) {
         return;
-    } else if (root->user->id == user->id) {
+    } else if (compare(user, root->user) == 0) {
         root->is_active = 0;
-    } else if (root->user->id > user->id) {
+    } else if (compare(user, root->user) > 0) {
         delete_NodeUser(root->right, user);
     } else {
         delete_NodeUser(root->left, user);

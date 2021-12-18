@@ -4,6 +4,7 @@ sts_type prev_status = console;
 sts_type curr_status = console;
 msg_type recv_command = not_identified;
 
+
 int main(){
 	int client_sock;
 	char buff[BUFF_SIZE + 1];
@@ -27,7 +28,9 @@ int main(){
 		
 	//Step 4: Communicate with server			
 	memset(buff,'\0',(strlen(buff)+1));
-	bytes_received = recv(client_sock, buff, BUFF_SIZE, 0); // Receive REQUEST_ID
+
+	// First receive REQUEST_ID
+	bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
 	printf("Receive: %s\n", buff);
 	
     while (fgets(buff, BUFF_SIZE, stdin) != NULL) {
@@ -37,7 +40,7 @@ int main(){
 		if (msg->command == quit) {
 			break;
 		}
-		apply_transaction(msg->command);
+		apply_transition(msg->command);
             
         bytes_sent = send(client_sock, msg, msg_len, 0);
 
@@ -46,6 +49,7 @@ int main(){
         
         //receive echo reply
         bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
+
         if (bytes_received < 0) {
                 perror("\nError: ");
                 exit(1);
@@ -56,7 +60,7 @@ int main(){
         }
 		
         buff[bytes_received] = '\0';
-        printf("Reply from server: %s\n", buff);
+        printf("Reply from server: %s\n", translate(buff));
     }
 	
 	//Step 4: Close socket

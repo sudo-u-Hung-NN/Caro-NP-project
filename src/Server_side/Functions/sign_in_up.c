@@ -3,35 +3,22 @@
 extern NodeUser *root;
 
 
-void checkValidAccount(char *account, NodeUser *root, int* valid) { 
-    if (root == NULL) {
-        return;
-    }
-    if (strcmp(root->user->account, account) == 0) {
-        *valid = 1;
-    }
-    checkValidAccount(account, root->left, valid);
-    checkValidAccount(account, root->right, valid);
-}
-
-
 User* process_sign_up(int conn_sock, message *msg) {
     User *newUser = NULL;
 
     // process message to get account
     char *account = getData(msg);
 
-    // check valid account
-    int valid = 0;
-
+    // Search User with account
     INFORLOG("Checking valid ...");
-    checkValidAccount(account, root, &valid);
+    NodeUser *found = search_NodeUser_withAccount(root, account);
+    int valid = (found != NULL);
     INFORLOG("done!");
 
     if (valid) {
         // send CACC_TRUE
-        INFORLOG("Sending ACC_TRUE");
-        send(conn_sock, "ACC_TRUE", 50, 0);
+        INFORLOG("Sending CACC_TRUE");
+        send(conn_sock, "CACC_TRUE", 50, 0);
 
         // recv SIGNPWD <pass>
         memset(msg, 0, sizeof(message));
@@ -58,15 +45,57 @@ User* process_sign_up(int conn_sock, message *msg) {
         send(conn_sock, "REQUEST_ID", 50, 0);
 
     } else {
-        INFORLOG("Send ACC_FALSE");
-        send(conn_sock, "ACC_FALSE", 50, 0);
+        INFORLOG("Send CACC_FALSE");
+        send(conn_sock, "CACC_FALSE", 50, 0);
     }
-    
-    free(msg);
     return newUser;
 }
 
 
 User* process_sign_in(int conn_sock, message *msg) {
-    return NULL;
+    // process message to get account
+    char *account = getData(msg);
+
+    // check valid account
+    INFORLOG("Checking user ...");
+    NodeUser *found = search_NodeUser_withAccount(root, account);
+    int valid = (found != NULL);
+    INFORLOG("done!");
+
+    if (valid) {
+        // send CACC_TRUE
+        INFORLOG("Sending ACC_TRUE");
+        send(conn_sock, "ACC_TRUE", 50, 0);
+
+        // recv SIGNPWD <pass>
+        memset(msg, 0, sizeof(message));
+        INFORLOG("Waiting LOGINPWD");
+        recv(conn_sock, msg, sizeof(message), 0);
+
+        // process message to get password
+        displayMessage(msg, "Received message");
+        char *password = getData(msg);
+
+        // create USer
+        INFORLOG("Comparing password...");
+        if (ASSERT(password, found->user->password)) {
+            INFORLOG("Send PWD_TRUE");
+            // send PWD_TRUE
+            send(conn_sock, "PWD_TRUE", 50, 0);
+            // activate Node User
+            found->is_active = 1;
+            
+            return found->user;
+        } else {
+            INFORLOG("Send PWD_FALSE");
+            // send PWD_FALSE
+            send(conn_sock, "PWD_FALSE", 50, 0);
+            return NULL;
+        }
+
+    } else {
+        INFORLOG("Send ACC_FALSE");
+        send(conn_sock, "ACC_FALSE", 50, 0);
+        return NULL;
+    }
 }

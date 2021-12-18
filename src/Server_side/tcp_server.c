@@ -37,7 +37,10 @@ int main(){
 	/* Establish a signal handler to catch SIGCHLD */
 	signal(SIGCHLD, sig_chld);
 
-	while(1){
+	int dumpfile_frequency = 10;
+	int count = 0;
+
+	while(++count){
 		sin_size=sizeof(struct sockaddr_in);
 		if ((conn_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1){
 			if (errno == EINTR)
@@ -56,6 +59,10 @@ int main(){
 			close(listen_sock);
 			printf("You got a connection from %s\n", inet_ntoa(client.sin_addr)); /* prints client's IP */
 			serve(conn_sock);
+		}
+
+		if (count % dumpfile_frequency == 0) {
+			dumpUserTree(root);
 		}
 		
 		/* The parent closes the connected socket since the child handles the new client */

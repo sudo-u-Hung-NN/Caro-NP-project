@@ -67,6 +67,15 @@ NodeUser *search_NodeUser(NodeUser *root, User *user);
 
 
 /**
+ * @brief This function look up an account in the Binary tree
+ * @param root 
+ * @param account 
+ * @return NodeUser* 
+ */
+NodeUser *search_NodeUser_withAccount(NodeUser *root, char *account);
+
+
+/**
  * @brief This function load user database file into a binary tree.
  * This function is called first when running server.
  * The database file path is defined in Users/user.h

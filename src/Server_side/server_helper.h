@@ -57,7 +57,7 @@ User* process_sign_up(int conn_sock, message *msg);
 /**
  * @brief Process login on socket that connects to client
  * @param conn_sock the socket connects to client
- * @return int 
+ * @return User*
  */
 User* process_sign_in(int conn_sock,  message *msg);
 

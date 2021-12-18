@@ -35,7 +35,7 @@ struct {
 };
 
 
-void apply_transaction(msg_type send_command) {
+void apply_transition(msg_type send_command) {
     for (int i = 0; i < NUM_TRANSITION; i++) {
         if (transitions[i].prev_status == prev_status && 
             transitions[i].recv_command == recv_command &&
@@ -46,3 +46,26 @@ void apply_transaction(msg_type send_command) {
 }
 
 
+struct {
+	char server_reply[50];
+	char instruction[100];
+} Translator[NUM_TRANSLATE] = {
+	{"REQUEST_ID", "Please login (LOGIN <account>) or sign up (SIGNUP <account>):\n"},
+	{"CACC_TRUE", "Valid account! Enter your password:\n"},
+	{"CACC_FALSE", "Account existed! Re-enter new account:\n"},
+	{"ACC_FALSE", "Your account doesn't exist!\n"},
+	{"ACC_TRUE", "Valid account! Enter your password:\n"},
+	{"PWD_TRUE", "Access granted! Login done\n"},
+	{"PWD_FALSE", "Wrong password!\n"}
+};
+
+
+char *translate(char *server_reply) {
+	for (int i = 0; i < NUM_TRANSLATE; i++) {
+		if (strcmp(server_reply, Translator[i].server_reply) == 0) {
+			return Translator[i].instruction;
+		}
+	}
+
+	return server_reply;
+}
