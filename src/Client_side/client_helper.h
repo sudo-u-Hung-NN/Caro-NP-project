@@ -16,7 +16,7 @@
 #include "../Utils/message.h"
 
 
-#define NUM_TRANSITION 20
+#define NUM_TRANSITION 18
 #define NUM_TRANSLATE 8
 
 #define SERVER_ADDR "127.0.0.1"
