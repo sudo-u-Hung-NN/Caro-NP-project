@@ -10,7 +10,7 @@ User* create_User(int id, char* name, char* account, char* password) {
     strcpy(tmp->name, name);
     strcpy(tmp->account, account);
     strcpy(tmp->password, password);
-
+    tmp->conn_sock = -1;
     return tmp;
 }
 

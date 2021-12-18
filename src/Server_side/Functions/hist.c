@@ -92,16 +92,15 @@ char* read_account_file(char *account) {
 /** History
  * @brief This function shows the current user his own history.
  * This function is defined in "src/Server_side/Functions/hist.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
- * @param current_user 
+ * @param current_user the current user
  */
-void process_hist(int conn_sock, message *msg, User* current_user) {
+void process_hist(message *msg, User* current_user) {
     char *history = read_account_file(current_user->account);
     if(history == NULL) {
-        send(conn_sock, "NULL_HISTORY", 50, 0);
+        send(current_user->conn_sock, "NULL_HISTORY", 50, 0);
     } else {
-        send(conn_sock, history, BUFF_SIZE, 0);
+        send(current_user->conn_sock, history, BUFF_SIZE, 0);
         free(history);
     }
 }
@@ -110,16 +109,16 @@ void process_hist(int conn_sock, message *msg, User* current_user) {
 /**
  * @brief This function shows the current user a nother player's history.
  * This function is defined in "src/Server_side/Functions/hist.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  */
-void process_histp(int conn_sock, message *msg) {
+void process_histp(message *msg, User* current_user) {
     char *account = getData(msg);
     char *history = read_account_file(account);
     if(history == NULL) {
-        send(conn_sock, "NULL_HISTORY", 50, 0);
+        send(current_user->conn_sock, "NULL_HISTORY", 50, 0);
     } else {
-        send(conn_sock, history, BUFF_SIZE, 0);
+        send(current_user->conn_sock, history, BUFF_SIZE, 0);
         free(history);
     }
 }
@@ -128,10 +127,10 @@ void process_histp(int conn_sock, message *msg) {
 /**
  * @brief This function shows the rankings.
  * This function is defined is "src/Server_side/Functions/hist.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  */
-void process_hista(int conn_sock, message *msg) {
+void process_hista(message *msg, User* current_user) {
     char *ranking = (char*) malloc(BUFF_SIZE * sizeof(char));
     bzero(ranking, BUFF_SIZE);
 
@@ -144,7 +143,7 @@ void process_hista(int conn_sock, message *msg) {
     int rank = 0;
     if (fptr == NULL) {
         WARNING("Ranking file not found!");
-        send(conn_sock, "NULL_RANKING", 50, 0);
+        send(current_user->conn_sock, "NULL_RANKING", 50, 0);
 
     } else {
         char line[50] = "";
@@ -155,7 +154,7 @@ void process_hista(int conn_sock, message *msg) {
             bzero(line, 50);
         }
         
-        send(conn_sock, ranking, BUFF_SIZE, 0);
+        send(current_user->conn_sock, ranking, BUFF_SIZE, 0);
     }
 
     free(ranking);

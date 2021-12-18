@@ -1,7 +1,7 @@
 #include "../server_helper.h"
 
 
-User* process_sign_up(int conn_sock, message *msg) {
+User* process_sign_up(message *msg, User* current_user) {
     User *newUser = NULL;
 
     // process message to get account
@@ -16,12 +16,12 @@ User* process_sign_up(int conn_sock, message *msg) {
     if (valid) {
         // send CACC_TRUE
         INFORLOG("Sending CACC_TRUE");
-        send(conn_sock, "CACC_TRUE", 50, 0);
+        send(current_user->conn_sock, "CACC_TRUE", 50, 0);
 
         // recv SIGNPWD <pass>
         memset(msg, 0, sizeof(message));
         INFORLOG("Waiting SIGNPWD");
-        recv(conn_sock, msg, sizeof(message), 0);
+        recv(current_user->conn_sock, msg, sizeof(message), 0);
 
         // process message to get password
         displayMessage(msg, "Received message");
@@ -42,17 +42,17 @@ User* process_sign_up(int conn_sock, message *msg) {
 
         INFORLOG("Send REQUEST_ID");
         // send REQUEST_ID
-        send(conn_sock, "REQUEST_ID", 50, 0);
+        send(current_user->conn_sock, "REQUEST_ID", 50, 0);
 
     } else {
         INFORLOG("Send CACC_FALSE");
-        send(conn_sock, "CACC_FALSE", 50, 0);
+        send(current_user->conn_sock, "CACC_FALSE", 50, 0);
     }
     return newUser;
 }
 
 
-User* process_sign_in(int conn_sock, message *msg) {
+User* process_sign_in(message *msg, User* current_user) {
     // process message to get account
     char *account = getData(msg);
 
@@ -63,39 +63,46 @@ User* process_sign_in(int conn_sock, message *msg) {
     INFORLOG("done!");
 
     if (valid) {
+        int is_doubled = (found->is_active == 1);
+        if (is_doubled) {
+            WARNING("An account is accessed from 2 clients, cancel second connect");
+            send(current_user->conn_sock, "DUPLICATED", 50, 0);
+            return NULL;
+        } 
+
         // send CACC_TRUE
         INFORLOG("Sending ACC_TRUE");
-        send(conn_sock, "ACC_TRUE", 50, 0);
+        send(current_user->conn_sock, "ACC_TRUE", 50, 0);
 
         // recv SIGNPWD <pass>
         memset(msg, 0, sizeof(message));
         INFORLOG("Waiting LOGINPWD");
-        recv(conn_sock, msg, sizeof(message), 0);
+        recv(current_user->conn_sock, msg, sizeof(message), 0);
 
         // process message to get password
         displayMessage(msg, "Received message");
         char *password = getData(msg);
 
-        // create USer
+        // activate USer
         INFORLOG("Comparing password...");
         if (ASSERT(password, found->user->password)) {
             INFORLOG("Send PWD_TRUE");
             // send PWD_TRUE
-            send(conn_sock, "PWD_TRUE", 50, 0);
+            send(current_user->conn_sock, "PWD_TRUE", 50, 0);
             // activate Node User
             found->is_active = 1;
-
+            found->user->conn_sock = current_user->conn_sock;
             return found->user;
         } else {
             INFORLOG("Send PWD_FALSE");
             // send PWD_FALSE
-            send(conn_sock, "PWD_FALSE", 50, 0);
+            send(current_user->conn_sock, "PWD_FALSE", 50, 0);
             return NULL;
         }
 
     } else {
         INFORLOG("Send ACC_FALSE");
-        send(conn_sock, "ACC_FALSE", 50, 0);
+        send(current_user->conn_sock, "ACC_FALSE", 50, 0);
         return NULL;
     }
 }

@@ -21,10 +21,10 @@ void traverse(NodeUser *root, char* buffer) {
 
 /**
  * @brief This function displays all online players
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  */
-void process_listp(int conn_sock, message *msg) {
+void process_listp(message *msg, User* current_user) {
     INFORLOG("Received request listing all players");
     char list[BUFF_SIZE];
     bzero(list, BUFF_SIZE);
@@ -36,14 +36,14 @@ void process_listp(int conn_sock, message *msg) {
     traverse(root, list);
     INFORLOG("Listing...");
     printf("%s", list);
-    send(conn_sock, list, BUFF_SIZE, 0);
+    send(current_user->conn_sock, list, BUFF_SIZE, 0);
 }
 
 /**
  * @brief This function shows all current games
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  */
-void process_listg(int conn_sock, message *msg) {
+void process_listg(message *msg, User* current_user) {
     INFORLOG("Received request listing all games");
 }

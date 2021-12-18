@@ -12,6 +12,7 @@ typedef struct User {
     char name[50];
     char account[50];
     char password[50];
+    int conn_sock;
 } User;
 
 

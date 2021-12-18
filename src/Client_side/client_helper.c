@@ -57,7 +57,8 @@ struct {
 	{"ACC_TRUE", "Valid account! Enter your password (\033[0;33mLOGPWD <password>\033[0m):\n"},
 	{"PWD_TRUE", "\033[0;34mAccess granted!\033[0m Login done\n"},
 	{"PWD_FALSE", "\033[0;35mWrong password!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
-	{"SETNAME_SUCESS", "\033[0;34mSetname successful\033[0m\n"}
+	{"SETNAME_SUCESS", "\033[0;34mSetname successful\033[0m\n"},
+	{"DUPLICATED", "\033[0;35mYour account is already online!\033[0m"}
 };
 
 

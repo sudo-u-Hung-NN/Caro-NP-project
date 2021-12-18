@@ -24,7 +24,7 @@ void serve(int sockfd) {
         }
 
         bzero(msg, sizeof(message));
-        bytes_received = recv(sockfd, msg, sizeof(message), 0); //blocking
+        bytes_received = recv(current_user->conn_sock, msg, sizeof(message), 0); //blocking
 
         // displayMessage(msg, "RECV message");
 
@@ -72,37 +72,37 @@ void serve(int sockfd) {
                 break;
             case hist:
                 INFORLOG("Process hist signal");
-                process_hist(sockfd, msg, current_user);
+                process_hist(msg, current_user);
                 break;
             case histp:
                 INFORLOG("Process histp signal");
-                process_histp(sockfd, msg);
+                process_histp(msg, current_user);
                 break;
             case hista:
                 INFORLOG("Process hista signal");
-                process_hista(sockfd, msg);
+                process_hista(msg, current_user);
                 break;
             case ret:
                 break;
             case listp:
                 INFORLOG("Process listp signal");
-                process_listp(sockfd, msg);
+                process_listp(msg, current_user);
                 break;
             case listg:
                 INFORLOG("Process listg signal");
-                process_listg(sockfd, msg);
+                process_listg(msg, current_user);
                 break;
             case setname:
                 INFORLOG("Process setname signal");
-                process_setname(sockfd, msg, current_user);
+                process_setname(msg, current_user);
                 break;
             case signup:
                 INFORLOG("Process sign up signal");
-                current_user = process_sign_up(sockfd, msg);
+                current_user = process_sign_up(msg, current_user);
                 break;
             case login:
                 INFORLOG("Process login signal");
-                current_user = process_sign_in(sockfd, msg);
+                current_user = process_sign_in(msg, current_user);
                 break;
             default:
                 break;

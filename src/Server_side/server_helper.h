@@ -68,78 +68,77 @@ void serve(int sockfd);
 /** Utils
  * @brief Process sign up on socket that connects to client.
  * This function is defined in "src/Server_side/Functions/sign_in_up.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  * @return User*
  */
-User* process_sign_up(int conn_sock, message *msg);
+User* process_sign_up(message *msg, User* current_user);
 
 
 /**
  * @brief Process login on socket that connects to client.
  * This function is defined in "src/Server_side/Functions/sign_in_up.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  * @return User*
  */
-User* process_sign_in(int conn_sock,  message *msg);
+User* process_sign_in(message *msg, User* current_user);
 
 
 /**
  * @brief This function set new name to the user.
  * This function is defined in "src/Server_side/Functions/setname.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
- * @param current_user 
+ * @param current_user the current user
  */
-void process_setname(int conn_sock, message *msg, User* current_user);
+void process_setname(message *msg, User* current_user);
 
 
 /**
  * @brief This function displays all online players.
  * This function is defined in "src/Server_side/Functions/list.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  */
-void process_listp(int conn_sock, message *msg);
+void process_listp(message *msg, User* current_user);
 
 
 /**
  * @brief This function shows all current games.
  * This function is defined in "src/Server_side/Functions/list.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  */
-void process_listg(int conn_sock, message *msg);
+void process_listg(message *msg, User* current_user);
 
 
 
 /** History
  * @brief This function shows the current user his own history.
  * This function is defined in "src/Server_side/Functions/hist.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
- * @param current_user 
+ * @param current_user the current user
  */
-void process_hist(int conn_sock, message *msg, User* current_user);
+void process_hist(message *msg, User* current_user);
 
 
 /**
  * @brief This function shows the current user a nother player's history.
  * This function is defined in "src/Server_side/Functions/hist.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  */
-void process_histp(int conn_sock, message *msg);
+void process_histp(message *msg, User* current_user);
 
 
 /**
  * @brief This function shows the rankings.
  * This function is defined is "src/Server_side/Functions/hist.c"
- * @param conn_sock the socket connects to client
  * @param msg the requested message from client
+ * @param current_user the current user
  */
-void process_hista(int conn_sock, message *msg);
+void process_hista(message *msg, User* current_user);
+
 
 
 #endif

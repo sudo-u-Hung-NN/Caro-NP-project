@@ -17,7 +17,7 @@
 
 
 #define NUM_TRANSITION 18
-#define NUM_TRANSLATE 8
+#define NUM_TRANSLATE 9
 
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_PORT 5500
