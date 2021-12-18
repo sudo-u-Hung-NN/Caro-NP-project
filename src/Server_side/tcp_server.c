@@ -6,6 +6,7 @@ int main(){
 	// Load User tree
 	INFORLOG("Loading user tree");
 	root = loadUserTree(root);
+	inOrderTraversal(root, NULL, 1);
 	INFORLOG("Loaded user tree");
 
 	int listen_sock, conn_sock; /* file descriptors */

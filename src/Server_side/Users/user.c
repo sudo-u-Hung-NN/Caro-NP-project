@@ -1,7 +1,7 @@
 #include "user.h"
 
 int compare(User *a, User* b) {
-    return strcmp(a->name, b->name);
+    return strcmp(a->account, b->account);
 }
 
 User* create_User(int id, char* name, char* account, char* password) {
@@ -74,7 +74,9 @@ void inOrderTraversal(NodeUser *root, int *count, int verbose) {
         return;
     }
     inOrderTraversal(root->left, count, verbose);
-    (*count) = (*count) + 1;
+    if (count != NULL) {
+        (*count) = (*count) + 1;
+    }
     if (verbose) {
         printf("TRAVERSE: id<%d> user<%s> account<%s> passwd<%s>\n", root->user->id, root->user->name, root->user->account, root->user->password);
     }

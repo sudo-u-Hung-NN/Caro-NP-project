@@ -1,7 +1,5 @@
 #include "server_helper.h"
 
-extern NodeUser *root;
-
 
 char *uppercase(char* input) {
     char* output = (char*) malloc(strlen(input) * sizeof(char));
@@ -71,6 +69,7 @@ void serve(int sockfd) {
             current_user = process_sign_up(sockfd, msg);
             break;
         case login:
+            INFORLOG("Process login signal");
             current_user = process_sign_in(sockfd, msg);
             break;
         case not_identified:

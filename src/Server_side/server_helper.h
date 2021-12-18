@@ -49,7 +49,6 @@ void serve(int sockfd);
 /**
  * @brief Process sign up on socket that connects to client
  * @param conn_sock the socket connects to client
- * @param root the root of User tree
  * @return User*
  */
 User* process_sign_up(int conn_sock, message *msg);

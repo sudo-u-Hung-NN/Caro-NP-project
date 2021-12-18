@@ -51,10 +51,10 @@ struct {
 	char instruction[100];
 } Translator[NUM_TRANSLATE] = {
 	{"REQUEST_ID", "Please login (LOGIN <account>) or sign up (SIGNUP <account>):\n"},
-	{"CACC_TRUE", "Valid account! Enter your password:\n"},
-	{"CACC_FALSE", "Account existed! Re-enter new account:\n"},
-	{"ACC_FALSE", "Your account doesn't exist!\n"},
-	{"ACC_TRUE", "Valid account! Enter your password:\n"},
+	{"CACC_TRUE", "Valid account! Enter your password (SIGNPWD <password>):\n"},
+	{"CACC_FALSE", "Account existed! Please login (LOGIN <account>) or sign up (SIGNUP <account>):\n"},
+	{"ACC_FALSE", "Your account doesn't exist! Please login (LOGIN <account>) or sign up (SIGNUP <account>):\n"},
+	{"ACC_TRUE", "Valid account! Enter your password (LOGINPWD <password>):\n"},
 	{"PWD_TRUE", "Access granted! Login done\n"},
 	{"PWD_FALSE", "Wrong password!\n"}
 };

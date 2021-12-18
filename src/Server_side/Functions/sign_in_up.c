@@ -2,7 +2,6 @@
 
 extern NodeUser *root;
 
-
 User* process_sign_up(int conn_sock, message *msg) {
     User *newUser = NULL;
 
@@ -12,7 +11,7 @@ User* process_sign_up(int conn_sock, message *msg) {
     // Search User with account
     INFORLOG("Checking valid ...");
     NodeUser *found = search_NodeUser_withAccount(root, account);
-    int valid = (found != NULL);
+    int valid = (found == NULL);
     INFORLOG("done!");
 
     if (valid) {
@@ -39,6 +38,8 @@ User* process_sign_up(int conn_sock, message *msg) {
         INFORLOG("Insert user into tree");
         // insert User to Binary Tree
         root = insert_NodeUser(root, newUser, 0);
+        inOrderTraversal(root, NULL, 1);
+        INFORLOG("Insert done");
 
         INFORLOG("Send REQUEST_ID");
         // send REQUEST_ID
@@ -84,7 +85,7 @@ User* process_sign_in(int conn_sock, message *msg) {
             send(conn_sock, "PWD_TRUE", 50, 0);
             // activate Node User
             found->is_active = 1;
-            
+
             return found->user;
         } else {
             INFORLOG("Send PWD_FALSE");

@@ -2,6 +2,7 @@ CC = gcc
 FLAGS = -Wall -g -c
 BUILDDIR = build
 EXEDIR = exec
+TEST = test
 
 
 # ====================== DEFINE CLIENT =============================
@@ -25,7 +26,7 @@ UTILS_FILE := $(BUILDDIR)/error.o $(BUILDDIR)/message.o $(BUILDDIR)/logger.o
 
 
 
-all: $(EXEDIR)/server $(EXEDIR)/client $(UTILS_FILE)
+all: $(EXEDIR)/server $(EXEDIR)/client $(UTILS_FILE) $(TEST)/test_user
 
 
 #========================== COMPILATION ============================
@@ -75,6 +76,15 @@ $(BUILDDIR)/message.o: $(UTILS)/message.c
 
 $(BUILDDIR)/logger.o: $(UTILS)/logger.c
 	$(CC) $(FLAGS) $(UTILS)/logger.c -o $(BUILDDIR)/logger.o
+
+
+
+#==========================< Testing >===============================
+$(TEST)/test_user: $(BUILDDIR)/test_user.o $(BUILDDIR)/user.o $(BUILDDIR)/utils.o $(UTILS_FILE)
+	$(CC) $(BUILDDIR)/test_user.o $(BUILDDIR)/user.o $(BUILDDIR)/utils.o $(UTILS_FILE) -o $(TEST)/test_user
+
+$(BUILDDIR)/test_user.o: $(SERVER_USERS)/test_user.c
+	$(CC) $(FLAGS) $(SERVER_USERS)/test_user.c -o $(BUILDDIR)/test_user.o
 
 
 clean:

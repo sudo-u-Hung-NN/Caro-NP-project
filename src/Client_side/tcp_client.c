@@ -31,7 +31,7 @@ int main(){
 
 	// First receive REQUEST_ID
 	bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
-	printf("Receive: %s\n", buff);
+	printf("%s", translate(buff));
 	
     while (fgets(buff, BUFF_SIZE, stdin) != NULL) {
         buff[strlen(buff) - 1] = '\0';
@@ -60,7 +60,7 @@ int main(){
         }
 		
         buff[bytes_received] = '\0';
-        printf("Reply from server: %s\n", translate(buff));
+        printf("%s", translate(buff));
     }
 	
 	//Step 4: Close socket
