@@ -17,7 +17,7 @@ SERVER_GAMEPLAY = src/Server_side/Gameplays
 SERVER_FUNCTIONS = src/Server_side/Functions
 
 SERVER_USERS_FILE := $(BUILDDIR)/user.o $(BUILDDIR)/utils.o
-SERVER_FUNCTIONS_FILE := $(BUILDDIR)/sign_in_up.o
+SERVER_FUNCTIONS_FILE := $(BUILDDIR)/sign_in_up.o $(BUILDDIR)/setname.o $(BUILDDIR)/list.o
 SERVERSIDE_REQUIREMENTS := $(SERVER_FUNCTIONS_FILE) $(SERVER_USERS_FILE)
 
 
@@ -52,7 +52,11 @@ $(BUILDDIR)/utils.o: $(SERVER_USERS)/utils.c
 $(BUILDDIR)/sign_in_up.o: $(SERVER_FUNCTIONS)/sign_in_up.c
 	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/sign_in_up.c -o $(BUILDDIR)/sign_in_up.o
 
+$(BUILDDIR)/setname.o: $(SERVER_FUNCTIONS)/setname.c
+	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/setname.c -o $(BUILDDIR)/setname.o
 
+$(BUILDDIR)/list.o: $(SERVER_FUNCTIONS)/list.c
+	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/list.c -o $(BUILDDIR)/list.o
 
 
 
@@ -85,6 +89,7 @@ $(TEST)/test_user: $(BUILDDIR)/test_user.o $(BUILDDIR)/user.o $(BUILDDIR)/utils.
 
 $(BUILDDIR)/test_user.o: $(SERVER_USERS)/test_user.c
 	$(CC) $(FLAGS) $(SERVER_USERS)/test_user.c -o $(BUILDDIR)/test_user.o
+
 
 
 clean:

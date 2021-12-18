@@ -37,30 +37,33 @@ int main(){
         buff[strlen(buff) - 1] = '\0';
 
 		message *msg = create_msg(buff, curr_status);
-		if (msg->command == quit) {
+		if (msg == NULL) {
+			continue;
+		} else if (msg->command == quit) {
 			break;
-		}
-		apply_transition(msg->command);
+		} else {
+			apply_transition(msg->command);
             
-        bytes_sent = send(client_sock, msg, msg_len, 0);
+			bytes_sent = send(client_sock, msg, msg_len, 0);
 
-        if(bytes_sent < 0)
-            perror("\nError: ");
-        
-        //receive echo reply
-        bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
+			if(bytes_sent < 0)
+				perror("\nError: ");
+			
+			//receive reply
+			bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
 
-        if (bytes_received < 0) {
-                perror("\nError: ");
-                exit(1);
-        }
-        else if (bytes_received == 0) {
-                printf("Connection closed.\n");
-                break;
-        }
-		
-        buff[bytes_received] = '\0';
-        printf("%s", translate(buff));
+			if (bytes_received < 0) {
+					perror("\nError: ");
+					exit(1);
+			}
+			else if (bytes_received == 0) {
+					printf("Connection closed.\n");
+					break;
+			}
+			
+			buff[bytes_received] = '\0';
+			printf("%s", translate(buff));
+		}
     }
 	
 	//Step 4: Close socket

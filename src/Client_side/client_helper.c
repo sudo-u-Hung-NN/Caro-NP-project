@@ -48,15 +48,16 @@ void apply_transition(msg_type send_command) {
 
 struct {
 	char server_reply[50];
-	char instruction[100];
+	char instruction[150];
 } Translator[NUM_TRANSLATE] = {
-	{"REQUEST_ID", "Please login (LOGIN <account>) or sign up (SIGNUP <account>):\n"},
-	{"CACC_TRUE", "Valid account! Enter your password (SIGNPWD <password>):\n"},
-	{"CACC_FALSE", "Account existed! Please login (LOGIN <account>) or sign up (SIGNUP <account>):\n"},
-	{"ACC_FALSE", "Your account doesn't exist! Please login (LOGIN <account>) or sign up (SIGNUP <account>):\n"},
-	{"ACC_TRUE", "Valid account! Enter your password (LOGINPWD <password>):\n"},
-	{"PWD_TRUE", "Access granted! Login done\n"},
-	{"PWD_FALSE", "Wrong password!\n"}
+	{"REQUEST_ID", "Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
+	{"CACC_TRUE", "Valid account! Enter your password (\033[0;33mSIGNPWD <password>\033[0m):\n"},
+	{"CACC_FALSE", "\033[0;35mAccount existed!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
+	{"ACC_FALSE", "\033[0;35mYour account doesn't exist!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
+	{"ACC_TRUE", "Valid account! Enter your password (\033[0;33mLOGPWD <password>\033[0m):\n"},
+	{"PWD_TRUE", "\033[0;34mAccess granted!\033[0m Login done\n"},
+	{"PWD_FALSE", "\033[0;35mWrong password!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
+	{"SETNAME_SUCESS", "\033[0;34mSetname successful\033[0m\n"}
 };
 
 

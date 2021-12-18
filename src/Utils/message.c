@@ -76,7 +76,12 @@ message *create_msg(char *input, sts_type curr_status) {
     msg_type mtype = command_char2type(command);
     int valid = check_valid(curr_status, mtype);
 
-    if (!valid){
+    if (mtype == not_identified) {
+        error(ERROR_COMMAND_NOT_FOUND);
+        free(new_msg);
+        return NULL;
+
+    } else if (!valid) {
         error(ERROR_INVALID_STATUS_COMMAND);
         free(new_msg);
         return NULL;
@@ -98,11 +103,6 @@ message *create_msg(char *input, sts_type curr_status) {
             target[j - (i+1)] = input[j];
         }
         break;
-    case not_identified:
-        error(ERROR_COMMAND_NOT_FOUND);
-        free(new_msg);
-        return NULL;
-        break;
     default:
         break;
     }
@@ -122,8 +122,8 @@ message *create_msg(char *input, sts_type curr_status) {
     strcpy(new_msg->data.target, target);
     strcpy(new_msg->data.data, data);
 
-    printf("Create message:\nCommand: <%s>\nTarget: <%s>\nData: <%s>\n",
-            keywords[new_msg->command].string, new_msg->data.target, new_msg->data.data);
+    // printf("Create message:\nCommand: <%s>\nTarget: <%s>\nData: <%s>\n",
+    //         keywords[new_msg->command].string, new_msg->data.target, new_msg->data.data);
     return new_msg;
 }
 

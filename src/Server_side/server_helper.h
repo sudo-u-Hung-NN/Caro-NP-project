@@ -27,15 +27,8 @@
 #define BUFF_SIZE 1024
 
 
-struct user {
-    int id;
-    char name[50];
-    char account[50];
-    char password[50];
-};
+extern NodeUser *root;
 
-
-char *uppercase(char* input);
 
 /* Handler process signal*/
 void sig_chld(int signo);
@@ -46,20 +39,107 @@ void sig_chld(int signo);
 */
 void serve(int sockfd);
 
+
 /**
- * @brief Process sign up on socket that connects to client
+ * ================================================================================================
+ *                                          FUNCTIONS
+ * 1. Utils
+ * 1.1. process_sign_up()
+ * 1.2. process_sign_in()
+ * 1.3. process_setname()
+ * 1.4. process_listp()
+ * 1.5. process_listg()
+ * 
+ * 2. History
+ * 2.1. process_hist()
+ * 2.2. process_histp()
+ * 2.3. process_hista()
+ * 
+ * 3. Spectate
+ * 3.1. process_spec()
+ * 3.2. process_squit()
+ * 3.3. process_schat()
+ * 
+ * 4. Game
+ * ================================================================================================
+ */
+
+
+/** Utils
+ * @brief Process sign up on socket that connects to client.
+ * This function is defined in "src/Server_side/Functions/sign_in_up.c"
  * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
  * @return User*
  */
 User* process_sign_up(int conn_sock, message *msg);
 
+
 /**
- * @brief Process login on socket that connects to client
+ * @brief Process login on socket that connects to client.
+ * This function is defined in "src/Server_side/Functions/sign_in_up.c"
  * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
  * @return User*
  */
 User* process_sign_in(int conn_sock,  message *msg);
 
+
+/**
+ * @brief This function set new name to the user.
+ * This function is defined in "src/Server_side/Functions/setname.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ * @param current_user 
+ */
+void process_setname(int conn_sock, message *msg, User* current_user);
+
+
+/**
+ * @brief This function displays all online players.
+ * This function is defined in "src/Server_side/Functions/list.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ */
+void process_listp(int conn_sock, message *msg);
+
+
+/**
+ * @brief This function shows all current games.
+ * This function is defined in "src/Server_side/Functions/list.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ */
+void process_listg(int conn_sock, message *msg);
+
+
+
+/** History
+ * @brief This function shows the current user his own history.
+ * This function is defined in "src/Server_side/Functions/hist.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ * @param current_user 
+ */
+void process_hist(int conn_sock, message *msg, User* current_user);
+
+
+/**
+ * @brief This function shows the current user a nother player's history.
+ * This function is defined in "src/Server_side/Functions/hist.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ */
+void process_histp(int conn_sock, message *msg);
+
+
+/**
+ * @brief This function shows the rankings.
+ * This function is defined is "src/Server_side/Functions/hist.c"
+ * @param conn_sock the socket connects to client
+ * @param msg the requested message from client
+ */
+void process_hista(int conn_sock, message *msg);
 
 
 #endif

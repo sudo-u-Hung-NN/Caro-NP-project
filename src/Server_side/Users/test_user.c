@@ -1,4 +1,5 @@
-#include "user.h"
+#include "./user.h"
+
 
 int main(int argc, char const *argv[])
 {
@@ -11,6 +12,7 @@ int main(int argc, char const *argv[])
     int valid = (found != NULL);
     printf("%d\n", valid);
     inOrderTraversal(s, &count, 1);
+    dumpUserTree(s);
     freeUserTree(s);
     return 0;
 }

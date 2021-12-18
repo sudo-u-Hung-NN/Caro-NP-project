@@ -1,6 +1,5 @@
 #include "../server_helper.h"
 
-extern NodeUser *root;
 
 User* process_sign_up(int conn_sock, message *msg) {
     User *newUser = NULL;

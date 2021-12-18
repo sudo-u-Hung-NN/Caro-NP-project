@@ -98,13 +98,13 @@ void treeToFile(NodeUser* root, FILE* fptr) {
         return;
     }
     treeToFile(root->left, fptr);
-    fprintf(fptr, "%d %s %s %s\n", root->user->id, root->user->name, root->user->account, root->user->password);
+    fprintf(fptr, "%d,%s,%s,%s\n", root->user->id, root->user->name, root->user->account, root->user->password);
     treeToFile(root->right, fptr);
 };
 
 
 void dumpUserTree(NodeUser* root) {
-    FILE *fptr = fopen(USER_DATABASE, "r");
+    FILE *fptr = fopen(USER_DATABASE, "w");
     INFORLOG("Writing database...");
     treeToFile(root, fptr);
     INFORLOG("Finished writing database");

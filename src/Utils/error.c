@@ -18,9 +18,8 @@ void error(ErrorCode err) {
   int i;
   for (i = 0 ; i < NUM_OF_ERRORS; i ++) {
     if (errors[i].errorCode == err) {
-      printf("ERROR: %s\n", errors[i].message);
+      printf("ERROR: \033[1;35m%s\033[0m\n", errors[i].message);
       break;
     }
   }
-  exit(i);
 }
