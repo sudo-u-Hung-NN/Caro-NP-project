@@ -48,11 +48,11 @@ void *client_sock_handler(void *client_sock);
 
 
 /**
- * @brief This function handle the client_game_sock.
+ * @brief This function handle the client_chat_sock.
  * Client game sock is used for game's infor communication, i.e. Game board, Movement
- * @param client_game_sock 
+ * @param client_chat_sock 
  */
-void *client_game_sock_handler(void *client_game_sock);
+void *client_chat_sock_handler(void *client_chat_sock);
 
 
 

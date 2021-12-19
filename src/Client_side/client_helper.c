@@ -129,7 +129,7 @@ void *client_sock_handler(void *client_socket) {
 
 
 
-void *client_game_sock_handler(void *client_game_socket) {
+void *client_chat_sock_handler(void *client_game_socket) {
 	int client_game_sock = *(int*) client_game_socket;
 
 	char buff[BUFF_SIZE + 1];

@@ -36,9 +36,9 @@ void sig_chld(int signo);
 /**
 * Receive and serve client
 * [IN] sockfd: socket descriptor that connects to client 
-* [IN] game_conn_sock: socket descriptor that also connects to client	
+* [IN] conn_chat_sock: socket descriptor that also connects to client	
 */
-void serve(int sockfd, int game_conn_sock);
+void serve(int sockfd, int conn_chat_sock);
 
 
 /**

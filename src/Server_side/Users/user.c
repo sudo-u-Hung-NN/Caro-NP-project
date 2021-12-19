@@ -11,7 +11,7 @@ User* create_User(int id, char* name, char* account, char* password) {
     strcpy(tmp->account, account);
     strcpy(tmp->password, password);
     tmp->conn_sock = -1;
-    tmp->play_sock = -1;
+    tmp->chat_sock = -1;
     return tmp;
 }
 

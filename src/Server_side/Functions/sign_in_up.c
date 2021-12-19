@@ -1,6 +1,6 @@
 #include "../server_helper.h"
 
-User* process_sign_up(message *msg, int client_sock, int client_game_sock) {
+User* process_sign_up(message *msg, int client_sock, int conn_chat_sock) {
     User *newUser = NULL;
 
     // process message to get account
@@ -51,7 +51,7 @@ User* process_sign_up(message *msg, int client_sock, int client_game_sock) {
 }
 
 
-User* process_sign_in(message *msg, int client_sock, int client_game_sock) {
+User* process_sign_in(message *msg, int client_sock, int conn_chat_sock) {
     // process message to get account
     char *account = getData(msg);
 
@@ -91,7 +91,7 @@ User* process_sign_in(message *msg, int client_sock, int client_game_sock) {
             // activate Node User
             found->is_active = 1;
             found->user->conn_sock = client_sock;
-            found->user->play_sock = client_game_sock;
+            found->user->chat_sock = conn_chat_sock;
             return found->user;
         } else {
             INFORLOG("Send PWD_FALSE");

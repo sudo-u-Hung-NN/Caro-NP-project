@@ -13,7 +13,7 @@ typedef struct User {
     char account[50];
     char password[50];
     int conn_sock;
-    int play_sock;
+    int chat_sock;
 } User;
 
 

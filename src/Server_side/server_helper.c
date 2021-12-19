@@ -11,7 +11,7 @@ void sig_chld(int signo){
 }
 
 
-void serve(int sockfd, int game_conn_sock) {
+void serve(int sockfd, int conn_chat_sock) {
 	message *msg = (message *) malloc(sizeof(message));
     User *current_user = NULL;
     int bytes_received;
@@ -98,11 +98,11 @@ void serve(int sockfd, int game_conn_sock) {
                 break;
             case signup:
                 INFORLOG("Process sign up signal");
-                current_user = process_sign_up(msg, sockfd, game_conn_sock);
+                current_user = process_sign_up(msg, sockfd, conn_chat_sock);
                 break;
             case login:
                 INFORLOG("Process login signal");
-                current_user = process_sign_in(msg, sockfd, game_conn_sock);
+                current_user = process_sign_in(msg, sockfd, conn_chat_sock);
                 break;
             default:
                 break;
@@ -110,5 +110,5 @@ void serve(int sockfd, int game_conn_sock) {
     }
     free(msg);
 	close(sockfd);
-    close(game_conn_sock);
+    close(conn_chat_sock);
 }
