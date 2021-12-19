@@ -11,7 +11,7 @@ void sig_chld(int signo){
 }
 
 
-void serve(int sockfd) {
+void serve(int sockfd, int game_conn_sock) {
 	message *msg = (message *) malloc(sizeof(message));
     User *current_user = NULL;
     int bytes_received;
@@ -24,7 +24,7 @@ void serve(int sockfd) {
         }
 
         bzero(msg, sizeof(message));
-        bytes_received = recv(current_user->conn_sock, msg, sizeof(message), 0); //blocking
+        bytes_received = recv(sockfd, msg, sizeof(message), 0); //blocking
 
         // displayMessage(msg, "RECV message");
 
@@ -37,13 +37,13 @@ void serve(int sockfd) {
                 INFORLOG("Process play");
                 break;
             case go:
-                INFORLOG("Process squit");
+                INFORLOG("Process go");
                 break;
             case acpt:
-                INFORLOG("Process squit");
+                INFORLOG("Process acpt");
                 break;
             case deny:
-                INFORLOG("Process squit");
+                INFORLOG("Process deny");
                 break;
             case cancel:
                 INFORLOG("Process cancel");
@@ -98,11 +98,11 @@ void serve(int sockfd) {
                 break;
             case signup:
                 INFORLOG("Process sign up signal");
-                current_user = process_sign_up(msg, current_user);
+                current_user = process_sign_up(msg, sockfd, game_conn_sock);
                 break;
             case login:
                 INFORLOG("Process login signal");
-                current_user = process_sign_in(msg, current_user);
+                current_user = process_sign_in(msg, sockfd, game_conn_sock);
                 break;
             default:
                 break;
@@ -110,4 +110,5 @@ void serve(int sockfd) {
     }
     free(msg);
 	close(sockfd);
+    close(game_conn_sock);
 }

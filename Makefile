@@ -64,7 +64,7 @@ $(BUILDDIR)/hist.o: $(SERVER_FUNCTIONS)/hist.c
 
 #==========================< Client >===============================
 $(EXEDIR)/client: $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(UTILS_FILE)
-	$(CC) $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(UTILS_FILE) -o $(EXEDIR)/client
+	$(CC) -pthread $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(UTILS_FILE) -o $(EXEDIR)/client
 
 $(BUILDDIR)/tcp_client.o: $(CLIENTSIDE)/tcp_client.c
 	$(CC) $(FLAGS) $(CLIENTSIDE)/tcp_client.c -o $(BUILDDIR)/tcp_client.o

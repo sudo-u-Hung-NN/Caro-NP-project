@@ -17,6 +17,6 @@ Game* process_play(message *msg, User* current_user) {
         send(current_user->conn_sock, "OFFLINE_OPPONENT", 50, 0);
         return NULL;
     } else {
-
-    }
+        
+    }   
 }

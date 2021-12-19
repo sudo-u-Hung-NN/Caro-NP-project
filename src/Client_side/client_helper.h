@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <pthread.h>
 
 #include "../Utils/types.h"
 #include "../Utils/message.h"
@@ -36,6 +37,23 @@ void apply_transition(msg_type recv_command);
  * @return char* 
  */
 char *translate(char *server_reply);
+
+
+/**
+ * @brief This function handle the client_sock.
+ * Client sock is used for trivial communication
+ * @param client_sock 
+ */
+void *client_sock_handler(void *client_sock);
+
+
+/**
+ * @brief This function handle the client_game_sock.
+ * Client game sock is used for game's infor communication, i.e. Game board, Movement
+ * @param client_game_sock 
+ */
+void *client_game_sock_handler(void *client_game_sock);
+
 
 
 #endif

@@ -4,73 +4,64 @@ sts_type prev_status = console;
 sts_type curr_status = console;
 msg_type recv_command = not_identified;
 
-
-int main(){
-	int client_sock;
-	char buff[BUFF_SIZE + 1];
+int main()
+{
+	int client_sock, client_game_sock;
 	struct sockaddr_in server_addr; /* server's address information */
-	int msg_len = sizeof(message);
-	int bytes_sent, bytes_received;
-	
+
 	//Step 1: Construct socket
-	client_sock = socket(AF_INET,SOCK_STREAM,0);
-	
+	client_sock = socket(AF_INET, SOCK_STREAM, 0);
+	client_game_sock = socket(AF_INET, SOCK_STREAM, 0);
+
 	//Step 2: Specify server address
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_port = htons(SERVER_PORT);
 	server_addr.sin_addr.s_addr = inet_addr(SERVER_ADDR);
-	
+
 	//Step 3: Request to connect server
-	if(connect(client_sock, (struct sockaddr*)&server_addr, sizeof(struct sockaddr)) < 0){
-		printf("Error! Can not connect to sever! Client exit imediately!\n");
+	if (connect(client_sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) < 0)
+	{
+		printf("Error! Can not connect client to sever! Client exit imediately!\n");
 		return 0;
 	}
-		
-	//Step 4: Communicate with server			
-	memset(buff,'\0',(strlen(buff)+1));
 
-	// First receive REQUEST_ID
-	bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
-	printf("%s", translate(buff));
+	if (connect(client_game_sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) < 0)
+	{
+		printf("Error! Can not connect client game socket to sever! Client exit imediately!\n");
+		return 0;
+	}
+
+	//Step 4: Communicate with server
+	pthread_t threads[2];
+
+	// Step 4.1: Threading client_sock
+	if (pthread_create(&threads[0], NULL, client_sock_handler, &client_sock) < 0) {
+		perror("Could not create thread for client_sock_handler");
+		return 1;
+	} else if (client_sock < 0) {
+		printf("server doesn't accept client_sock...\n");
+		exit(0);
+	} else {
+		printf("Server accepts the client_sock...\n");
+	}
+
+	// Step 4.2: Threading client_sock
+	if (pthread_create(&threads[1], NULL, client_game_sock_handler, &client_game_sock) < 0) {
+		perror("Could not create thread for client_game_sock_handler");
+		return 1;
+	} else if (client_game_sock < 0) {
+		printf("server doesn't accept client_game_sock...\n");
+		exit(0);
+	} else {
+		printf("Server accepts the client_game_sock...\n");
+	}
 	
-    while (fgets(buff, BUFF_SIZE, stdin) != NULL) {
-        buff[strlen(buff) - 1] = '\0';
+	// Step 4.3: Joining threads
+	pthread_join(threads[0], NULL);
+	pthread_join(threads[1], NULL);
 
-		message *msg = create_msg(buff, curr_status);
-		if (msg == NULL) {
-			continue;
-		} else if (msg->command == quit) {
-			send(client_sock, msg, msg_len, 0);
-			free(msg);
-			break;
-		} else {
-			apply_transition(msg->command);
-            
-			bytes_sent = send(client_sock, msg, msg_len, 0);
-
-			if(bytes_sent < 0)
-				perror("\nError: ");
-			
-			//receive reply
-			bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
-
-			if (bytes_received < 0) {
-					perror("\nError: ");
-					exit(1);
-			}
-			else if (bytes_received == 0) {
-					printf("Connection closed.\n");
-					break;
-			}
-			
-			buff[bytes_received] = '\0';
-			printf("%s", translate(buff));
-		}
-
-		free(msg);
-    }
-	
-	//Step 4: Close socket
+	//Step 5: Close socket
 	close(client_sock);
+	close(client_game_sock);
 	return 0;
 }

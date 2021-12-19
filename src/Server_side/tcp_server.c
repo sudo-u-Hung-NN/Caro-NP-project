@@ -9,7 +9,7 @@ int main(){
 	inOrderTraversal(root, NULL, 1);
 	INFORLOG("Loaded user tree");
 
-	int listen_sock, conn_sock; /* file descriptors */
+	int listen_sock, conn_sock, game_conn_sock; /* file descriptors */
 	struct sockaddr_in server; /* server's address information */
 	struct sockaddr_in client; /* client's address information */
 	pid_t pid;
@@ -43,7 +43,19 @@ int main(){
 
 	while(++count){
 		sin_size=sizeof(struct sockaddr_in);
+
+		// Connect sock to client_sock
 		if ((conn_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1){
+			if (errno == EINTR)
+				continue;
+			else{
+				perror("\nError");			
+				return 0;
+			}
+		}
+
+		// Connect sock to client_game_sock
+		if ((game_conn_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1) {
 			if (errno == EINTR)
 				continue;
 			else{
@@ -59,7 +71,7 @@ int main(){
 		if(pid == 0){
 			close(listen_sock);
 			printf("You got a connection from %s\n", inet_ntoa(client.sin_addr)); /* prints client's IP */
-			serve(conn_sock);
+			serve(conn_sock, game_conn_sock);
 		}
 
 		if (count % dumpfile_frequency == 0) {
@@ -68,6 +80,7 @@ int main(){
 		
 		/* The parent closes the connected socket since the child handles the new client */
 		close(conn_sock);
+		close(game_conn_sock);
 	}
 	close(listen_sock);
 

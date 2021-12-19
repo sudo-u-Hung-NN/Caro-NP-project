@@ -35,9 +35,10 @@ void sig_chld(int signo);
 
 /**
 * Receive and serve client
-* [IN] sockfd: socket descriptor that connects to client 	
+* [IN] sockfd: socket descriptor that connects to client 
+* [IN] game_conn_sock: socket descriptor that also connects to client	
 */
-void serve(int sockfd);
+void serve(int sockfd, int game_conn_sock);
 
 
 /**
@@ -69,20 +70,22 @@ void serve(int sockfd);
  * @brief Process sign up on socket that connects to client.
  * This function is defined in "src/Server_side/Functions/sign_in_up.c"
  * @param msg the requested message from client
- * @param current_user the current user
+ * @param client_sock the sock used for trivial communication
+ * @param client_game_sock the sock used for game communication only
  * @return User*
  */
-User* process_sign_up(message *msg, User* current_user);
+User* process_sign_up(message *msg, int client_sock, int client_game_sock);
 
 
 /**
  * @brief Process login on socket that connects to client.
  * This function is defined in "src/Server_side/Functions/sign_in_up.c"
  * @param msg the requested message from client
- * @param current_user the current user
+ * @param client_sock the sock used for trivial communication
+ * @param client_game_sock the sock used for game communication only
  * @return User*
  */
-User* process_sign_in(message *msg, User* current_user);
+User* process_sign_in(message *msg, int client_sock, int client_game_sock);
 
 
 /**

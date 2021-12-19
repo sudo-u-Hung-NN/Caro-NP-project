@@ -71,3 +71,112 @@ char *translate(char *server_reply) {
 
 	return server_reply;
 }
+
+
+void *client_sock_handler(void *client_socket) {
+	int client_sock = *(int*) client_socket;
+
+	char buff[BUFF_SIZE + 1];
+	int msg_len = sizeof(message);
+	int bytes_sent, bytes_received;
+
+
+	memset(buff,'\0',(strlen(buff)+1));
+
+	// First receive REQUEST_ID
+	bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
+	printf("\033[1;34mTrivial socket listener:\033[0m %s", translate(buff));
+	
+    while (fgets(buff, BUFF_SIZE, stdin) != NULL) {
+        buff[strlen(buff) - 1] = '\0';
+
+		message *msg = create_msg(buff, curr_status);
+		if (msg == NULL) {
+			continue;
+		} else if (msg->command == quit) {
+			send(client_sock, msg, msg_len, 0);
+			free(msg);
+			break;
+		} else {
+			apply_transition(msg->command);
+            
+			bytes_sent = send(client_sock, msg, msg_len, 0);
+
+			if(bytes_sent < 0)
+				perror("\nError: ");
+			
+			//receive reply
+			bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
+
+			if (bytes_received < 0) {
+					perror("\nError: ");
+					exit(1);
+			}
+			else if (bytes_received == 0) {
+					printf("Connection closed.\n");
+					break;
+			}
+			
+			buff[bytes_received] = '\0';
+			printf("\033[1;34mTrivial socket listener:\033[0m %s", translate(buff));
+		}
+
+		free(msg);
+    }
+
+	return 0;
+}
+
+
+
+void *client_game_sock_handler(void *client_game_socket) {
+	int client_game_sock = *(int*) client_game_socket;
+
+	char buff[BUFF_SIZE + 1];
+	int msg_len = sizeof(message);
+	int bytes_sent, bytes_received;
+
+	memset(buff,'\0',(strlen(buff)+1));
+	
+    while (recv(client_game_sock, buff, BUFF_SIZE, 0) > 0) {
+
+        buff[strlen(buff) - 1] = '\0';
+		printf("\033[1;34mGame socket listener:\033[0m %s", translate(buff));
+
+		fgets(buff, BUFF_SIZE, stdin);
+		message *msg = create_msg(buff, curr_status);
+		if (msg == NULL) {
+			continue;
+		} else if (msg->command == quit) {
+			send(client_game_sock, msg, msg_len, 0);
+			free(msg);
+			break;
+		} else {
+			apply_transition(msg->command);
+            
+			bytes_sent = send(client_game_sock, msg, msg_len, 0);
+
+			if(bytes_sent < 0)
+				perror("\nError: ");
+			
+			//receive reply
+			bytes_received = recv(client_game_sock, buff, BUFF_SIZE, 0);
+
+			if (bytes_received < 0) {
+					perror("\nError: ");
+					exit(1);
+			}
+			else if (bytes_received == 0) {
+					printf("Connection closed.\n");
+					break;
+			}
+			
+			buff[bytes_received] = '\0';
+			printf("Game socket listener: %s", translate(buff));
+		}
+
+		free(msg);
+    }
+
+	return 0;
+}
