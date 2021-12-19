@@ -19,15 +19,13 @@ int main()
 	server_addr.sin_addr.s_addr = inet_addr(SERVER_ADDR);
 
 	//Step 3: Request to connect server
-	if (connect(client_sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) < 0)
-	{
-		printf("Error! Can not connect client to sever! Client exit imediately!\n");
+	if (connect(client_chat_sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) < 0) {
+		printf("Error! Can not connect client game socket to sever! Client exit imediately!\n");
 		return 0;
 	}
 
-	if (connect(client_chat_sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) < 0)
-	{
-		printf("Error! Can not connect client game socket to sever! Client exit imediately!\n");
+	if (connect(client_sock, (struct sockaddr *)&server_addr, sizeof(struct sockaddr)) < 0) {
+		printf("Error! Can not connect client to sever! Client exit imediately!\n");
 		return 0;
 	}
 
@@ -35,17 +33,6 @@ int main()
 	pthread_t threads[2];
 
 	// Step 4.1: Threading client_sock
-	if (pthread_create(&threads[0], NULL, client_sock_handler, &client_sock) < 0) {
-		perror("Could not create thread for client_sock_handler");
-		return 1;
-	} else if (client_sock < 0) {
-		printf("server doesn't accept client_sock...\n");
-		exit(0);
-	} else {
-		printf("Server accepts the client_sock...\n");
-	}
-
-	// Step 4.2: Threading client_sock
 	if (pthread_create(&threads[1], NULL, client_chat_sock_handler, &client_chat_sock) < 0) {
 		perror("Could not create thread for client_chat_sock_handler");
 		return 1;
@@ -54,6 +41,16 @@ int main()
 		exit(0);
 	} else {
 		printf("Server accepts the client_chat_sock...\n");
+	}
+
+	if (pthread_create(&threads[0], NULL, client_sock_handler, &client_sock) < 0) {
+		perror("Could not create thread for client_sock_handler");
+		return 1;
+	} else if (client_sock < 0) {
+		printf("server doesn't accept client_sock...\n");
+		exit(0);
+	} else {
+		printf("Server accepts the client_sock...\n");
 	}
 	
 	// Step 4.3: Joining threads

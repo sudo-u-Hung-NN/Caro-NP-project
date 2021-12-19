@@ -5,30 +5,32 @@ struct KEY {
   msg_type mtype;
   sts_type usable_in_status[4];
   int num_usable;
+  char help[120];
+
 } keywords[MSG_TYPE_LEN] = {
-  {"play", play, {console}, 1},
-  {"go", go, {playing}, 1},
-  {"accept", acpt, {console, playing, spectating}, 3},
-  {"deny", deny, {console, playing, spectating}, 3},
-  {"cancel", cancel, {waiting}, 1},
-  {"draw", draw, {playing}, 1},
-  {"rematch", rematch, {console}, 1},
-  {"chat", chat, {console, playing, spectating}, 3},
-  {"quit", quit, {console, playing, spectating, waiting}, 4},
-  {"spec", spec, {console}, 1},
-  {"schat", schat, {spectating}, 1},
-  {"squit", squit, {spectating}, 1},
-  {"hist", hist, {console}, 1},
-  {"histp", histp, {console, spectating}, 2},
-  {"hista", hista, {console}, 1},
-  {"ret", ret, {spectating, waiting}, 2},
-  {"listp", listp, {console}, 1},
-  {"listg", listg, {console}, 1},
-  {"setname", setname, {console}, 1},
-  {"signup", signup, {console}, 1},
-  {"signpwd", signpwd, {console}, 1},
-  {"login", login, {console}, 1},
-  {"logpwd", logpwd, {console}, 1}
+  {"play", play, {console}, 1, "Type: 'play <account>' to challenge other players"},
+  {"go", go, {playing}, 1, "Type: 'go <A5>' to place your move to cell A5. You can only use this command in play mode"},
+  {"accept", acpt, {console, playing, spectating}, 3, "Type: 'accept' to accept challenge invitation from other"},
+  {"deny", deny, {console, playing, spectating}, 3, "Type: 'deny' to decline challenge invitation from other"},
+  {"cancel", cancel, {waiting}, 1, "Type: 'cancel' to cancel challenge invitation to other"},
+  {"draw", draw, {playing}, 1, "Type: 'draw' to send draw request to opponent. You can only use this command in play mode"},
+  {"rematch", rematch, {console}, 1, "Type: 'rematch' to re-challenge your previous opponent"},
+  {"chat", chat, {console, playing, spectating}, 3, "Type: 'chat <account> <content>' to send message to an ONLINE account"},
+  {"quit", quit, {console, playing, spectating, waiting}, 4, "Type: 'quit' to turn off the application"},
+  {"spec", spec, {console}, 1, "Type: 'spec' to spectate a currently-playing game"},
+  {"schat", schat, {spectating}, 1, "Type: 'schat' to send message to all players in a game. You can only use this command in spectating mode"},
+  {"squit", squit, {spectating}, 1, "Type: 'squit' to exit spectating. You can only use this command in spectating mode"},
+  {"hist", hist, {console}, 1, "Type: 'hist' to check your history"},
+  {"histp", histp, {console, spectating}, 2, "Type: 'histp <account>' to check an account's history"},
+  {"hista", hista, {console}, 1, "Type: 'hista' to check rankings"},
+  {"return", ret, {spectating, waiting}, 2, "Type: 'return' to get back"},
+  {"listp", listp, {console}, 1, "Type: 'listp' to list all players"},
+  {"listg", listg, {console}, 1, "Type: 'listg' to list all currently-playing games"},
+  {"setname", setname, {console}, 1, "Type: 'setname <newname>' to set your name to newname"},
+  {"signup", signup, {console}, 1, ""},
+  {"signpwd", signpwd, {console}, 1, ""},
+  {"login", login, {console}, 1, ""},
+  {"logpwd", logpwd, {console}, 1, ""}
 };
 
 
@@ -139,4 +141,12 @@ char *getData(message *msg) {
 void displayMessage(message *msg, char *announce) {
     printf("%s:\nCommand: <%s>\nTarget: <%s>\nData: <%s>\n",
             announce, keywords[msg->command].string, msg->data.target, msg->data.data);
+}
+
+void help() {
+    for (int i = 0; i < MSG_TYPE_LEN; i++) {
+        if (strlen(keywords[i].help) > 1) {
+            printf("%s\n", keywords[i].help);
+        }
+    }
 }

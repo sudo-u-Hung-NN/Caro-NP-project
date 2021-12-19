@@ -55,7 +55,7 @@ struct {
 	{"CACC_FALSE", "\033[0;35mAccount existed!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
 	{"ACC_FALSE", "\033[0;35mYour account doesn't exist!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
 	{"ACC_TRUE", "Valid account! Enter your password (\033[0;33mLOGPWD <password>\033[0m):\n"},
-	{"PWD_TRUE", "\033[0;34mAccess granted!\033[0m Login done\n"},
+	{"PWD_TRUE", "\033[0;34mAccess granted!\033[0m Login done. Use\033[0;34mhelp\033[0m to explore for more!\n"},
 	{"PWD_FALSE", "\033[0;35mWrong password!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
 	{"SETNAME_SUCESS", "\033[0;34mSetname successful\033[0m\n"},
 	{"DUPLICATED", "\033[0;35mYour account is already online!\033[0m"}, 
@@ -95,6 +95,9 @@ void *client_sock_handler(void *client_socket) {
 
 		if (strcasecmp(buff, "cs") == 0) {
 			display_chatscreen();
+			continue;
+		} else if (strcasecmp(buff, "help") == 0) {
+			help();
 			continue;
 		}
 

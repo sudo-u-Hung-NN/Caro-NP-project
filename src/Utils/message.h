@@ -23,5 +23,6 @@ char *getData(message *msg);
 char *getTarget(message *msg);
 
 void displayMessage(message *msg, char* announce);
+void help();
 
 #endif

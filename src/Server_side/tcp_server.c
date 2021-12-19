@@ -29,12 +29,12 @@ int main(){
 	server.sin_addr.s_addr = htonl(INADDR_ANY);  /* INADDR_ANY puts your IP address automatically */   
 
 	if(bind(listen_sock, (struct sockaddr*)&server, sizeof(server))==-1){ 
-		perror("\nError: ");
+		perror("Error");
 		return 0;
 	}     
 
 	if(listen(listen_sock, BACKLOG) == -1){  
-		perror("\nError: ");
+		perror("Error");
 		return 0;
 	}
 	
