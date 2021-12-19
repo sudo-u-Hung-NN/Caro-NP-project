@@ -1,6 +1,9 @@
 #include "server_helper.h"
 
-NodeUser *root = NULL;
+
+NodeUser *root = NULL;			// Record all users
+NodeGame *game_root = NULL;		// Record current games
+
 
 int main(){
 	// Load User tree

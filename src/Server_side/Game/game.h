@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../Users/user.h"
+#include "../../Utils/logger.h"
 
 #define SIZE 10 //Board size
 
@@ -41,6 +42,13 @@ typedef struct Game
 } Game;
 
 
+typedef struct NodeGame {
+    Game* game;
+    struct NodeGame *left;
+    struct NodeGame *right;
+} NodeGame;
+
+
 /**
  * @brief This function creates a user-cored Player
  * @param user 
@@ -53,17 +61,16 @@ Player* initPlayer(const User *user);
  * @brief This function creates a game with 2 players
  * @param player1 
  * @param player2 
- * @param game_id 
  * @return Game* 
  */
-Game* initGame(Player *player1, Player *player2, int game_id);
+Game* initGame(Player *player1, Player *player2);
 
 
 /**
  * @brief This function starts the game
  * @param game 
  */
-void play(Game* game);
+void game_play(Game* game);
 
 
 /**
@@ -77,6 +84,34 @@ void loadGameScreen(Game *game);
  * @brief This function calls back 2 players for another game
  * @param game 
  */
-void rematch(Game* game);
+void game_rematch(Game* game);
+
+
+/**
+ * @brief Insert a game into game tree
+ * @param game_root 
+ * @param game 
+ * @return NodeGame* game_root
+ */
+NodeGame *insert_NodeGame(NodeGame *game_root, Game *game);
+
+
+/**
+ * @brief This function search a game by id
+ * @param game_root 
+ * @param id 
+ * @return NodeGame* game_root
+ */
+NodeGame *search_NodeGame_byId(NodeGame *game_root, int id);
+
+
+/**
+ * @brief This function close a game and delete it out of the game tree
+ * @param game_root 
+ * @param id 
+ * @return NodeGame* game_root
+ */
+NodeGame* close_NodeGame_byId(NodeGame* game_root, int id);
+
 
 #endif

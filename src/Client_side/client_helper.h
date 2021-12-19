@@ -18,7 +18,9 @@
 
 
 #define NUM_TRANSITION 18
-#define NUM_TRANSLATE 9
+#define NUM_TRANSLATE 13
+#define NUM_CHATSTORE 20
+#define NUM_SCREENLINE 50
 
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_PORT 5500
@@ -54,6 +56,18 @@ void *client_sock_handler(void *client_sock);
  */
 void *client_chat_sock_handler(void *client_chat_sock);
 
+
+/**
+ * @brief This function store chat into ChatScreen
+ * @param buff 
+ */
+void store_chat(char* buff);
+
+
+/**
+ * @brief This function displays chat screen.
+ */
+void display_chatscreen();
 
 
 #endif

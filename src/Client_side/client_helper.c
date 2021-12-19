@@ -58,7 +58,11 @@ struct {
 	{"PWD_TRUE", "\033[0;34mAccess granted!\033[0m Login done\n"},
 	{"PWD_FALSE", "\033[0;35mWrong password!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
 	{"SETNAME_SUCESS", "\033[0;34mSetname successful\033[0m\n"},
-	{"DUPLICATED", "\033[0;35mYour account is already online!\033[0m"}
+	{"DUPLICATED", "\033[0;35mYour account is already online!\033[0m"}, 
+	{"NULL_RANKING", "\033[0;35mRanking file not found!\033[0m"},
+	{"NULL_HISTORY", "\033[0;35mHistory not found or not established yet!\033[0m"},
+	{"NULL_ACCOUNT", "\033[0;35mYou are looking for a ghoust account!\033[0m"},
+	{"OFFLINE_ACCOUNT", "\033[0;35mYou are looking for an offline account!\033[0m"}
 };
 
 
@@ -80,15 +84,19 @@ void *client_sock_handler(void *client_socket) {
 	int msg_len = sizeof(message);
 	int bytes_sent, bytes_received;
 
-
 	memset(buff,'\0',(strlen(buff)+1));
 
 	// First receive REQUEST_ID
 	bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
-	printf("\033[1;34mTrivial socket listener:\033[0m %s", translate(buff));
+	printf("\033[1;34mSERVER\033[0m %s", translate(buff));
 	
     while (fgets(buff, BUFF_SIZE, stdin) != NULL) {
         buff[strlen(buff) - 1] = '\0';
+
+		if (strcasecmp(buff, "cs") == 0) {
+			display_chatscreen();
+			continue;
+		}
 
 		message *msg = create_msg(buff, curr_status);
 		if (msg == NULL) {
@@ -99,6 +107,13 @@ void *client_sock_handler(void *client_socket) {
 			break;
 		} else {
 			apply_transition(msg->command);
+
+			if (msg->command == chat) {
+				char rendered[BUFF_SIZE];
+				bzero(rendered, BUFF_SIZE);
+				sprintf(rendered, "TO %s: %s", msg->data.target, msg->data.data);
+				store_chat(rendered);
+			}
             
 			bytes_sent = send(client_sock, msg, msg_len, 0);
 
@@ -109,70 +124,15 @@ void *client_sock_handler(void *client_socket) {
 			bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
 
 			if (bytes_received < 0) {
-					perror("\nError: ");
-					exit(1);
-			}
-			else if (bytes_received == 0) {
-					printf("Connection closed.\n");
-					break;
-			}
-			
-			buff[bytes_received] = '\0';
-			printf("\033[1;34mTrivial socket listener:\033[0m %s", translate(buff));
-		}
-
-		free(msg);
-    }
-
-	return 0;
-}
-
-
-
-void *client_chat_sock_handler(void *client_game_socket) {
-	int client_game_sock = *(int*) client_game_socket;
-
-	char buff[BUFF_SIZE + 1];
-	int msg_len = sizeof(message);
-	int bytes_sent, bytes_received;
-
-	memset(buff,'\0',(strlen(buff)+1));
-	
-    while (recv(client_game_sock, buff, BUFF_SIZE, 0) > 0) {
-
-        buff[strlen(buff) - 1] = '\0';
-		printf("\033[1;34mGame socket listener:\033[0m %s", translate(buff));
-
-		fgets(buff, BUFF_SIZE, stdin);
-		message *msg = create_msg(buff, curr_status);
-		if (msg == NULL) {
-			continue;
-		} else if (msg->command == quit) {
-			send(client_game_sock, msg, msg_len, 0);
-			free(msg);
-			break;
-		} else {
-			apply_transition(msg->command);
-            
-			bytes_sent = send(client_game_sock, msg, msg_len, 0);
-
-			if(bytes_sent < 0)
 				perror("\nError: ");
-			
-			//receive reply
-			bytes_received = recv(client_game_sock, buff, BUFF_SIZE, 0);
-
-			if (bytes_received < 0) {
-					perror("\nError: ");
-					exit(1);
-			}
-			else if (bytes_received == 0) {
-					printf("Connection closed.\n");
-					break;
+				exit(1);
+			} else if (bytes_received == 0) {
+				printf("Connection closed.\n");
+				break;
 			}
 			
 			buff[bytes_received] = '\0';
-			printf("Game socket listener: %s", translate(buff));
+			printf("\033[1;34mSERVER:\033[0m %s", translate(buff));
 		}
 
 		free(msg);
@@ -180,3 +140,4 @@ void *client_chat_sock_handler(void *client_game_socket) {
 
 	return 0;
 }
+

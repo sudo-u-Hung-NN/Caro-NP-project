@@ -15,10 +15,15 @@ UTILS = src/Utils
 SERVER_USERS = src/Server_side/Users
 SERVER_GAMEPLAY = src/Server_side/Gameplays
 SERVER_FUNCTIONS = src/Server_side/Functions
+SERVER_GAME = src/Server_side/Game
 
 SERVER_USERS_FILE := $(BUILDDIR)/user.o $(BUILDDIR)/utils.o
-SERVER_FUNCTIONS_FILE := $(BUILDDIR)/sign_in_up.o $(BUILDDIR)/setname.o $(BUILDDIR)/list.o $(BUILDDIR)/hist.o
-SERVERSIDE_REQUIREMENTS := $(SERVER_FUNCTIONS_FILE) $(SERVER_USERS_FILE)
+SERVER_FUNCTIONS_FILE := $(BUILDDIR)/sign_in_up.o $(BUILDDIR)/setname.o $(BUILDDIR)/list.o $(BUILDDIR)/hist.o \
+						$(BUILDDIR)/play.o $(BUILDDIR)/chat.o
+
+SERVER_GAME_FILE := $(BUILDDIR)/game.o $(BUILDDIR)/player.o $(BUILDDIR)/game_tree.o
+
+SERVERSIDE_REQUIREMENTS := $(SERVER_FUNCTIONS_FILE) $(SERVER_USERS_FILE) $(SERVER_GAME_FILE)
 
 
 # ====================== DEFINE UTILS ==============================
@@ -40,12 +45,15 @@ $(BUILDDIR)/tcp_server.o: $(SERVERSIDE)/tcp_server.c
 $(BUILDDIR)/server_helper.o: $(SERVERSIDE)/server_helper.c
 	$(CC) $(FLAGS) $(SERVERSIDE)/server_helper.c -o $(BUILDDIR)/server_helper.o
 
+
+
 #=====================< Server User files >=========================
 $(BUILDDIR)/user.o: $(SERVER_USERS)/user.c
 	$(CC) $(FLAGS) $(SERVER_USERS)/user.c -o $(BUILDDIR)/user.o
 
 $(BUILDDIR)/utils.o: $(SERVER_USERS)/utils.c
 	$(CC) $(FLAGS) $(SERVER_USERS)/utils.c -o $(BUILDDIR)/utils.o
+
 
 
 #=====================< Server Functions >==========================
@@ -61,16 +69,39 @@ $(BUILDDIR)/list.o: $(SERVER_FUNCTIONS)/list.c
 $(BUILDDIR)/hist.o: $(SERVER_FUNCTIONS)/hist.c
 	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/hist.c -o $(BUILDDIR)/hist.o
 
+$(BUILDDIR)/play.o: $(SERVER_FUNCTIONS)/play.c
+	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/play.c -o $(BUILDDIR)/play.o
+
+$(BUILDDIR)/chat.o: $(SERVER_FUNCTIONS)/chat.c
+	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/chat.c -o $(BUILDDIR)/chat.o
+
+
+
+#==========================< Server Game >==========================
+$(BUILDDIR)/game.o: $(SERVER_GAME)/game.c
+	$(CC) $(FLAGS) $(SERVER_GAME)/game.c -o $(BUILDDIR)/game.o
+
+$(BUILDDIR)/player.o: $(SERVER_GAME)/player.c
+	$(CC) $(FLAGS) $(SERVER_GAME)/player.c -o $(BUILDDIR)/player.o
+
+$(BUILDDIR)/game_tree.o: $(SERVER_GAME)/game_tree.c
+	$(CC) $(FLAGS) $(SERVER_GAME)/game_tree.c -o $(BUILDDIR)/game_tree.o
+
+
 
 #==========================< Client >===============================
-$(EXEDIR)/client: $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(UTILS_FILE)
-	$(CC) -pthread $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(UTILS_FILE) -o $(EXEDIR)/client
+$(EXEDIR)/client: $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(BUILDDIR)/client_chat.o $(UTILS_FILE)
+	$(CC) -pthread $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(BUILDDIR)/client_chat.o $(UTILS_FILE) -o $(EXEDIR)/client
 
 $(BUILDDIR)/tcp_client.o: $(CLIENTSIDE)/tcp_client.c
 	$(CC) $(FLAGS) $(CLIENTSIDE)/tcp_client.c -o $(BUILDDIR)/tcp_client.o
 
 $(BUILDDIR)/client_helper.o: $(CLIENTSIDE)/client_helper.c
 	$(CC) $(FLAGS) $(CLIENTSIDE)/client_helper.c -o $(BUILDDIR)/client_helper.o
+
+$(BUILDDIR)/client_chat.o: $(CLIENTSIDE)/client_chat.c
+	$(CC) $(FLAGS) $(CLIENTSIDE)/client_chat.c -o $(BUILDDIR)/client_chat.o
+
 
 
 #==========================< Utils >=================================

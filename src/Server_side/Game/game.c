@@ -1,5 +1,7 @@
 #include "game.h"
 
+extern int total_game;
+
 Game *initGameBoard(Game *game)
 {
     for (int i = 0; i < SIZE; i++)
@@ -12,7 +14,7 @@ Game *initGameBoard(Game *game)
     return game;
 }
 
-Game *initGame(Player *player1, Player *player2, int game_id)
+Game *initGame(Player *player1, Player *player2)
 {
     Game *game = (Game *)malloc(sizeof(Game));
     if (game == NULL)
@@ -21,10 +23,12 @@ Game *initGame(Player *player1, Player *player2, int game_id)
         exit(0);
     }
     game = initGameBoard(game);
-    game->id = game_id;
+    game->id = total_game;
     game->firstMove = 1;
     game->player1 = player1;
     game->player2 = player2;
+
+    total_game += 1;
     return game;
 }
 
@@ -138,7 +142,7 @@ int checkWin(Game *game, int row, int col)
 }
 
 //Start game
-void play(Game *game)
+void game_play(Game *game)
 {
     initGameBoard(game);
     loadGameScreen(game);
@@ -191,17 +195,17 @@ void play(Game *game)
     game->firstMove = 1;
 }
 
-void rematch(Game *game)
+void game_rematch(Game *game)
 {
     if (game->firstMove == 1)
     {
-        play(game);
+        game_play(game);
     }
     else
     {
         Player *tmp = game->player1;
         game->player1 = game->player2;
         game->player2 = tmp;
-        play(game);
+        game_play(game);
     }
 }

@@ -13,6 +13,7 @@ void sig_chld(int signo){
 
 void serve(int sockfd, int conn_chat_sock) {
 	message *msg = (message *) malloc(sizeof(message));
+    Game *game = NULL;
     User *current_user = NULL;
     int bytes_received;
 	
@@ -35,15 +36,10 @@ void serve(int sockfd, int conn_chat_sock) {
         switch (msg->command) {
             case play:
                 INFORLOG("Process play");
+                game = process_play(msg, current_user);
                 break;
             case go:
                 INFORLOG("Process go");
-                break;
-            case acpt:
-                INFORLOG("Process acpt");
-                break;
-            case deny:
-                INFORLOG("Process deny");
                 break;
             case cancel:
                 INFORLOG("Process cancel");
@@ -56,6 +52,7 @@ void serve(int sockfd, int conn_chat_sock) {
                 break;
             case chat:
                 INFORLOG("Process chat");
+                process_chat(msg, current_user);
                 break;
             case quit:
                 INFORLOG("Process quit");

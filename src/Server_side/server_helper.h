@@ -21,6 +21,8 @@
 #include "../Utils/message.h"
 #include "../Utils/logger.h"
 #include "./Users/user.h"
+#include "./Game/game.h"
+
 
 #define PORT 5500
 #define BACKLOG 20
@@ -51,6 +53,13 @@ void serve(int sockfd, int conn_chat_sock);
  * 1.4. process_listp()
  * 1.5. process_listg()
  * 
+ * 4. Game
+ * 4.1. process_chat()
+ * 4.2. process_play()
+ * 4.3. process_accept()
+ * 4.4. process_deny()
+ * 
+ * 
  * 2. History
  * 2.1. process_hist()
  * 2.2. process_histp()
@@ -61,7 +70,6 @@ void serve(int sockfd, int conn_chat_sock);
  * 3.2. process_squit()
  * 3.3. process_schat()
  * 
- * 4. Game
  * ================================================================================================
  */
 
@@ -142,6 +150,23 @@ void process_histp(message *msg, User* current_user);
  */
 void process_hista(message *msg, User* current_user);
 
+
+
+/** Game
+ * @brief This function send chat message
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
+void process_chat(message *msg, User* current_user);
+
+
+/**
+ * @brief This function process play protocol, create new game room
+ * @param msg the requested message from client
+ * @param current_user the current user
+ * @return Game* 
+ */
+Game* process_play(message *msg, User* current_user);
 
 
 #endif
