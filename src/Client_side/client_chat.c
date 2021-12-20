@@ -19,7 +19,7 @@ void store_chat(char* buff) {
 
 void display_chatscreen() {
 	system("clear");
-	printf("<===============================< \033[1;34mCHAT SCREEN\033[0m >================================>");
+	printf("<===========< \033[1;34mCHAT SCREEN\033[0m >===========>\n");
     for (int i = oldest_chat_index; i < NUM_CHATSTORE && (strlen(ChatScreen[i]) > 1); i++) {
 		printf("%s\n", ChatScreen[i]);
     }

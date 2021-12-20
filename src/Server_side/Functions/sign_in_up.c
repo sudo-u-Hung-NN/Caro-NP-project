@@ -23,7 +23,7 @@ User* process_sign_up(message *msg, int client_sock, int conn_chat_sock) {
         recv(client_sock, msg, sizeof(message), 0);
 
         // process message to get password
-        displayMessage(msg, "Received message");
+        // displayMessage(msg, "Received message");
         char *password = getData(msg);
 
         // create USer
@@ -79,7 +79,7 @@ User* process_sign_in(message *msg, int client_sock, int conn_chat_sock) {
         recv(client_sock, msg, sizeof(message), 0);
 
         // process message to get password
-        displayMessage(msg, "Received message");
+        // displayMessage(msg, "Received message");
         char *password = getData(msg);
 
         // activate USer

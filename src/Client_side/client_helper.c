@@ -55,14 +55,15 @@ struct {
 	{"CACC_FALSE", "\033[0;35mAccount existed!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
 	{"ACC_FALSE", "\033[0;35mYour account doesn't exist!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
 	{"ACC_TRUE", "Valid account! Enter your password (\033[0;33mLOGPWD <password>\033[0m):\n"},
-	{"PWD_TRUE", "\033[0;34mAccess granted!\033[0m Login done. Use\033[0;34mhelp\033[0m to explore for more!\n"},
+	{"PWD_TRUE", "\033[0;34mAccess granted!\033[0m Login done. Use \033[1;34mhelp\033[0m to explore for more!\n"},
 	{"PWD_FALSE", "\033[0;35mWrong password!\033[0m Please login (\033[0;33mLOGIN <account>\033[0m) or sign up (\033[0;33mSIGNUP <account>\033[0m):\n"},
 	{"SETNAME_SUCESS", "\033[0;34mSetname successful\033[0m\n"},
-	{"DUPLICATED", "\033[0;35mYour account is already online!\033[0m"}, 
-	{"NULL_RANKING", "\033[0;35mRanking file not found!\033[0m"},
-	{"NULL_HISTORY", "\033[0;35mHistory not found or not established yet!\033[0m"},
-	{"NULL_ACCOUNT", "\033[0;35mYou are looking for a ghoust account!\033[0m"},
-	{"OFFLINE_ACCOUNT", "\033[0;35mYou are looking for an offline account!\033[0m"}
+	{"DUPLICATED", "\033[0;35mYour account is already online!\033[0m\n"}, 
+	{"NULL_RANKING", "\033[0;35mRanking file not found!\033[0m\n"},
+	{"NULL_HISTORY", "\033[0;35mHistory not found or not established yet!\033[0m\n"},
+	{"NULL_ACCOUNT", "\033[0;35mYou are looking for a ghoust account!\033[0m\n"},
+	{"OFFLINE_ACCOUNT", "\033[0;35mYou are looking for an offline account!\033[0m\n"},
+	{"MESSAGE_SENT", "\033[0;34mMessage sent successfully\033[0m\n"}
 };
 
 
@@ -81,6 +82,7 @@ void *client_sock_handler(void *client_socket) {
 	int client_sock = *(int*) client_socket;
 
 	char buff[BUFF_SIZE + 1];
+	char rendered[BUFF_SIZE];
 	int msg_len = sizeof(message);
 	int bytes_sent, bytes_received;
 
@@ -89,8 +91,13 @@ void *client_sock_handler(void *client_socket) {
 	// First receive REQUEST_ID
 	bytes_received = recv(client_sock, buff, BUFF_SIZE, 0);
 	printf("\033[1;34mSERVER\033[0m %s", translate(buff));
+
+	int stop = 0;
 	
-    while (fgets(buff, BUFF_SIZE, stdin) != NULL) {
+    while (!stop) {
+		printf("Command line: ");
+		fgets(buff, BUFF_SIZE, stdin);
+
         buff[strlen(buff) - 1] = '\0';
 
 		if (strcasecmp(buff, "cs") == 0) {
@@ -99,9 +106,13 @@ void *client_sock_handler(void *client_socket) {
 		} else if (strcasecmp(buff, "help") == 0) {
 			help();
 			continue;
+		} else if (strcasecmp(buff, "clear") == 0) {
+			system("clear");
+			continue;
 		}
 
 		message *msg = create_msg(buff, curr_status);
+
 		if (msg == NULL) {
 			continue;
 		} else if (msg->command == quit) {
@@ -112,9 +123,8 @@ void *client_sock_handler(void *client_socket) {
 			apply_transition(msg->command);
 
 			if (msg->command == chat) {
-				char rendered[BUFF_SIZE];
 				bzero(rendered, BUFF_SIZE);
-				sprintf(rendered, "TO %s: %s", msg->data.target, msg->data.data);
+				sprintf(rendered, "\033[1;34mTO \033[1;32m%s\033[0m: %s", msg->data.target, msg->data.data);
 				store_chat(rendered);
 			}
             
@@ -136,6 +146,7 @@ void *client_sock_handler(void *client_socket) {
 			
 			buff[bytes_received] = '\0';
 			printf("\033[1;34mSERVER:\033[0m %s", translate(buff));
+			bzero(buff, BUFF_SIZE);
 		}
 
 		free(msg);

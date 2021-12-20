@@ -9,7 +9,6 @@ int main(){
 	// Load User tree
 	INFORLOG("Loading user tree");
 	root = loadUserTree(root);
-	inOrderTraversal(root, NULL, 1);
 	INFORLOG("Loaded user tree");
 
 	int listen_sock, conn_sock, conn_chat_sock; /* file descriptors */
@@ -47,18 +46,18 @@ int main(){
 	while(++count){
 		sin_size=sizeof(struct sockaddr_in);
 
-		// Connect sock to client_sock
-		if ((conn_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1){
+		// Connect sock to client_chat_sock
+		if ((conn_chat_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1) {
 			if (errno == EINTR)
 				continue;
 			else{
-				perror("\nError");			
+				perror("\nError");
 				return 0;
 			}
 		}
 
-		// Connect sock to client_chat_sock
-		if ((conn_chat_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1) {
+		// Connect sock to client_sock
+		if ((conn_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1){
 			if (errno == EINTR)
 				continue;
 			else{

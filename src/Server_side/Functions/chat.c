@@ -17,11 +17,14 @@ void process_chat(message *msg, User* current_user) {
         send(current_user->conn_sock, "OFFLINE_ACCOUNT", 50, 0);
 
     } else {
-        INFORLOG("Transfer message");
+        INFORLOG("Transfering message...");
         char rendered[BUFF_SIZE];
         bzero(rendered, BUFF_SIZE);
 
         sprintf(rendered, "\033[1;32m%s\033[0m: %s", current_user->account, content);
         send(receiver->user->chat_sock, rendered, BUFF_SIZE, 0);
+        send(current_user->conn_sock, "MESSAGE_SENT", 50, 0);
     }
+
+    INFORLOG("Transfered message!");
 }

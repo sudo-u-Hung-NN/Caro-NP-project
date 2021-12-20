@@ -34,8 +34,7 @@ void process_listp(message *msg, User* current_user) {
 
     strcat(list, formatted_string);
     traverse(root, list);
-    INFORLOG("Listing...");
-    printf("%s", list);
+    // printf("%s", list);
     send(current_user->conn_sock, list, BUFF_SIZE, 0);
 }
 

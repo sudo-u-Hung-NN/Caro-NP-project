@@ -54,7 +54,6 @@ Game* process_play(message *msg, User* current_user) {
         } else {
             INFORLOG("Received denial!");
             send(current_user->conn_sock, "DENIED", 50, 0);
-
         } 
         
     }

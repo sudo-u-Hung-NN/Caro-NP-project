@@ -78,7 +78,7 @@ NodeUser* loadUserTree(NodeUser* root) {
             strcpy(password, "\0");
 
             fromLineToData(line, sep, &id, name, account, password);
-            printf("IO: id<%d> user<%s> account<%s> passwd<%s>\n", id, name, account, password);
+            // printf("IO: id<%d> user<%s> account<%s> passwd<%s>\n", id, name, account, password);
 
             User *user = create_User(id, name, account, password);
             root = insert_NodeUser(root, user, 1);

@@ -59,13 +59,13 @@ msg_type command_char2type(char *command) {
             return keywords[i].mtype;
         }
     }
+    printf("return unidentified\n");
     return not_identified;
 }
 
 
 message *create_msg(char *input, sts_type curr_status) {
-    message *new_msg = (message *) malloc(sizeof(message));
-    bzero(new_msg, sizeof(message));
+    message *new_msg = NULL;
 
     char command[25] = "\0", target[TARGET_LEN] = "\0", data[DATA_LEN] = "\0";
 
@@ -76,56 +76,44 @@ message *create_msg(char *input, sts_type curr_status) {
     }
 
     msg_type mtype = command_char2type(command);
-    int valid = check_valid(curr_status, mtype);
 
     if (mtype == not_identified) {
         error(ERROR_COMMAND_NOT_FOUND);
-        free(new_msg);
         return NULL;
 
-    } else if (!valid) {
+    } else if (!check_valid(curr_status, mtype)) {
         error(ERROR_INVALID_STATUS_COMMAND);
-        free(new_msg);
         return NULL;
-    }
 
-    switch (mtype)
-    {
-    // case play:
-    // case go:
-    // case spec:
-    // case histp:
-    // case setname:
-    // case signup:
-    // case signpwd:
-    // case login:
-    // case logpwd:
-    case chat:
-        for (j = i + 1; j < TARGET_LEN && input[j] != ' '; j++) {
-            target[j - (i+1)] = input[j];
-        }
-        break;
-    default:
-        break;
-    }
-
-    if (j == 0) {
-        k = i;
     } else {
-        k = j;
+        switch (mtype) {
+            case chat:
+                for (j = i + 1; j < TARGET_LEN && input[j] != ' '; j++) {
+                    target[j - (i+1)] = input[j];
+                }
+                break;
+            default:
+                break;
+        }
+
+        if (j == 0) {
+            k = i;
+        } else {
+            k = j;
+        }
+
+        for (int p = k + 1; p - (k + 1) < DATA_LEN && input[p] != '\0'; p++) {
+            data[p - (k + 1)] = input[p];
+        }
+
+        new_msg = (message *) malloc(sizeof(message));
+        bzero(new_msg, sizeof(message));
+        new_msg->command = mtype;
+        // new_msg->status = curr_status;
+        strcpy(new_msg->data.target, target);
+        strcpy(new_msg->data.data, data);
+
     }
-
-    for (int p = k + 1; p - (k + 1) < DATA_LEN && input[p] != '\0'; p++) {
-        data[p - (k + 1)] = input[p];
-    }
-
-    new_msg->command = mtype;
-    // new_msg->status = curr_status;
-    strcpy(new_msg->data.target, target);
-    strcpy(new_msg->data.data, data);
-
-    // printf("Create message:\nCommand: <%s>\nTarget: <%s>\nData: <%s>\n",
-    //         keywords[new_msg->command].string, new_msg->data.target, new_msg->data.data);
     return new_msg;
 }
 
