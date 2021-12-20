@@ -153,20 +153,45 @@ void process_hista(message *msg, User* current_user);
 
 
 /** Game
- * @brief This function send chat message
- * @param msg the requested message from client
- * @param current_user the current user
- */
-void process_chat(message *msg, User* current_user);
-
-
-/**
  * @brief This function process play protocol, create new game room
  * @param msg the requested message from client
  * @param current_user the current user
  * @return Game* 
  */
 Game* process_play(message *msg, User* current_user);
+
+void process_go(message *msg, User* current_user, Game* game);
+
+void process_draw(message *msg, User* current_user, Game* game);
+
+void process_rematch(message *msg, User* current_user);
+
+
+
+/** Spec
+ * @brief This function help spectate a game
+ * @param msg the requested message from client
+ * @param current_user the current user
+ * @return Game* 
+ */
+Game * process_spec(message *msg, User* current_user);
+
+void process_schat(message *msg, User* current_user, Game* game);
+
+void process_squit(message *msg, User* current_user, Game* game);
+
+
+/** Norm
+ * @brief This function send chat message
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
+void process_chat(message *msg, User* current_user);
+
+void process_return(message *msg, User* current_user);
+
+void process_cancel(message *msg, User* current_user);
+
 
 
 #endif

@@ -34,22 +34,25 @@ void serve(int sockfd, int conn_chat_sock) {
         }
 
         switch (msg->command) {
+            // =============== Game =================
             case play:
                 INFORLOG("Process play");
                 game = process_play(msg, current_user);
                 break;
             case go:
                 INFORLOG("Process go");
-                break;
-            case cancel:
-                INFORLOG("Process cancel");
+                process_go(msg, current_user, game);
                 break;
             case draw:
                 INFORLOG("Process draw");
+                process_draw(msg, current_user, game);
                 break;
             case rematch:
                 INFORLOG("Process rematch");
+                process_rematch(msg, current_user);
                 break;
+
+            // ============== Norm ==================
             case chat:
                 INFORLOG("Process chat");
                 process_chat(msg, current_user);
@@ -58,15 +61,30 @@ void serve(int sockfd, int conn_chat_sock) {
                 INFORLOG("Process quit");
                 keep_on = 0;
                 break;
+            case cancel:
+                INFORLOG("Process cancel");
+                process_cancel(msg, current_user);
+                break;
+            case ret:
+                INFORLOG("Process return");
+                process_return(msg, current_user);
+                break;
+
+            // ============== Spec =================
             case spec:
                 INFORLOG("Process spec");
+                game = process_spec(msg, current_user);
                 break;
             case schat:
                 INFORLOG("Process schat");
+                process_schat(msg, current_user, game);
                 break;
             case squit:
                 INFORLOG("Process squit");
+                process_squit(msg, current_user, game);
                 break;
+
+            // ============== Hist =================
             case hist:
                 INFORLOG("Process hist signal");
                 process_hist(msg, current_user);
@@ -79,8 +97,8 @@ void serve(int sockfd, int conn_chat_sock) {
                 INFORLOG("Process hista signal");
                 process_hista(msg, current_user);
                 break;
-            case ret:
-                break;
+            
+            // ============== Utils ================
             case listp:
                 INFORLOG("Process listp signal");
                 process_listp(msg, current_user);

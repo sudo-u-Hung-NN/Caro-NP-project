@@ -154,7 +154,12 @@ void process_hista(message *msg, User* current_user) {
             bzero(line, 50);
         }
         
-        send(current_user->conn_sock, ranking, BUFF_SIZE, 0);
+        if (strlen(ranking) > 1) {
+            send(current_user->conn_sock, ranking, BUFF_SIZE, 0);
+        } else {
+            send(current_user->conn_sock, "BLANK_RANKING", 50, 0);
+        }
+        
     }
 
     free(ranking);

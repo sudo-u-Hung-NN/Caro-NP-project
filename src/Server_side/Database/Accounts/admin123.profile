@@ -1,1 +1,3 @@
-game_id,opponent_account,outcome
+15,hung20184118,0
+16,hung20184118,1
+209,hung20184118,1
