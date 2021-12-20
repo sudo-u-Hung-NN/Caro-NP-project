@@ -46,7 +46,7 @@ char *translate(char *server_reply);
  * Client sock is used for trivial communication
  * @param client_sock 
  */
-void *client_sock_handler(void *client_sock);
+void *client_listener_handler(void *client_sock);
 
 
 /**
@@ -54,7 +54,7 @@ void *client_sock_handler(void *client_sock);
  * Client game sock is used for game's infor communication, i.e. Game board, Movement
  * @param client_chat_sock 
  */
-void *client_chat_sock_handler(void *client_chat_sock);
+void *client_speaker_handler(void *client_chat_sock);
 
 
 /**

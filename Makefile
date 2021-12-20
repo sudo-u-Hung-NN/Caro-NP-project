@@ -126,18 +126,20 @@ $(BUILDDIR)/game_tree.o: $(SERVER_GAME)/game_tree.c
 
 
 #==========================< Client >===============================
-$(EXEDIR)/client: $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(BUILDDIR)/client_chat.o $(UTILS_FILE)
-	$(CC) -pthread $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_helper.o $(BUILDDIR)/client_chat.o $(UTILS_FILE) -o $(EXEDIR)/client
+$(EXEDIR)/client: $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_listener.o $(BUILDDIR)/client_speaker.o $(BUILDDIR)/client_helper.o $(UTILS_FILE)
+	$(CC) -pthread $(BUILDDIR)/tcp_client.o $(BUILDDIR)/client_listener.o $(BUILDDIR)/client_speaker.o $(BUILDDIR)/client_helper.o $(UTILS_FILE) -o $(EXEDIR)/client
 
 $(BUILDDIR)/tcp_client.o: $(CLIENTSIDE)/tcp_client.c
 	$(CC) $(FLAGS) $(CLIENTSIDE)/tcp_client.c -o $(BUILDDIR)/tcp_client.o
 
+$(BUILDDIR)/client_listener.o: $(CLIENTSIDE)/client_listener.c
+	$(CC) $(FLAGS) $(CLIENTSIDE)/client_listener.c -o $(BUILDDIR)/client_listener.o
+
+$(BUILDDIR)/client_speaker.o: $(CLIENTSIDE)/client_speaker.c
+	$(CC) $(FLAGS) $(CLIENTSIDE)/client_speaker.c -o $(BUILDDIR)/client_speaker.o
+
 $(BUILDDIR)/client_helper.o: $(CLIENTSIDE)/client_helper.c
 	$(CC) $(FLAGS) $(CLIENTSIDE)/client_helper.c -o $(BUILDDIR)/client_helper.o
-
-$(BUILDDIR)/client_chat.o: $(CLIENTSIDE)/client_chat.c
-	$(CC) $(FLAGS) $(CLIENTSIDE)/client_chat.c -o $(BUILDDIR)/client_chat.o
-
 
 
 #==========================< Utils >=================================

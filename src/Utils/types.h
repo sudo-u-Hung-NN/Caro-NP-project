@@ -8,7 +8,8 @@ typedef enum {
 	spec, schat, squit,
 	hist, histp, hista,
 	ret, listp, listg, setname, signup, signpwd, login, logpwd,
-  not_identified
+  	not_identified,
+	ok, ko
 } msg_type;
 
 

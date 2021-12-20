@@ -11,7 +11,7 @@ void sig_chld(int signo){
 }
 
 
-void serve(int sockfd, int conn_chat_sock) {
+void serve(int client_listener_sock, int client_speaker_sock) {
 	message *msg = (message *) malloc(sizeof(message));
     Game *game = NULL;
     User *current_user = NULL;
@@ -21,11 +21,11 @@ void serve(int sockfd, int conn_chat_sock) {
     while(keep_on) {
         
         if (current_user == NULL) {
-            send(sockfd, "REQUEST_ID", 50, 0);
+            send(client_listener_sock, "REQUEST_ID", 50, 0);
         }
 
         bzero(msg, sizeof(message));
-        bytes_received = recv(sockfd, msg, sizeof(message), 0); //blocking
+        bytes_received = recv(client_listener_sock, msg, sizeof(message), 0); //blocking
 
         // displayMessage(msg, "RECV message");
 
@@ -113,17 +113,17 @@ void serve(int sockfd, int conn_chat_sock) {
                 break;
             case signup:
                 INFORLOG("Process sign up signal");
-                current_user = process_sign_up(msg, sockfd, conn_chat_sock);
+                current_user = process_sign_up(msg, client_listener_sock, client_speaker_sock);
                 break;
             case login:
                 INFORLOG("Process login signal");
-                current_user = process_sign_in(msg, sockfd, conn_chat_sock);
+                current_user = process_sign_in(msg, client_listener_sock, client_speaker_sock);
                 break;
             default:
                 break;
         }
     }
     free(msg);
-	close(sockfd);
-    close(conn_chat_sock);
+	close(client_listener_sock);
+    close(client_speaker_sock);
 }

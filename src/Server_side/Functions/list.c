@@ -4,7 +4,7 @@ extern NodeUser* root;
 
 
 void traverse(NodeUser *root, char* buffer) {
-    if (root == NULL || strlen(buffer) + 1 > BUFF_SIZE) {
+    if (root == NULL || strlen(buffer) + 1 > rep_instruct_len) {
         return;
     }
     char formatted_string[150] = "\0";
@@ -26,8 +26,11 @@ void traverse(NodeUser *root, char* buffer) {
  */
 void process_listp(message *msg, User* current_user) {
     INFORLOG("Received request listing all players");
-    char list[BUFF_SIZE];
-    bzero(list, BUFF_SIZE);
+
+    size_t rep_len = sizeof(reply);
+
+    char list[rep_instruct_len];
+    bzero(list, rep_instruct_len);
 
     char formatted_string[128] = "\0";
     sprintf(formatted_string, "\n%3s %-15s %-15s %-5s\n", "Id", "Account", "Name", "Status");
@@ -35,7 +38,7 @@ void process_listp(message *msg, User* current_user) {
     strcat(list, formatted_string);
     traverse(root, list);
     // printf("%s", list);
-    send(current_user->conn_sock, list, BUFF_SIZE, 0);
+    send(current_user->conn_sock, create_reply(ok, list), rep_len, 0);
 }
 
 /**

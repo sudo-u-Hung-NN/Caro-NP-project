@@ -11,7 +11,7 @@ int main(){
 	root = loadUserTree(root);
 	INFORLOG("Loaded user tree");
 
-	int listen_sock, conn_sock, conn_chat_sock; /* file descriptors */
+	int listen_sock, client_listener_sock, client_speaker_sock; /* file descriptors */
 	struct sockaddr_in server; /* server's address information */
 	struct sockaddr_in client; /* client's address information */
 	pid_t pid;
@@ -47,7 +47,7 @@ int main(){
 		sin_size=sizeof(struct sockaddr_in);
 
 		// Connect sock to client_chat_sock
-		if ((conn_chat_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1) {
+		if ((client_speaker_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1) {
 			if (errno == EINTR)
 				continue;
 			else{
@@ -57,7 +57,7 @@ int main(){
 		}
 
 		// Connect sock to client_sock
-		if ((conn_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1){
+		if ((client_listener_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1){
 			if (errno == EINTR)
 				continue;
 			else{
@@ -73,7 +73,7 @@ int main(){
 		if(pid == 0){
 			close(listen_sock);
 			printf("You got a connection from %s\n", inet_ntoa(client.sin_addr)); /* prints client's IP */
-			serve(conn_sock, conn_chat_sock);
+			serve(client_listener_sock, client_speaker_sock);
 		}
 
 		if (count % dumpfile_frequency == 0) {
@@ -81,8 +81,8 @@ int main(){
 		}
 		
 		/* The parent closes the connected socket since the child handles the new client */
-		close(conn_sock);
-		close(conn_chat_sock);
+		close(client_listener_sock);
+		close(client_speaker_sock);
 	}
 	close(listen_sock);
 

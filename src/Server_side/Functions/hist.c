@@ -47,8 +47,8 @@ void fromLineToHist(char* input, char sep, int* game_id, char *opponent_account,
  * @return char* 
  */
 char* read_account_file(char *account) {
-    char *history = (char*) malloc(BUFF_SIZE * sizeof(char));
-    bzero(history, BUFF_SIZE);
+    char *history = (char*) malloc(rep_instruct_len * sizeof(char));
+    bzero(history, rep_instruct_len);
 
     char filename[50];
     bzero(filename, 50);
@@ -69,7 +69,7 @@ char* read_account_file(char *account) {
 
         char rendered_line[100];
 
-        while ((fgets(line, 50, fptr) != NULL) && strlen(history) < BUFF_SIZE - 1) {
+        while ((fgets(line, 50, fptr) != NULL) && strlen(history) < rep_instruct_len - 1) {
             fromLineToHist(line, ',', &game_id, opponent_account, &win);
 
             bzero(line, 50);
@@ -98,9 +98,9 @@ char* read_account_file(char *account) {
 void process_hist(message *msg, User* current_user) {
     char *history = read_account_file(current_user->account);
     if(history == NULL) {
-        send(current_user->conn_sock, "NULL_HISTORY", 50, 0);
+        send(current_user->conn_sock, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
     } else {
-        send(current_user->conn_sock, history, BUFF_SIZE, 0);
+        send(current_user->conn_sock, create_reply(ok, history), sizeof(reply), 0);
         free(history);
     }
 }
@@ -115,10 +115,11 @@ void process_hist(message *msg, User* current_user) {
 void process_histp(message *msg, User* current_user) {
     char *account = getData(msg);
     char *history = read_account_file(account);
+
     if(history == NULL) {
-        send(current_user->conn_sock, "NULL_HISTORY", 50, 0);
+        send(current_user->conn_sock, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
     } else {
-        send(current_user->conn_sock, history, BUFF_SIZE, 0);
+        send(current_user->conn_sock, create_reply(ok, history), sizeof(reply), 0);
         free(history);
     }
 }
@@ -131,8 +132,8 @@ void process_histp(message *msg, User* current_user) {
  * @param current_user the current user
  */
 void process_hista(message *msg, User* current_user) {
-    char *ranking = (char*) malloc(BUFF_SIZE * sizeof(char));
-    bzero(ranking, BUFF_SIZE);
+    char *ranking = (char*) malloc(rep_instruct_len * sizeof(char));
+    bzero(ranking, rep_instruct_len);
 
     char filename[50];
     bzero(filename, 50);
@@ -140,24 +141,26 @@ void process_hista(message *msg, User* current_user) {
     sprintf(filename, "%s/all.ranking", ACCOUNT_PATH);
     FILE *fptr = fopen(filename, "r");
 
+    size_t rep_len = sizeof(reply);
+
     int rank = 0;
     if (fptr == NULL) {
         WARNING("Ranking file not found!");
-        send(current_user->conn_sock, "NULL_RANKING", 50, 0);
+        send(current_user->conn_sock, create_reply(ko, "NULL_RANKING"), rep_len, 0);
 
     } else {
         char line[50] = "";
         fgets(line, 50, fptr);
 
-        while ((fgets(line, 50, fptr) != NULL) && (strlen(ranking) < BUFF_SIZE - 1) && (rank < 15)) {
+        while ((fgets(line, 50, fptr) != NULL) && (strlen(ranking) < rep_instruct_len - 1) && (rank < 15)) {
             strcat(ranking, line);
             bzero(line, 50);
         }
         
         if (strlen(ranking) > 1) {
-            send(current_user->conn_sock, ranking, BUFF_SIZE, 0);
+            send(current_user->conn_sock, create_reply(ok, ranking), rep_len, 0);
         } else {
-            send(current_user->conn_sock, "BLANK_RANKING", 50, 0);
+            send(current_user->conn_sock, create_reply(ko, "BLANK_RANKING"), rep_len, 0);
         }
         
     }

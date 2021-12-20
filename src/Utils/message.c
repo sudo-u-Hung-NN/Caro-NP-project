@@ -131,6 +131,15 @@ void displayMessage(message *msg, char *announce) {
             announce, keywords[msg->command].string, msg->data.target, msg->data.data);
 }
 
+
+reply *create_reply(msg_type command, char *instruction) {
+    reply *tmp = (reply*) malloc(sizeof(reply));
+    tmp->command = command;
+    strcpy(tmp->instruction, instruction);
+    return tmp;
+}
+
+
 void help() {
     for (int i = 0; i < MSG_TYPE_LEN; i++) {
         if (strlen(keywords[i].help) > 1) {

@@ -1,7 +1,7 @@
 #include "../server_helper.h"
 
 
-User* process_sign_up(message *msg, int client_sock, int conn_chat_sock) {
+User* process_sign_up(message *msg, int client_listener_sock, int client_speaker_sock) {
     User *newUser = NULL;
 
     // process message to get account
@@ -13,15 +13,18 @@ User* process_sign_up(message *msg, int client_sock, int conn_chat_sock) {
     int valid = (found == NULL);
     INFORLOG("done!");
 
+    // Create reply
+    size_t rep_len = sizeof(reply);
+
     if (valid) {
         // send CACC_TRUE
         INFORLOG("Sending CACC_TRUE");
-        send(client_sock, "CACC_TRUE", 50, 0);
+        send(client_listener_sock, create_reply(ok, "CACC_TRUE"), rep_len, 0);
 
         // recv SIGNPWD <pass>
         memset(msg, 0, sizeof(message));
         INFORLOG("Waiting SIGNPWD");
-        recv(client_sock, msg, sizeof(message), 0);
+        recv(client_listener_sock, msg, sizeof(message), 0);
 
         // process message to get password
         // displayMessage(msg, "Received message");
@@ -42,11 +45,13 @@ User* process_sign_up(message *msg, int client_sock, int conn_chat_sock) {
 
         INFORLOG("Send REQUEST_ID");
         // send REQUEST_ID
-        send(client_sock, "REQUEST_ID", 50, 0);
+        send(client_listener_sock, create_reply(ok, "REQUEST_ID"), rep_len, 0);
 
     } else {
         INFORLOG("Send CACC_FALSE");
-        send(client_sock, "CACC_FALSE", 50, 0);
+        send(client_listener_sock, create_reply(ko, "CACC_FALSE"), rep_len, 0);
+        
     }
+
     return newUser;
 }
