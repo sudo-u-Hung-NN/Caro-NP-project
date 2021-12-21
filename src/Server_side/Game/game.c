@@ -16,7 +16,9 @@ Game *initGameBoard(Game *game)
 
 Game *initGame(Player *player1, Player *player2)
 {
-    Game *game = (Game *)malloc(sizeof(Game));
+    // Game *game = (Game *)malloc(sizeof(Game));
+    Game* game = (Game *) mmap(NULL, sizeof(Game), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
     if (game == NULL)
     {
         printf("Can't allocate!\n");
@@ -27,6 +29,8 @@ Game *initGame(Player *player1, Player *player2)
     game->firstMove = 1;
     game->player1 = player1;
     game->player2 = player2;
+
+    game->number_spectator = 0;
 
     total_game += 1;
     return game;

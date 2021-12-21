@@ -3,7 +3,9 @@
 int total_game = 0;
 
 NodeGame *create_NodeGame(Game *game) {
-    NodeGame *tmp = (NodeGame*) malloc (sizeof(NodeGame));
+    // NodeGame *tmp = (NodeGame*) malloc (sizeof(NodeGame));
+    NodeGame *tmp = (NodeGame*) mmap (NULL, sizeof(NodeGame), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
     tmp->game = game;
     tmp->left = NULL;
     tmp->right = NULL;

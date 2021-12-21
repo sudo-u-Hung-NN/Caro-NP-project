@@ -45,6 +45,7 @@ void *client_speaker_handler(void *client_speaker) {
 			if (msg->command == chat) {
 				bzero(rendered, BUFF_SIZE);
 				sprintf(rendered, "\033[1;34mTO \033[1;32m%s\033[0m: %s", msg->data.target, msg->data.data);
+				printf("%s\n", rendered);
 				store_chat(rendered);
 			}
             

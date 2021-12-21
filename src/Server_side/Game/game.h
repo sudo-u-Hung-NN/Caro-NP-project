@@ -3,9 +3,12 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "sys/mman.h"
+
 #include "../Users/user.h"
 #include "../../Utils/logger.h"
 
+#define MAX_SPECTATOR 10
 #define SIZE 10 //Board size
 
 #define ROW_A 0
@@ -38,6 +41,8 @@ typedef struct Game
     char board[SIZE][SIZE];
     Player *player1;
     Player *player2;
+    int number_spectator;
+    User *spectators[MAX_SPECTATOR];
     int firstMove;
 } Game;
 

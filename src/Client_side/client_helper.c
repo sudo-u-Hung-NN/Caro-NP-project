@@ -64,7 +64,17 @@ struct {
 	{"NULL_ACCOUNT", "\033[0;35mYou are looking for a ghoust account!\033[0m\n"},
 	{"OFFLINE_ACCOUNT", "\033[0;35mYou are looking for an offline account!\033[0m\n"},
 	{"MESSAGE_SENT", "\033[0;34mMessage sent successfully\033[0m\n"},
-	{"BLANK_RANKING", "\033[0;35mBlank ranking file!\033[0m\n"}
+	{"BLANK_RANKING", "\033[0;35mBlank ranking file!\033[0m\n"},
+	{"ON_DEVELOP", "\033[0;35mThis functionality is on develop!\033[0m\n"},
+	{"LOOP_OPERATOR", "\033[0;35mYou are trying to execute operators on yourself!\033[0m\n"},
+	
+	// Gamming
+	{"ACCEPTED", "\033[1;34mYour challenge request is accepted!\033[0m\n"},
+	{"DENIED", "\033[1;35mYour challenge request is denied!\033[0m\n"},
+	{"GAME_CREATED", "\033[1;34mThe game is successfully created!\033[0m\n"},
+	{"GAME_FAILED", "\033[1;35mFailed to create new game! Try again latter!\033[0m\n"},
+	{"YOUR_TURN", "\033[1;34mYour turn!\033[0m (use \033[0;33mGO <row><col>\033[0m, e.g. GO A3)\n"},
+	{"OPPONENT_TURN", "\033[1;35mIt's your opponent's turn!\033[0m\n"}
 };
 
 

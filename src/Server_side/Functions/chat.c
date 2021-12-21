@@ -14,6 +14,14 @@ void process_chat(message *msg, User* current_user) {
         WARNING("Receiver not found!");
         send(current_user->listener, create_reply(ko, "NULL_ACCOUNT"), rep_len, 0);
 
+    } else if (receiver->user == current_user) {
+        WARNING("Self chatting detected!");
+        send(current_user->listener, create_reply(ko, "LOOP_OPERATOR"), rep_len, 0);
+
+    } else if (receiver->user->listener == current_user->listener) {
+        WARNING("Error in listener!");
+        send(current_user->listener, create_reply(ko, "LOOP_OPERATOR"), rep_len, 0);
+
     } else if (receiver->is_active != 1) {
         WARNING("Trying to send message to offline account");
         send(current_user->listener, create_reply(ko, "OFFLINE_ACCOUNT"), rep_len, 0);

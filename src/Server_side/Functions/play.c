@@ -34,7 +34,7 @@ Game* process_play(message *msg, User* current_user) {
         // Waiting for reply
         INFORLOG("Waiting for acceptance");
         bzero(msg, recv_len);
-        recv(opponent->user->listener, msg, recv_len, 0);
+        recv(opponent->user->speaker, msg, recv_len, 0);
 
         // displayMessage(msg, "Receive reply");
         
@@ -53,8 +53,19 @@ Game* process_play(message *msg, User* current_user) {
             INFORLOG("Create new game");
             newgame = initGame(player1, player2);
 
-            INFORLOG("Insert new game into Game Binary Tree");
-            game_root = insert_NodeGame(game_root, newgame);
+            if (newgame != NULL) {
+                INFORLOG("Insert new game into Game Binary Tree");
+                game_root = insert_NodeGame(game_root, newgame);
+                send(current_user->listener, create_reply(ok, "GAME_CREATED"), rep_len, 0);
+                send(opponent->user->listener, create_reply(ok, "GAME_CREATED"), rep_len, 0);
+
+                send(current_user->listener, create_reply(ok, "YOUR_TURN"), rep_len, 0);
+                send(opponent->user->listener, create_reply(ok, "OPPONENT_TURN"), rep_len, 0);
+                
+            } else {
+                send(current_user->listener, create_reply(ko, "GAME_FAILED"), rep_len, 0);
+                send(opponent->user->listener, create_reply(ko, "GAME_FAILED"), rep_len, 0);
+            }
 
         } else {
             INFORLOG("Received denial!");
