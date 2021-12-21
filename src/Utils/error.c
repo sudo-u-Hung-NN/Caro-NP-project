@@ -18,7 +18,7 @@ void error(ErrorCode err) {
   int i;
   for (i = 0 ; i < NUM_OF_ERRORS; i ++) {
     if (errors[i].errorCode == err) {
-      printf("ERROR: \033[1;35m%s\033[0m\n", errors[i].message);
+      printf("\033[0;31m%s\033[0m: \033[1;35m%s\033[0m\n", "ERROR", errors[i].message);
       break;
     }
   }

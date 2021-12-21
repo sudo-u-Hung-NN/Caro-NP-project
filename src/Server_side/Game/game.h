@@ -28,7 +28,7 @@
 
 typedef struct Player
 {
-    int id;
+    char role; // 'X' or 'Y'
     int score;
     const User *user;
     int draw;
@@ -43,7 +43,7 @@ typedef struct Game
     Player *player2;
     int number_spectator;
     User *spectators[MAX_SPECTATOR];
-    int firstMove;
+    char turn; // 'X' or 'Y'
 } Game;
 
 
@@ -57,9 +57,10 @@ typedef struct NodeGame {
 /**
  * @brief This function creates a user-cored Player
  * @param user 
+ * @param role either 'X' or 'O'
  * @return Player* 
  */
-Player* initPlayer(const User *user);
+Player* initPlayer(const User *user, char role);
 
 
 /**

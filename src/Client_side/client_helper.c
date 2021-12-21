@@ -71,7 +71,8 @@ struct {
 	// Gamming
 	{"ACCEPTED", "\033[1;34mYour challenge request is accepted!\033[0m\n"},
 	{"DENIED", "\033[1;35mYour challenge request is denied!\033[0m\n"},
-	{"GAME_CREATED", "\033[1;34mThe game is successfully created!\033[0m\n"},
+	{"GAME_CREATED_X", "\033[1;34mThe game is successfully created! You play X\033[0m\n"},
+	{"GAME_CREATED_O", "\033[1;34mThe game is successfully created! You play O\033[0m\n"},
 	{"GAME_FAILED", "\033[1;35mFailed to create new game! Try again latter!\033[0m\n"},
 	{"YOUR_TURN", "\033[1;34mYour turn!\033[0m (use \033[0;33mGO <row><col>\033[0m, e.g. GO A3)\n"},
 	{"OPPONENT_TURN", "\033[1;35mIt's your opponent's turn!\033[0m\n"}
