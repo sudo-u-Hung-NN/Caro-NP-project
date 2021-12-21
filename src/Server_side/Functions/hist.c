@@ -32,7 +32,7 @@ void fromLineToHist(char* input, char sep, int* game_id, char *opponent_account,
     strcpy(opponent_account, data);
 
     bzero(data, sizeof(data));
-    for(; input[i] != sep; i++) {
+    for(i = i + 1; input[i] != sep; i++) {
         cut[0] = input[i];
         cut[1] = '\0';
         strcat(data, cut);
@@ -61,8 +61,6 @@ char* read_account_file(char *account) {
         return NULL;
     } else {
         char line[50] = "";
-        fgets(line, 50, fptr);
-
         int game_id = 0;
         int win = 0;
         char opponent_account[50] = "\0";
@@ -96,6 +94,13 @@ char* read_account_file(char *account) {
  * @param current_user the current user
  */
 void process_hist(message *msg, User* current_user) {
+    char self_infor[512];
+    bzero(self_infor, 512);
+    sprintf(self_infor, "Name: %s\nAccount: %s\nId: %d\nListener socket: %d\nSpeaker socket: %d\n",
+                current_user->name, current_user->account, current_user->id, current_user->listener, current_user->speaker);
+    
+    send(current_user->listener, create_reply(ok, self_infor), sizeof(reply), 0);
+
     char *history = read_account_file(current_user->account);
     if(history == NULL) {
         send(current_user->listener, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);

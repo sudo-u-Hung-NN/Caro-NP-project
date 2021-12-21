@@ -64,6 +64,7 @@ struct {
 	{"NULL_ACCOUNT", "\033[0;35mYou are looking for a ghoust account!\033[0m\n"},
 	{"OFFLINE_ACCOUNT", "\033[0;35mYou are looking for an offline account!\033[0m\n"},
 	{"MESSAGE_SENT", "\033[0;34mMessage sent successfully\033[0m\n"},
+	{"MESSAGE_FAILED", "\033[0;35mFailed to send message!\033[0m\n"},
 	{"BLANK_RANKING", "\033[0;35mBlank ranking file!\033[0m\n"},
 	{"ON_DEVELOP", "\033[0;35mThis functionality is on develop!\033[0m\n"},
 	{"LOOP_OPERATOR", "\033[0;35mYou are trying to execute operators on yourself!\033[0m\n"},

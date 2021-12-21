@@ -59,6 +59,7 @@ void serve(int client_listener_sock, int client_speaker_sock) {
                 break;
             case quit:
                 INFORLOG("Process quit");
+                process_quit(msg, current_user);
                 keep_on = 0;
                 break;
             case cancel:

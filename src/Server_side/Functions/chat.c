@@ -33,9 +33,15 @@ void process_chat(message *msg, User* current_user) {
 
         sprintf(rendered, "\033[1;32m%s\033[0m: %s", current_user->account, content);
 
-        send(receiver->user->listener, create_reply(chat, rendered), rep_len, 0);
-        send(current_user->listener, create_reply(ok, "MESSAGE_SENT"), rep_len, 0);
-
-        INFORLOG("Transfered message!");
+        if(send(receiver->user->listener, create_reply(chat, rendered), rep_len, 0) > 0) {
+            INFORLOG("Transfered message!");
+            if (send(current_user->listener, create_reply(ok, "MESSAGE_SENT"), rep_len, 0)) {
+                INFORLOG("Sent notification!");
+            }
+        } else {
+            if (send(current_user->listener, create_reply(ok, "MESSAGE_FAILED"), rep_len, 0)) {
+                INFORLOG("Sent notification!");
+            }
+        }
     }
 }

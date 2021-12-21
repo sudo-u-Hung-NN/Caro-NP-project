@@ -26,7 +26,7 @@ Game *initGame(Player *player1, Player *player2)
     }
     game = initGameBoard(game);
     game->id = total_game;
-    game->firstMove = 1;
+    game->turn = 'X';
     game->player1 = player1;
     game->player2 = player2;
 
@@ -167,7 +167,7 @@ void game_play(Game *game)
         loadGameScreen(game);
         if (checkWin(game, row, col))
         {
-            game->firstMove = 2;
+            game->turn = 'O';
             game->player1->score += 3;
             game->player2->score--;
             printf("%s won!\n", game->player1->user->name);
@@ -186,7 +186,7 @@ void game_play(Game *game)
         loadGameScreen(game);
         if (checkWin(game, row, col))
         {
-            game->firstMove = 1;
+            game->turn = 'X';
             game->player2->score += 3;
             game->player1->score--;
             printf("%s won!\n", game->player2->user->name);
@@ -196,13 +196,12 @@ void game_play(Game *game)
     printf("Game draw!\n");
     game->player1->score++;
     game->player2->score++;
-    game->firstMove = 1;
+    game->turn = 'X';
 }
 
 void game_rematch(Game *game)
 {
-    if (game->firstMove == 1)
-    {
+    if (game->turn == 'X') {
         game_play(game);
     }
     else

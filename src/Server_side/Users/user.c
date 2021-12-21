@@ -7,8 +7,8 @@ int compare(User *a, User* b) {
 }
 
 User* create_User(int id, char* name, char* account, char* password) {
-    // User *tmp = (User*) malloc(sizeof(User));
-    User *tmp = (User*) mmap(NULL, sizeof(User), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+    User *tmp = (User*) malloc(sizeof(User));
+    // User *tmp = (User*) mmap(NULL, sizeof(User), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 
     tmp->id = id;
     strcpy(tmp->name, name);

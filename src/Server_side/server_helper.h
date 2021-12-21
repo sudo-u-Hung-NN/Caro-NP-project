@@ -192,6 +192,6 @@ void process_return(message *msg, User* current_user);
 
 void process_cancel(message *msg, User* current_user);
 
-
+void process_quit(message *msg, User* current_user);
 
 #endif

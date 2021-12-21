@@ -20,7 +20,7 @@ SERVER_GAME = src/Server_side/Game
 SERVER_USERS_FILE := $(BUILDDIR)/user.o $(BUILDDIR)/utils.o
 
 SERVER_FUNCTIONS_FILE := $(BUILDDIR)/play.o $(BUILDDIR)/go.o $(BUILDDIR)/draw.o $(BUILDDIR)/rematch.o \
-						$(BUILDDIR)/chat.o $(BUILDDIR)/cancel.o $(BUILDDIR)/return.o \
+						$(BUILDDIR)/chat.o $(BUILDDIR)/cancel.o $(BUILDDIR)/return.o $(BUILDDIR)/quit.o \
 						$(BUILDDIR)/spec.o \
 						$(BUILDDIR)/hist.o \
 						$(BUILDDIR)/list.o $(BUILDDIR)/setname.o $(BUILDDIR)/sign_up.o $(BUILDDIR)/log_in.o

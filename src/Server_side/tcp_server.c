@@ -21,6 +21,9 @@ int main(){
 		printf("socket() error\n");
 		return 0;
 	}
+
+	int option = 1;
+	setsockopt(listen_sock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 	
 	bzero(&server, sizeof(server));
 	server.sin_family = AF_INET;         
