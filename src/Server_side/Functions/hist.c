@@ -32,7 +32,7 @@ void fromLineToHist(char* input, char sep, int* game_id, char *opponent_account,
     strcpy(opponent_account, data);
 
     bzero(data, sizeof(data));
-    for(i = i + 1; input[i] != sep; i++) {
+    for(i = i + 1; input[i] != '\n' && input[i] != EOF; i++) {
         cut[0] = input[i];
         cut[1] = '\0';
         strcat(data, cut);
@@ -60,23 +60,23 @@ char* read_account_file(char *account) {
         WARNING("Profile not found!");
         return NULL;
     } else {
-        char line[50] = "";
+        char line[100] = "";
         int game_id = 0;
         int win = 0;
         char opponent_account[50] = "\0";
 
-        char rendered_line[100];
+        char rendered_line[150];
 
-        while ((fgets(line, 50, fptr) != NULL) && strlen(history) < rep_instruct_len - 1) {
+        while ((fgets(line, 100, fptr) != NULL) && strlen(history) < rep_instruct_len - 1) {
             fromLineToHist(line, ',', &game_id, opponent_account, &win);
 
-            bzero(line, 50);
-            bzero(rendered_line, 100);
+            bzero(line, 100);
+            bzero(rendered_line, 150);
             
             if (win) {
-                sprintf(rendered_line, "%s played with %s :-: game id<%d> :-: \033[1;34mwin\033[0m\n", account, opponent_account, game_id);
+                sprintf(rendered_line, "\n%s played with %s :-: game id<%d> :-: \033[1;34mwin\033[0m", account, opponent_account, game_id);
             } else {
-                sprintf(rendered_line, "%s played with %s :-: game id<%d> :-: \033[0;31mlose\033[0m\n", account, opponent_account, game_id);
+                sprintf(rendered_line, "\n%s played with %s :-: game id<%d> :-: \033[0;31mlose\033[0m", account, opponent_account, game_id);
             }
             strcat(history, rendered_line);
         }
@@ -96,12 +96,13 @@ char* read_account_file(char *account) {
 void process_hist(message *msg, User* current_user) {
     char self_infor[512];
     bzero(self_infor, 512);
-    sprintf(self_infor, "Name: %s\nAccount: %s\nId: %d\nListener socket: %d\nSpeaker socket: %d\n",
+    sprintf(self_infor, "\nName: %s\nAccount: %s\nId: %d\nListener socket: %d\nSpeaker socket: %d\n",
                 current_user->name, current_user->account, current_user->id, current_user->listener, current_user->speaker);
     
     send(current_user->listener, create_reply(ok, self_infor), sizeof(reply), 0);
 
     char *history = read_account_file(current_user->account);
+
     if(history == NULL) {
         send(current_user->listener, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
     } else {
