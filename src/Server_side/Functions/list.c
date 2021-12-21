@@ -2,7 +2,6 @@
 
 extern NodeUser* root;
 
-
 void traverse(NodeUser *root, char* buffer) {
     if (root == NULL || strlen(buffer) + 1 > rep_instruct_len) {
         return;
@@ -18,6 +17,7 @@ void traverse(NodeUser *root, char* buffer) {
     strcat(buffer, formatted_string);
     traverse(root->right, buffer);
 }
+
 
 /**
  * @brief This function displays all online players
@@ -38,8 +38,9 @@ void process_listp(message *msg, User* current_user) {
     strcat(list, formatted_string);
     traverse(root, list);
     // printf("%s", list);
-    send(current_user->conn_sock, create_reply(ok, list), rep_len, 0);
+    send(current_user->listener, create_reply(ok, list), rep_len, 0);
 }
+
 
 /**
  * @brief This function shows all current games
@@ -48,4 +49,5 @@ void process_listp(message *msg, User* current_user) {
  */
 void process_listg(message *msg, User* current_user) {
     INFORLOG("Received request listing all games");
+    send(current_user->listener, create_reply(ko, "ON_DEVELOP"), sizeof(reply), 0);
 }

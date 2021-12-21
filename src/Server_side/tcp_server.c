@@ -85,7 +85,8 @@ int main(){
 		close(client_speaker_sock);
 	}
 	close(listen_sock);
-
 	dumpUserTree(root);
+	freeUserTree(root);
+	
 	return 0;
 }

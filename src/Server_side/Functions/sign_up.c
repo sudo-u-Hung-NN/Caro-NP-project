@@ -24,7 +24,7 @@ User* process_sign_up(message *msg, int client_listener_sock, int client_speaker
         // recv SIGNPWD <pass>
         memset(msg, 0, sizeof(message));
         INFORLOG("Waiting SIGNPWD");
-        recv(client_listener_sock, msg, sizeof(message), 0);
+        recv(client_speaker_sock, msg, sizeof(message), 0);
 
         // process message to get password
         // displayMessage(msg, "Received message");

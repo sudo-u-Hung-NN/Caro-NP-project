@@ -1,22 +1,27 @@
 #include "user.h"
+#include "sys/mman.h"
+
 
 int compare(User *a, User* b) {
     return strcmp(a->account, b->account);
 }
 
 User* create_User(int id, char* name, char* account, char* password) {
-    User *tmp = (User*) malloc(sizeof(User));
+    // User *tmp = (User*) malloc(sizeof(User));
+    User *tmp = (User*) mmap(NULL, sizeof(User), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
     tmp->id = id;
     strcpy(tmp->name, name);
     strcpy(tmp->account, account);
     strcpy(tmp->password, password);
-    tmp->conn_sock = -1;
-    tmp->chat_sock = -1;
+    tmp->listener = -1;
+    tmp->speaker = -1;
     return tmp;
 }
 
 NodeUser *create_NodeUser(User* user, int is_stored_in_database) {
-    NodeUser *tmp = (NodeUser*) malloc(sizeof(NodeUser));
+    // NodeUser *tmp = (NodeUser*) malloc(sizeof(NodeUser));
+    NodeUser *tmp = (NodeUser*) mmap(NULL, sizeof(NodeUser), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 
     tmp->is_active = 0;
     tmp->is_stored_in_database = is_stored_in_database;
@@ -102,6 +107,8 @@ void freeUserTree(NodeUser *root) {
     }
     freeUserTree(root->left);
     freeUserTree(root->right);
-    free(root->user);
-    free(root);
+    munmap(root->user, sizeof(root->user));
+    // free(root->user);
+    munmap(root, sizeof(root));
+    // free(root);
 }

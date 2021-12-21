@@ -45,6 +45,7 @@ void *client_listener_handler(void *client_socket) {
         if (rep->command == chat) {
             bzero(rendered, BUFF_SIZE);
             sprintf(rendered, "\033[1;34mFROM\033[0m %s", translate(rep->instruction));
+            printf("%s\n", rendered);
             store_chat(rendered);
         } else {
             printf("\033[1;34mSERVER:\033[0m %s", translate(rep->instruction));

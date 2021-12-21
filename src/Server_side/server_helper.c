@@ -21,11 +21,11 @@ void serve(int client_listener_sock, int client_speaker_sock) {
     while(keep_on) {
         
         if (current_user == NULL) {
-            send(client_listener_sock, "REQUEST_ID", 50, 0);
+            send(client_listener_sock, create_reply(ok, "REQUEST_ID"), sizeof(reply), 0);
         }
 
         bzero(msg, sizeof(message));
-        bytes_received = recv(client_listener_sock, msg, sizeof(message), 0); //blocking
+        bytes_received = recv(client_speaker_sock, msg, sizeof(message), 0); //blocking
 
         // displayMessage(msg, "RECV message");
 

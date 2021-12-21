@@ -12,11 +12,11 @@ void process_chat(message *msg, User* current_user) {
 
     if (receiver == NULL) {
         WARNING("Receiver not found!");
-        send(current_user->conn_sock, create_reply(ko, "NULL_ACCOUNT"), rep_len, 0);
+        send(current_user->listener, create_reply(ko, "NULL_ACCOUNT"), rep_len, 0);
 
     } else if (receiver->is_active != 1) {
         WARNING("Trying to send message to offline account");
-        send(current_user->conn_sock, create_reply(ko, "OFFLINE_ACCOUNT"), rep_len, 0);
+        send(current_user->listener, create_reply(ko, "OFFLINE_ACCOUNT"), rep_len, 0);
 
     } else {
         INFORLOG("Transfering message...");
@@ -25,9 +25,9 @@ void process_chat(message *msg, User* current_user) {
 
         sprintf(rendered, "\033[1;32m%s\033[0m: %s", current_user->account, content);
 
-        send(receiver->user->chat_sock, create_reply(chat, rendered), rep_len, 0);
-        send(current_user->conn_sock, create_reply(ok, "MESSAGE_SENT"), rep_len, 0);
-    }
+        send(receiver->user->listener, create_reply(chat, rendered), rep_len, 0);
+        send(current_user->listener, create_reply(ok, "MESSAGE_SENT"), rep_len, 0);
 
-    INFORLOG("Transfered message!");
+        INFORLOG("Transfered message!");
+    }
 }

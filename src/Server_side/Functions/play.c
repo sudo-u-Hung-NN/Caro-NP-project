@@ -15,11 +15,11 @@ Game* process_play(message *msg, User* current_user) {
 
     if (opponent == NULL) {
         WARNING("Failed to find opponent");
-        send(current_user->conn_sock, create_reply(ko, "NULL_ACCOUNT"), rep_len, 0);
+        send(current_user->listener, create_reply(ko, "NULL_ACCOUNT"), rep_len, 0);
 
     } else if (opponent->is_active != 1) {
         WARNING("Trying to challenge an offline opponent");
-        send(current_user->conn_sock, create_reply(ko, "OFFLINE_ACCOUNT"), rep_len, 0);
+        send(current_user->listener, create_reply(ko, "OFFLINE_ACCOUNT"), rep_len, 0);
 
     } else {
         INFORLOG("Sending invitation");
@@ -28,19 +28,19 @@ Game* process_play(message *msg, User* current_user) {
         sprintf(rendered, "\033[1;36mCHALLENGE\033[0m from %s", current_user->account);
         
         // Send challenge to opponent
-        send(opponent->user->conn_sock, create_reply(play, rendered), rep_len, 0);
+        send(opponent->user->listener, create_reply(play, rendered), rep_len, 0);
         
         
         // Waiting for reply
         INFORLOG("Waiting for acceptance");
         bzero(msg, recv_len);
-        recv(opponent->user->conn_sock, msg, recv_len, 0);
+        recv(opponent->user->listener, msg, recv_len, 0);
 
         // displayMessage(msg, "Receive reply");
         
         if (msg->command == acpt) {
             // notice the sender
-            send(current_user->conn_sock, create_reply(acpt, "ACCEPTED"), rep_len, 0);
+            send(current_user->listener, create_reply(acpt, "ACCEPTED"), rep_len, 0);
 
             INFORLOG("Received acceptance!");
             
@@ -58,7 +58,7 @@ Game* process_play(message *msg, User* current_user) {
 
         } else {
             INFORLOG("Received denial!");
-            send(current_user->conn_sock, create_reply(deny, "DENIED"), rep_len, 0);
+            send(current_user->listener, create_reply(deny, "DENIED"), rep_len, 0);
         } 
         
     }

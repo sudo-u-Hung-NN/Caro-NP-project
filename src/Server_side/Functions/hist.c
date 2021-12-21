@@ -98,9 +98,9 @@ char* read_account_file(char *account) {
 void process_hist(message *msg, User* current_user) {
     char *history = read_account_file(current_user->account);
     if(history == NULL) {
-        send(current_user->conn_sock, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
+        send(current_user->listener, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
     } else {
-        send(current_user->conn_sock, create_reply(ok, history), sizeof(reply), 0);
+        send(current_user->listener, create_reply(ok, history), sizeof(reply), 0);
         free(history);
     }
 }
@@ -117,9 +117,9 @@ void process_histp(message *msg, User* current_user) {
     char *history = read_account_file(account);
 
     if(history == NULL) {
-        send(current_user->conn_sock, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
+        send(current_user->listener, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
     } else {
-        send(current_user->conn_sock, create_reply(ok, history), sizeof(reply), 0);
+        send(current_user->listener, create_reply(ok, history), sizeof(reply), 0);
         free(history);
     }
 }
@@ -146,7 +146,7 @@ void process_hista(message *msg, User* current_user) {
     int rank = 0;
     if (fptr == NULL) {
         WARNING("Ranking file not found!");
-        send(current_user->conn_sock, create_reply(ko, "NULL_RANKING"), rep_len, 0);
+        send(current_user->listener, create_reply(ko, "NULL_RANKING"), rep_len, 0);
 
     } else {
         char line[50] = "";
@@ -158,9 +158,9 @@ void process_hista(message *msg, User* current_user) {
         }
         
         if (strlen(ranking) > 1) {
-            send(current_user->conn_sock, create_reply(ok, ranking), rep_len, 0);
+            send(current_user->listener, create_reply(ok, ranking), rep_len, 0);
         } else {
-            send(current_user->conn_sock, create_reply(ko, "BLANK_RANKING"), rep_len, 0);
+            send(current_user->listener, create_reply(ko, "BLANK_RANKING"), rep_len, 0);
         }
         
     }
