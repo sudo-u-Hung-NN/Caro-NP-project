@@ -112,6 +112,8 @@ struct {
 	{"SCREEN", "\033[1;34m<============= GAME SCREEN ==============>!\033[0m\n"},
 	{"INVALID_MOVE", "\033[1;35mYou have made an invalid move!\033[0m\n"},
 	{"FALSE_FORMAT", "\033[1;35mYour move is of wrong format!\033[0m\n"},
+	{"DRAW_REQUEST", "\033[1;34mYou have received a draw request!\033[0m\n"},
+	{"DRAW",  "\033[1;34mThe game ends tie for both!\033[0m\n"}
 };
 
 

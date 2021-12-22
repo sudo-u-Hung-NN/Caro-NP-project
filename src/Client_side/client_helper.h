@@ -18,7 +18,7 @@
 
 
 #define NUM_TRANSITION 19
-#define NUM_TRANSLATE 30
+#define NUM_TRANSLATE 32
 #define NUM_CHATSTORE 20
 #define NUM_SCREENLINE 50
 

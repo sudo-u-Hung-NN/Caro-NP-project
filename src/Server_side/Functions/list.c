@@ -72,7 +72,7 @@ void process_listg(message *msg, User* current_user) {
     bzero(list, rep_instruct_len);
 
     char formatted_string[128] = "\0";
-    sprintf(formatted_string, "\n%3d %-15s %-15s %5d\n", "Id", "Player1", "Player2", "Specs");
+    sprintf(formatted_string, "\n%3s %-15s %-15s %5s\n", "Id", "Player1", "Player2", "Specs");
     strcat(list, formatted_string);
 
     traverse_game(game_root, list);
