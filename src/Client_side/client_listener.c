@@ -39,7 +39,7 @@ void *client_listener_handler(void *client_socket) {
 
     while ((bytes_received = recv(client_sock, rep, BUFF_SIZE, 0)) > 0) {
         if (rep->command != ok && rep->command != ko && rep->command != not_identified) {
-            apply_transition(rep->command);
+            recv_command(rep->command);
         }
 
         if (rep->command == chat) {

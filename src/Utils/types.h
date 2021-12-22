@@ -9,7 +9,7 @@ typedef enum {
 	hist, histp, hista,
 	ret, listp, listg, setname, signup, signpwd, login, logpwd,
   	not_identified,
-	ok, ko
+	ok, ko, done
 } msg_type;
 
 

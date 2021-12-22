@@ -1,8 +1,8 @@
 #include "client_helper.h"
 
-sts_type prev_status = console;
 sts_type curr_status = console;
-msg_type recv_command = not_identified;
+msg_type sendCommand = not_identified;
+msg_type recvCommand = not_identified;
 
 int main()
 {

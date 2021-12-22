@@ -17,8 +17,8 @@
 #include "../Utils/message.h"
 
 
-#define NUM_TRANSITION 18
-#define NUM_TRANSLATE 25
+#define NUM_TRANSITION 19
+#define NUM_TRANSLATE 30
 #define NUM_CHATSTORE 20
 #define NUM_SCREENLINE 50
 
@@ -26,11 +26,12 @@
 #define SERVER_PORT 5500
 #define BUFF_SIZE 1024
 
-/**
- * @brief This function is called whenever user create a command
- * @param recv_command 
- */
-void apply_transition(msg_type recv_command);
+
+
+
+void send_command(msg_type command);
+
+void recv_command(msg_type command);
 
 
 /**

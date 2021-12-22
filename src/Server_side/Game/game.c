@@ -14,6 +14,7 @@ Game *initGameBoard(Game *game)
     return game;
 }
 
+
 Game *initGame(Player *player1, Player *player2)
 {
     // Game *game = (Game *)malloc(sizeof(Game));
@@ -36,25 +37,48 @@ Game *initGame(Player *player1, Player *player2)
     return game;
 }
 
-void loadGame(Game *game, char role, int row, int col)
-{
+
+void loadGame(Game *game, char role, int row, int col) {
     game->board[row][col] = role;
 }
 
-void loadGameScreen(Game *game)
-{
-    printf("    0   1   2   3   4   5   6   7   8   9\n");
-    printf("  -----------------------------------------\n");
+
+char* loadGameScreen(Game *game) {
+
+    char *screen = (char*) malloc(512 * sizeof(char));
+    bzero(screen, 512);
+    strcat(screen, "\n    0   1   2   3   4   5   6   7   8   9\n");
+    strcat(screen, "  -----------------------------------------\n");
+
     char row = 65;
     for (int i = 0; i < SIZE; i++)
     {
-        printf("%c ", row++);
+        char cell[6] = "";
+        sprintf(cell, "%c ", row++);
+        strcat(screen, cell);
+        bzero(cell, 6);
+
         for (int j = 0; j < SIZE; j++)
         {
-            printf("| %c ", game->board[i][j]);
+            sprintf(cell, "| %c ", game->board[i][j]);
+            strcat(screen, cell);
         }
-        printf("|\n  -----------------------------------------\n");
+        strcat(screen, "|\n  -----------------------------------------\n");
     }
+
+    return screen;
+    // printf("    0   1   2   3   4   5   6   7   8   9\n");
+    // printf("  -----------------------------------------\n");
+    // char row = 65;
+    // for (int i = 0; i < SIZE; i++)
+    // {
+    //     printf("%c ", row++);
+    //     for (int j = 0; j < SIZE; j++)
+    //     {
+    //         printf("| %c ", game->board[i][j]);
+    //     }
+    //     printf("|\n  -----------------------------------------\n");
+    // }
 }
 
 //Check entered cordination valid or invalid
@@ -63,6 +87,7 @@ int isValid(Game *game, int row, int col)
 {
     return (game->board[row][col] == '.') && (row < SIZE) && (col < SIZE) && (row >= 0) && (col >= 0);
 }
+
 
 int checkWin(Game *game, int row, int col)
 {
@@ -145,6 +170,15 @@ int checkWin(Game *game, int row, int col)
     return 0;
 }
 
+
+void get_move(Game *game, char *move, int *row, int *col) {
+    do {
+        scanf("%s", move);
+        *row = (int)move[0] - 65;
+        *col = (int)move[1] - 48;
+    } while (!isValid(game, *row, *col));
+}
+
 //Start game
 void game_play(Game *game)
 {
@@ -155,13 +189,7 @@ void game_play(Game *game)
     int step = 0;
     while (step <= 100)
     {
-        do
-        {
-            printf("Enter %s's move: ", game->player1->user->name);
-            scanf("%s", move);
-            row = (int)move[0] - 65;
-            col = (int)move[1] - 48;
-        } while (!isValid(game, row, col));
+        get_move(game, move, &row, &col);
         step++;
         loadGame(game, ROLE_X, row, col);
         loadGameScreen(game);
@@ -174,13 +202,7 @@ void game_play(Game *game)
             return;
         }
 
-        do
-        {
-            printf("Enter %s's move: ", game->player2->user->name);
-            scanf("%s", move);
-            row = (int)move[0] - 65;
-            col = (int)move[1] - 48;
-        } while (!isValid(game, row, col));
+        get_move(game, move, &row, &col);
         step++;
         loadGame(game, ROLE_O, row, col);
         loadGameScreen(game);

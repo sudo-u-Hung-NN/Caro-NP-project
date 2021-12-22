@@ -39,7 +39,7 @@ void process_chat(message *msg, User* current_user) {
                 INFORLOG("Sent notification!");
             }
         } else {
-            if (send(current_user->listener, create_reply(ok, "MESSAGE_FAILED"), rep_len, 0)) {
+            if (send(current_user->listener, create_reply(ko, "MESSAGE_FAILED"), rep_len, 0)) {
                 INFORLOG("Sent notification!");
             }
         }

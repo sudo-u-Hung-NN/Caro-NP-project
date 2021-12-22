@@ -1,8 +1,6 @@
 #include "client_helper.h"
 
-extern sts_type prev_status;
 extern sts_type curr_status;
-extern msg_type recv_command;
 
 
 void *client_speaker_handler(void *client_speaker) {
@@ -40,7 +38,7 @@ void *client_speaker_handler(void *client_speaker) {
 			free(msg);
 			break;
 		} else {
-			apply_transition(msg->command);
+			send_command(msg->command);
 
 			if (msg->command == chat) {
 				bzero(rendered, BUFF_SIZE);

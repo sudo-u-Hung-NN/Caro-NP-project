@@ -72,6 +72,13 @@ Player* initPlayer(const User *user, char role);
 Game* initGame(Player *player1, Player *player2);
 
 
+int isValid(Game *game, int row, int col);
+
+int checkWin(Game *game, int row, int col);
+
+void loadGame(Game *game, char role, int row, int col);
+
+
 /**
  * @brief This function starts the game
  * @param game 
@@ -83,7 +90,7 @@ void game_play(Game* game);
  * @brief This function renders the board
  * @param game 
  */
-void loadGameScreen(Game *game);
+char* loadGameScreen(Game *game);
 
 
 /**

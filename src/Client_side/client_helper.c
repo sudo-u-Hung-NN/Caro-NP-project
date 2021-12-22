@@ -1,8 +1,10 @@
 #include "client_helper.h"
 
-extern sts_type prev_status;
+
 extern sts_type curr_status;
-extern msg_type recv_command;
+extern msg_type sendCommand;
+extern msg_type recvCommand;
+
 
 struct {
 	sts_type prev_status;
@@ -26,6 +28,7 @@ struct {
 	{playing,		draw,				acpt,			console},
 	{playing,		draw,				deny,			playing},
 	{playing,		not_identified,	 	draw,			playing},
+	{playing, 		done, 				not_identified,	console},
 
 	{spectating,	not_identified,		squit,			console},
 	{spectating,	play,				acpt,			playing},
@@ -35,16 +38,43 @@ struct {
 };
 
 
-void apply_transition(msg_type send_command) {
+void apply_transition() {
     for (int i = 0; i < NUM_TRANSITION; i++) {
-        if (transitions[i].prev_status == prev_status && 
-            transitions[i].recv_command == recv_command &&
-            transitions[i].send_command == send_command) {
-            prev_status = transitions[i].next_status;
+        if (transitions[i].prev_status == curr_status && 
+            transitions[i].recv_command == recvCommand &&
+            transitions[i].send_command == sendCommand) {
+            curr_status = transitions[i].next_status;
         }
     }
 }
 
+
+void send_command(msg_type command) {
+	if (command == play ||
+		command == rematch ||
+		command == acpt ||
+		command == deny ||
+		command == cancel ||
+		command == squit ||
+		command == draw ||
+		command == spec) {
+			sendCommand = command;
+			apply_transition();
+		}
+}
+
+
+void recv_command(msg_type command) {
+	if (command == play ||
+		command == rematch ||
+		command == acpt ||
+		command == deny ||
+		command == draw ||
+		command == done) {
+			recvCommand = command;
+			apply_transition();
+		}
+}
 
 struct {
 	char server_reply[50];
@@ -75,8 +105,13 @@ struct {
 	{"GAME_CREATED_X", "\033[1;34mThe game is successfully created! You play X\033[0m\n"},
 	{"GAME_CREATED_O", "\033[1;34mThe game is successfully created! You play O\033[0m\n"},
 	{"GAME_FAILED", "\033[1;35mFailed to create new game! Try again latter!\033[0m\n"},
-	{"YOUR_TURN", "\033[1;34mYour turn!\033[0m (use \033[0;33mGO <row><col>\033[0m, e.g. GO A3)\n"},
-	{"OPPONENT_TURN", "\033[1;35mIt's your opponent's turn!\033[0m\n"}
+	{"YOUR_TURN", "\033[1;34mYour turn!\033[0m (format: \033[0;33mGO <row><col>\033[0m, e.g. GO A3)\n"},
+	{"OPPONENT_TURN", "\033[1;35mIt's your opponent's turn!\033[0m\n"},
+	{"WIN", "\033[1;34mYou won!\033[0m\n"},
+	{"LOSE", "\033[1;35mYou went second place!\033[0m\n"},
+	{"SCREEN", "\033[1;34m<============= GAME SCREEN ==============>!\033[0m\n"},
+	{"INVALID_MOVE", "\033[1;35mYou have made an invalid move!\033[0m\n"},
+	{"FALSE_FORMAT", "\033[1;35mYour move is of wrong format!\033[0m\n"},
 };
 
 
