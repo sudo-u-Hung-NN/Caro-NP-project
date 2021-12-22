@@ -49,6 +49,7 @@ void fromLineToHist(char* input, char sep, int* game_id, char *opponent_account,
 char* read_account_file(char *account) {
     char *history = (char*) malloc(rep_instruct_len * sizeof(char));
     bzero(history, rep_instruct_len);
+    history[0] = '\n';
 
     char filename[50];
     bzero(filename, 50);
@@ -74,9 +75,9 @@ char* read_account_file(char *account) {
             bzero(rendered_line, 150);
             
             if (win) {
-                sprintf(rendered_line, "\n%s played with %s :-: game id<%d> :-: \033[1;34mwin\033[0m", account, opponent_account, game_id);
+                sprintf(rendered_line, "%s played with %s :-: game id<%d> :-: \033[1;34mwin\033[0m\n", account, opponent_account, game_id);
             } else {
-                sprintf(rendered_line, "\n%s played with %s :-: game id<%d> :-: \033[0;31mlose\033[0m", account, opponent_account, game_id);
+                sprintf(rendered_line, "%s played with %s :-: game id<%d> :-: \033[0;31mlose\033[0m\n", account, opponent_account, game_id);
             }
             strcat(history, rendered_line);
         }
