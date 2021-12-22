@@ -43,7 +43,7 @@ all: $(EXEDIR)/server $(EXEDIR)/client $(UTILS_FILE) $(TEST)/test_user
 #========================== COMPILATION ============================
 #==========================< Server >===============================
 $(EXEDIR)/server: $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(SERVERSIDE_REQUIREMENTS) $(UTILS_FILE)
-	$(CC) $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(SERVERSIDE_REQUIREMENTS) $(UTILS_FILE) -o $(EXEDIR)/server
+	$(CC) -pthread $(BUILDDIR)/tcp_server.o $(BUILDDIR)/server_helper.o $(SERVERSIDE_REQUIREMENTS) $(UTILS_FILE) -o $(EXEDIR)/server
 
 $(BUILDDIR)/tcp_server.o: $(SERVERSIDE)/tcp_server.c
 	$(CC) $(FLAGS) $(SERVERSIDE)/tcp_server.c -o $(BUILDDIR)/tcp_server.o

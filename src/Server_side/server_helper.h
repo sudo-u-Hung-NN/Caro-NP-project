@@ -13,6 +13,8 @@
 #include <errno.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include <sys/mman.h>
+#include <pthread.h>
 
 #include "string.h"
 #include "ctype.h"
@@ -29,6 +31,12 @@
 #define BUFF_SIZE 1024
 
 
+struct args {
+    int client_listener_sock;
+    int client_speaker_sock;
+};
+
+
 extern NodeUser *root;
 
 
@@ -40,7 +48,7 @@ void sig_chld(int signo);
 * [IN] sockfd: socket descriptor that connects to client 
 * [IN] conn_chat_sock: socket descriptor that also connects to client	
 */
-void serve(int sockfd, int conn_chat_sock);
+void *serve(void *agrus);
 
 
 /**

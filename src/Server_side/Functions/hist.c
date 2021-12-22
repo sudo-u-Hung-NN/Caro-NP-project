@@ -123,6 +123,15 @@ void process_histp(message *msg, User* current_user) {
     char *account = getData(msg);
     char *history = read_account_file(account);
 
+    char self_infor[512];
+    bzero(self_infor, 512);
+
+    User* target = search_NodeUser_withAccount(root, account)->user;
+    sprintf(self_infor, "\nName: %s\nAccount: %s\nId: %d\nListener socket: %d\nSpeaker socket: %d\n",
+                target->name, target->account, target->id, target->listener, target->speaker);
+
+    send(current_user->listener, create_reply(ok, self_infor), sizeof(reply), 0);
+
     if(history == NULL) {
         send(current_user->listener, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
     } else {

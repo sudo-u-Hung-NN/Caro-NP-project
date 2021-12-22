@@ -22,8 +22,8 @@
 #define NUM_CHATSTORE 20
 #define NUM_SCREENLINE 50
 
-// #define SERVER_ADDR "127.0.0.1"
-#define SERVER_ADDR "172.20.238.18"
+#define SERVER_ADDR "127.0.0.1"      // Testing address
+// #define SERVER_ADDR "172.20.238.18"     // Playing address
 #define SERVER_PORT 5500
 #define BUFF_SIZE 1024
 

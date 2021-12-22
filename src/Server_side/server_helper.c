@@ -11,7 +11,9 @@ void sig_chld(int signo){
 }
 
 
-void serve(int client_listener_sock, int client_speaker_sock) {
+void *serve(void *argus) {
+    int client_listener_sock = ((struct args*)argus)->client_listener_sock;
+    int client_speaker_sock = ((struct args*)argus)->client_speaker_sock;
 	message *msg = (message *) malloc(sizeof(message));
     Game *game = NULL;
     User *current_user = NULL;
@@ -127,4 +129,5 @@ void serve(int client_listener_sock, int client_speaker_sock) {
     free(msg);
 	close(client_listener_sock);
     close(client_speaker_sock);
+    return 0;
 }
