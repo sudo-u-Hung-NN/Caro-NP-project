@@ -48,7 +48,7 @@ void traverse_game(NodeGame *game_root, char* buffer) {
         return;
     }
     char formatted_string[150] = "\0";
-    traverse(game_root->left, buffer);
+    traverse_game(game_root->left, buffer);
     sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %3d\n", 
                             game_root->game->id, 
                             game_root->game->player1->user->account,
@@ -56,7 +56,7 @@ void traverse_game(NodeGame *game_root, char* buffer) {
                             game_root->game->number_spectator);
 
     strcat(buffer, formatted_string);
-    traverse(game_root->right, buffer);
+    traverse_game(game_root->right, buffer);
 }
 
 
