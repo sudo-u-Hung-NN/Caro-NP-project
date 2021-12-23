@@ -28,7 +28,7 @@ int main(){
 	setsockopt(listen_sock, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 	
 	bzero(&server, sizeof(server));
-	server.sin_family = AF_INET;         
+	server.sin_family = AF_INET;
 	server.sin_port = htons(PORT);
 	server.sin_addr.s_addr = htonl(INADDR_ANY);  /* INADDR_ANY puts your IP address automatically */   
 

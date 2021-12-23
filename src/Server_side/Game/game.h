@@ -26,12 +26,15 @@
 #define ROLE_X 'X'
 #define ROLE_O 'O'
 
+typedef struct Game Game;
+typedef struct Player Player;
 
 typedef struct Player
 {
     char role; // 'X' or 'Y'
     int score;
     const User *user;
+    Game *current_game;
     int draw;
 } Player;
 
@@ -84,21 +87,21 @@ void loadGame(Game *game, char role, int row, int col);
  * @brief This function starts the game
  * @param game 
  */
-void game_play(Game* game);
+// void game_play(Game* game);
 
 
 /**
  * @brief This function renders the board
  * @param game 
  */
-char* loadGameScreen(Game *game);
+// char* loadGameScreen(Game *game);
 
 
 /**
  * @brief This function calls back 2 players for another game
  * @param game 
  */
-void game_rematch(Game* game);
+// void game_rematch(Game* game);
 
 
 /**

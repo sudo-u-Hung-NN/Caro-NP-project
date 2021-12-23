@@ -9,7 +9,7 @@
 #include "string.h"
 #include "stdio.h"
 
-#define rep_instruct_len 750
+#define rep_instruct_len 512
 struct message {
     msg_type command;
     msg_data data;
@@ -18,7 +18,7 @@ typedef struct message message;
 
 typedef struct reply {
     msg_type command;
-    char instruction[rep_instruct_len];
+    char instruction[rep_instruct_len + 1];
 } reply;
 
 reply *create_reply(msg_type command, char *instruction);

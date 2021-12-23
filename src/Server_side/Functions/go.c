@@ -1,58 +1,67 @@
 #include "../server_helper.h"
 #include "ctype.h"
 
+extern Player *myself;
+extern Player *rival;
 
-void make_move(Player* current_player, Player *opponent_player, Game* game, message *msg) {
-    if (current_player->role == game->turn) {
-        char *move = getData(msg);
-        if (isalpha(move[0]) && isdigit(move[1])) {
-            int row = (int)move[0] - 65;
-            int col = (int)move[1] - 48;
-            if (isValid(game, row, col)) {
-                INFORLOG("Player made his move");
-                loadGame(game, game->turn, row, col);
+void process_go(message *msg, User* current_user) {
 
-                if (checkWin(game, row, col)) {
-                    send(current_player->user->listener, create_reply(done, "WIN"), sizeof(reply), 0);
-                    send(opponent_player->user->listener, create_reply(done, "LOSE"), sizeof(reply), 0);
-                    INFORLOG("Game completed");
+    if (myself == NULL || rival == NULL) {
+        WARNING("Using go without a game");
+        send(current_user->listener, create_reply(ko, "NO_GAME"), sizeof(reply), 0);
+
+    } else {
+        Game *current_game = myself->current_game;
+        if (myself->role == current_game->turn) {
+            
+            char *move = getData(msg);
+            if (isalpha(move[0]) && isdigit(move[1])) {
+                int row = (int)move[0] - 65;
+                int col = (int)move[1] - 48;
+                INFORLOG("Here check valid");
+                int valid = isValid(current_game, row, col);
+                INFORLOG("Valid check ok");
+
+                if (valid) {
+                    INFORLOG("Player made his move");
+                    loadGame(current_game, current_game->turn, row, col);
+
+                    current_game->turn = (current_game->turn == 'X') ? 'O' : 'X';
+
+                    char board[SIZE * SIZE];
+                    memcpy(board, current_game->board, SIZE* SIZE);
+
+                    send(myself->user->listener, create_reply(scrn, board), sizeof(reply), 0);
+                    send(rival->user->listener, create_reply(scrn, board), sizeof(reply), 0);
+
+                    INFORLOG("Here check done");
+                    int done = checkWin(current_game, row, col);
+                    INFORLOG("Check done ok");
+
+                    if (done) {
+                        send(myself->user->listener, create_reply(done, "WIN"), sizeof(reply), 0);
+                        send(rival->user->listener, create_reply(done, "LOSE"), sizeof(reply), 0);
+                        INFORLOG("Game completed");
+                        return;
+                    }
+
+                } else {
+                    send(myself->user->listener, create_reply(ko, "INVALID_MOVE"), sizeof(reply), 0);
+                    send(myself->user->listener, create_reply(ok, "YOUR_TURN"), sizeof(reply), 0);
+                    WARNING("Invalid move detected");
                     return;
                 }
-                char *screen = loadGameScreen(game);
-                send(current_player->user->listener, create_reply(go, screen), sizeof(reply), 0);
-                send(opponent_player->user->listener, create_reply(go, screen), sizeof(reply), 0);
-                free(screen);
 
             } else {
-                send(current_player->user->listener, create_reply(ko, "INVALID_MOVE"), sizeof(reply), 0);
-                send(current_player->user->listener, create_reply(ok, "YOUR_TURN"), sizeof(reply), 0);
-                WARNING("Invalid move detected");
+                WARNING("False format detected");
+                send(myself->user->listener, create_reply(ko, "FALSE_FORMAT"), sizeof(reply), 0);
+                send(myself->user->listener, create_reply(ok, "YOUR_TURN"), sizeof(reply), 0);
                 return;
             }
 
         } else {
-            WARNING("False format detected");
-            send(current_player->user->listener, create_reply(ko, "FALSE_FORMAT"), sizeof(reply), 0);
-            send(current_player->user->listener, create_reply(ok, "YOUR_TURN"), sizeof(reply), 0);
-            return;
+            WARNING("Wrong turn detected");
+            send(myself->user->listener, create_reply(ko, "OPPONENT_TURN"), sizeof(reply), 0);
         }
-
-    } else {
-        WARNING("Wrong turn detected");
-        send(current_player->user->listener, create_reply(ko, "OPPONENT_TURN"), sizeof(reply), 0);
-    }
-}
-
-
-void process_go(message *msg, User* current_user, Game *game) {
-    if (game->player1->user == current_user) {
-        Player *current_player = game->player1;
-        Player *opponent_player = game->player2;
-        make_move(current_player, opponent_player, game, msg);
-
-    } else if (game->player2->user == current_user) {
-        Player *current_player = game->player2;
-        Player * opponent_player = game->player1;
-        make_move(current_player, opponent_player, game, msg);
     }
 }

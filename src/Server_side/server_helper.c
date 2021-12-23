@@ -15,7 +15,6 @@ void *serve(void *argus) {
     int client_listener_sock = ((struct args*)argus)->client_listener_sock;
     int client_speaker_sock = ((struct args*)argus)->client_speaker_sock;
 	message *msg = (message *) malloc(sizeof(message));
-    Game *game = NULL;
     User *current_user = NULL;
     int bytes_received;
 	
@@ -39,15 +38,23 @@ void *serve(void *argus) {
             // =============== Game =================
             case play:
                 INFORLOG("Process play");
-                game = process_play(msg, current_user);
+                process_play(msg, current_user);
+                break;
+            case acpt:
+                INFORLOG("Process accept");
+                process_accept(msg, current_user);
+                break;
+            case deny:
+                INFORLOG("Process deny");
+                process_deny(msg, current_user);
                 break;
             case go:
                 INFORLOG("Process go");
-                process_go(msg, current_user, game);
+                process_go(msg, current_user);
                 break;
             case draw:
                 INFORLOG("Process draw");
-                process_draw(msg, current_user, game);
+                process_draw(msg, current_user);
                 break;
             case rematch:
                 INFORLOG("Process rematch");
@@ -76,15 +83,15 @@ void *serve(void *argus) {
             // ============== Spec =================
             case spec:
                 INFORLOG("Process spec");
-                game = process_spec(msg, current_user);
+                process_spec(msg, current_user);
                 break;
             case schat:
                 INFORLOG("Process schat");
-                process_schat(msg, current_user, game);
+                process_schat(msg, current_user);
                 break;
             case squit:
                 INFORLOG("Process squit");
-                process_squit(msg, current_user, game);
+                process_squit(msg, current_user);
                 break;
 
             // ============== Hist =================

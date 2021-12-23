@@ -166,27 +166,29 @@ void process_hista(message *msg, User* current_user);
  * @param current_user the current user
  * @return Game* 
  */
-Game* process_play(message *msg, User* current_user);
+void process_play(message *msg, User* current_user);
 
-void process_go(message *msg, User* current_user, Game* game);
+void process_go(message *msg, User* current_user);
 
-void process_draw(message *msg, User* current_user, Game* game);
+void process_draw(message *msg, User* current_user);
 
 void process_rematch(message *msg, User* current_user);
 
+void process_accept(message *msg, User* current_user);
+
+void process_deny(message *msg, User* current_user);
 
 
 /** Spec
  * @brief This function help spectate a game
  * @param msg the requested message from client
  * @param current_user the current user
- * @return Game* 
  */
-Game * process_spec(message *msg, User* current_user);
+void process_spec(message *msg, User* current_user);
 
-void process_schat(message *msg, User* current_user, Game* game);
+void process_schat(message *msg, User* current_user);
 
-void process_squit(message *msg, User* current_user, Game* game);
+void process_squit(message *msg, User* current_user);
 
 
 /** Norm

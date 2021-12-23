@@ -26,6 +26,7 @@
 // #define SERVER_ADDR "172.20.238.18"     // Playing address
 #define SERVER_PORT 5500
 #define BUFF_SIZE 1024
+#define SIZE 10 //Board size
 
 
 char *getStatusName(sts_type status);

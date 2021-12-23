@@ -19,7 +19,7 @@ SERVER_GAME = src/Server_side/Game
 
 SERVER_USERS_FILE := $(BUILDDIR)/user.o $(BUILDDIR)/utils.o
 
-SERVER_FUNCTIONS_FILE := $(BUILDDIR)/play.o $(BUILDDIR)/go.o $(BUILDDIR)/draw.o $(BUILDDIR)/rematch.o \
+SERVER_FUNCTIONS_FILE := $(BUILDDIR)/play.o $(BUILDDIR)/accept.o $(BUILDDIR)/deny.o $(BUILDDIR)/go.o $(BUILDDIR)/draw.o $(BUILDDIR)/rematch.o \
 						$(BUILDDIR)/chat.o $(BUILDDIR)/cancel.o $(BUILDDIR)/return.o $(BUILDDIR)/quit.o \
 						$(BUILDDIR)/spec.o \
 						$(BUILDDIR)/hist.o \
@@ -66,6 +66,12 @@ $(BUILDDIR)/utils.o: $(SERVER_USERS)/utils.c
 # 1. Game
 $(BUILDDIR)/play.o: $(SERVER_FUNCTIONS)/play.c
 	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/play.c -o $(BUILDDIR)/play.o
+
+$(BUILDDIR)/accept.o: $(SERVER_FUNCTIONS)/accept.c
+	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/accept.c -o $(BUILDDIR)/accept.o
+
+$(BUILDDIR)/deny.o: $(SERVER_FUNCTIONS)/deny.c
+	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/deny.c -o $(BUILDDIR)/deny.o
 
 $(BUILDDIR)/go.o: $(SERVER_FUNCTIONS)/go.c
 	$(CC) $(FLAGS) $(SERVER_FUNCTIONS)/go.c -o $(BUILDDIR)/go.o

@@ -28,6 +28,22 @@ void display_chatscreen() {
 }
 
 
+void loadGameScreen(char *board) {
+    printf("    0   1   2   3   4   5   6   7   8   9\n");
+    printf("  -----------------------------------------\n");
+    char row = 65;
+    for (int i = 0; i < SIZE; i++)
+    {
+        printf("%c ", row++);
+        for (int j = 0; j < SIZE; j++)
+        {
+            printf("| %c ", board[SIZE * i + j]);
+        }
+        printf("|\n  -----------------------------------------\n");
+    }
+}
+
+
 void *client_listener_handler(void *client_socket) {
 	int client_sock = *(int*) client_socket;
 
@@ -37,6 +53,9 @@ void *client_listener_handler(void *client_socket) {
 
     reply *rep = (reply*) malloc(sizeof(reply));
     bzero(rep, msg_len);
+
+    char screen[SIZE * SIZE];
+    bzero(screen, SIZE * SIZE);
 
     while ((bytes_received = recv(client_sock, rep, BUFF_SIZE, 0)) > 0) {
         if (rep->command != ok && rep->command != ko && rep->command != not_identified) {
@@ -49,9 +68,11 @@ void *client_listener_handler(void *client_socket) {
             printf("%s\n", rendered);
             store_chat(rendered);
 
-        } else if (rep->command == go) {
+        } else if (rep->command == scrn) {
+            printf("Received scrn reply\n");
+            memcpy(screen, rep->instruction, SIZE * SIZE);
             system("clear");
-            printf("%s", rep->instruction);
+            loadGameScreen(screen);
 
         } else {
             printf("\033[0;33m%s\033[0m \033[1;34mSERVER:\033[0m %s", getStatusName(curr_status), translate(rep->instruction));

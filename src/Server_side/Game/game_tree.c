@@ -53,51 +53,51 @@ NodeGame* minValueNode(NodeGame* node)
 }
 
 
-NodeGame* close_NodeGame_byId(NodeGame* root, int key) {
+NodeGame* close_NodeGame_byId(NodeGame* game_root, int key) {
     // base case
-    if (root == NULL)
-        return root;
+    if (game_root == NULL)
+        return game_root;
  
     // If the key to be deleted is
-    // smaller than the root's
+    // smaller than the game_root's
     // key, then it lies in left subtree
-    if (key < root->game->id)
-        root->left = close_NodeGame_byId(root->left, key);
+    if (key < game_root->game->id)
+        game_root->left = close_NodeGame_byId(game_root->left, key);
  
     // If the key to be deleted is
-    // greater than the root's
+    // greater than the game_root's
     // key, then it lies in right subtree
-    else if (key > root->game->id)
-        root->right = close_NodeGame_byId(root->right, key);
+    else if (key > game_root->game->id)
+        game_root->right = close_NodeGame_byId(game_root->right, key);
  
-    // if key is same as root's key, then This is the node
+    // if key is same as game_root's key, then This is the node
     // to be deleted
     else {
         // node has no child
-        if (root->left==NULL && root->right==NULL)
+        if (game_root->left==NULL && game_root->right==NULL)
             return NULL;
        
         // node with only one child or no child
-        else if (root->left == NULL) {
-            NodeGame* temp = root->right;
-            free(root);
+        else if (game_root->left == NULL) {
+            NodeGame* temp = game_root->right;
+            free(game_root);
             return temp;
         }
-        else if (root->right == NULL) {
-            NodeGame* temp = root->left;
-            free(root);
+        else if (game_root->right == NULL) {
+            NodeGame* temp = game_root->left;
+            free(game_root);
             return temp;
         }
  
         // node with two children: Get the inorder successor
         // (smallest in the right subtree)
-        NodeGame* temp = minValueNode(root->right);
+        NodeGame* temp = minValueNode(game_root->right);
  
         // Copy the inorder successor's content to this node
-        root->game->id = temp->game->id;
+        game_root->game->id = temp->game->id;
  
         // Delete the inorder successor
-        root->right = close_NodeGame_byId(root->right, temp->game->id);
+        game_root->right = close_NodeGame_byId(game_root->right, temp->game->id);
     }
-    return root;
+    return game_root;
 }

@@ -14,9 +14,11 @@ void *client_speaker_handler(void *client_speaker) {
 	bzero(buff, BUFF_SIZE + 1);
 	
     while (1) {
-		fgets(buff, BUFF_SIZE, stdin);
+		// fgets(buff, BUFF_SIZE, stdin);
+		scanf("%[^\n]s", buff);
+		while (getchar() != '\n');
 
-        buff[strlen(buff) - 1] = '\0';
+        buff[strlen(buff)] = '\0';
 
 		if (strcasecmp(buff, "cs") == 0) {
 			display_chatscreen();

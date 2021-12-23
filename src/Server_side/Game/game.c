@@ -2,7 +2,8 @@
 
 extern int total_game;
 
-Game *initGameBoard(Game *game)
+
+void initGameBoard(Game *game)
 {
     for (int i = 0; i < SIZE; i++)
     {
@@ -11,7 +12,6 @@ Game *initGameBoard(Game *game)
             game->board[i][j] = '.';
         }
     }
-    return game;
 }
 
 
@@ -25,7 +25,7 @@ Game *initGame(Player *player1, Player *player2)
         printf("Can't allocate!\n");
         exit(0);
     }
-    game = initGameBoard(game);
+    initGameBoard(game);
     game->id = total_game;
     game->turn = 'X';
     game->player1 = player1;
@@ -42,44 +42,6 @@ void loadGame(Game *game, char role, int row, int col) {
     game->board[row][col] = role;
 }
 
-
-char* loadGameScreen(Game *game) {
-
-    char *screen = (char*) malloc(rep_instruct_len * sizeof(char));
-    bzero(screen, rep_instruct_len);
-    strcat(screen, "\n    0   1   2   3   4   5   6   7   8   9\n");
-    strcat(screen, "  -----------------------------------------\n");
-
-    char row = 65;
-    for (int i = 0; i < SIZE && strlen(screen) < rep_instruct_len - 1; i++)
-    {
-        char cell[10] = "";
-        sprintf(cell, "%c ", row++);
-        strcat(screen, cell);
-        bzero(cell, 10);
-
-        for (int j = 0; j < SIZE && strlen(screen) < rep_instruct_len - 1; j++)
-        {
-            sprintf(cell, "| %c ", game->board[i][j]);
-            strcat(screen, cell);
-        }
-        strcat(screen, "|\n  -----------------------------------------\n");
-    }
-
-    return screen;
-    // printf("    0   1   2   3   4   5   6   7   8   9\n");
-    // printf("  -----------------------------------------\n");
-    // char row = 65;
-    // for (int i = 0; i < SIZE; i++)
-    // {
-    //     printf("%c ", row++);
-    //     for (int j = 0; j < SIZE; j++)
-    //     {
-    //         printf("| %c ", game->board[i][j]);
-    //     }
-    //     printf("|\n  -----------------------------------------\n");
-    // }
-}
 
 //Check entered cordination valid or invalid
 //1 for valid, 0 for invalid
@@ -180,57 +142,57 @@ void get_move(Game *game, char *move, int *row, int *col) {
 }
 
 //Start game
-void game_play(Game *game)
-{
-    initGameBoard(game);
-    loadGameScreen(game);
-    char move[3];
-    int row, col;
-    int step = 0;
-    while (step <= 100)
-    {
-        get_move(game, move, &row, &col);
-        step++;
-        loadGame(game, ROLE_X, row, col);
-        loadGameScreen(game);
-        if (checkWin(game, row, col))
-        {
-            game->turn = 'O';
-            game->player1->score += 3;
-            game->player2->score--;
-            printf("%s won!\n", game->player1->user->name);
-            return;
-        }
+// void game_play(Game *game)
+// {
+//     initGameBoard(game);
+//     loadGameScreen(game);
+//     char move[3];
+//     int row, col;
+//     int step = 0;
+//     while (step <= 100)
+//     {
+//         get_move(game, move, &row, &col);
+//         step++;
+//         loadGame(game, ROLE_X, row, col);
+//         loadGameScreen(game);
+//         if (checkWin(game, row, col))
+//         {
+//             game->turn = 'O';
+//             game->player1->score += 3;
+//             game->player2->score--;
+//             printf("%s won!\n", game->player1->user->name);
+//             return;
+//         }
 
-        get_move(game, move, &row, &col);
-        step++;
-        loadGame(game, ROLE_O, row, col);
-        loadGameScreen(game);
-        if (checkWin(game, row, col))
-        {
-            game->turn = 'X';
-            game->player2->score += 3;
-            game->player1->score--;
-            printf("%s won!\n", game->player2->user->name);
-            return;
-        }
-    }
-    printf("Game draw!\n");
-    game->player1->score++;
-    game->player2->score++;
-    game->turn = 'X';
-}
+//         get_move(game, move, &row, &col);
+//         step++;
+//         loadGame(game, ROLE_O, row, col);
+//         loadGameScreen(game);
+//         if (checkWin(game, row, col))
+//         {
+//             game->turn = 'X';
+//             game->player2->score += 3;
+//             game->player1->score--;
+//             printf("%s won!\n", game->player2->user->name);
+//             return;
+//         }
+//     }
+//     printf("Game draw!\n");
+//     game->player1->score++;
+//     game->player2->score++;
+//     game->turn = 'X';
+// }
 
-void game_rematch(Game *game)
-{
-    if (game->turn == 'X') {
-        game_play(game);
-    }
-    else
-    {
-        Player *tmp = game->player1;
-        game->player1 = game->player2;
-        game->player2 = tmp;
-        game_play(game);
-    }
-}
+// void game_rematch(Game *game)
+// {
+//     if (game->turn == 'X') {
+//         game_play(game);
+//     }
+//     else
+//     {
+//         Player *tmp = game->player1;
+//         game->player1 = game->player2;
+//         game->player2 = tmp;
+//         game_play(game);
+//     }
+// }

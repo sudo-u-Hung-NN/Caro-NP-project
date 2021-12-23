@@ -134,6 +134,10 @@ void displayMessage(message *msg, char *announce) {
 
 reply *create_reply(msg_type command, char *instruction) {
     reply *tmp = (reply*) malloc(sizeof(reply));
+    if (tmp == NULL) {
+        printf("FAILED to create reply\n");
+        return NULL;
+    }
     tmp->command = command;
     strcpy(tmp->instruction, instruction);
     return tmp;

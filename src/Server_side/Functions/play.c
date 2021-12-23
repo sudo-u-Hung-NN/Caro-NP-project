@@ -4,14 +4,16 @@ extern NodeUser *root;
 extern NodeGame *game_root;
 
 
-Game* process_play(message *msg, User* current_user) {
+Player *myself = NULL;
+Player *rival = NULL;
 
-    Game *newgame = NULL;
+
+void process_play(message *msg, User* current_user) {
+
     char *opponent_account = getData(msg);
     NodeUser *opponent = search_NodeUser_withAccount(root, opponent_account);
 
     size_t rep_len = sizeof(reply);
-    size_t recv_len = sizeof(message);
 
     if (opponent == NULL) {
         WARNING("Failed to find opponent");
@@ -22,67 +24,44 @@ Game* process_play(message *msg, User* current_user) {
         send(current_user->listener, create_reply(ko, "OFFLINE_ACCOUNT"), rep_len, 0);
 
     } else {
-        INFORLOG("Sending invitation");
-        char rendered[150];
-        bzero(rendered, 150);
-        sprintf(rendered, "\033[1;36mCHALLENGE\033[0m from %s (use \033[0;33mACCEPT\033[0m or \033[0;33mDENY\033[0m)\n", current_user->account);
-        
-        // Send challenge to opponent
-        send(opponent->user->listener, create_reply(play, rendered), rep_len, 0);
-        send(current_user->listener, create_reply(ok, "CHALLENGE_SENT"), rep_len, 0);
-        
-        // Waiting for reply
-        INFORLOG("Waiting for acceptance");
-        bzero(msg, recv_len);
-        recv(opponent->user->speaker, msg, recv_len, 0);
+        // Init myself
+        myself = initPlayer(current_user, 'X');
+        rival = initPlayer(opponent->user, 'O');
 
-        // displayMessage(msg, "Receive reply");
-        
-        if (msg->command == acpt) {
-            // notice the sender
-            send(current_user->listener, create_reply(acpt, "ACCEPTED"), rep_len, 0);
+        // Create new game
+        INFORLOG("Create new game");
+        Game *newgame = initGame(myself, rival);
 
-            INFORLOG("Received acceptance!");
+        if (newgame != NULL) {
+            // Link players to game
+            myself->current_game = newgame;
+            rival->current_game = newgame;
+
+            // Insert new game into Game Tree
+            INFORLOG("Insert new game into Game Binary Tree");
+            game_root = insert_NodeGame(game_root, newgame);
+
+            // Render invitation
+            INFORLOG("Sending invitation");
+            char rendered[150];
+            bzero(rendered, 150);
+            sprintf(rendered, "\033[1;36mCHALLENGE\033[0m from %s, game id %d (use \033[0;33mACCEPT %d\033[0m or \033[0;33mDENY %d\033[0m)\n", 
+                    current_user->account,
+                    newgame->id, 
+                    newgame->id, 
+                    newgame->id);
             
-            INFORLOG("Create player 1");
-            Player *player1 = initPlayer(current_user, 'X');
+            // Send challenge to opponent
+            send(opponent->user->listener, create_reply(play, rendered), rep_len, 0);
+            send(current_user->listener, create_reply(ok, "CHALLENGE_SENT"), rep_len, 0);
 
-            INFORLOG("Create player 2");
-            Player *player2 = initPlayer(opponent->user, 'O');
-
-            INFORLOG("Create new game");
-            newgame = initGame(player1, player2);
-
-            if (newgame != NULL) {
-                INFORLOG("Insert new game into Game Binary Tree");
-                game_root = insert_NodeGame(game_root, newgame);
-                send(current_user->listener, create_reply(ok, "GAME_CREATED_X"), rep_len, 0);
-                send(opponent->user->listener, create_reply(ok, "GAME_CREATED_O"), rep_len, 0);
-
-                char *game_screen = loadGameScreen(newgame);
-                if (game_screen == NULL) {
-                    WARNING("Failed to load game screen");
-                } else {
-                    INFORLOG("Loading game sreen for players");
-                    send(current_user->listener, create_reply(go, game_screen), rep_len, 0);
-                    send(opponent->user->listener, create_reply(go, game_screen), rep_len, 0);
-                    free(game_screen);
-                }
-
-                send(current_user->listener, create_reply(ok, "YOUR_TURN"), rep_len, 0);
-                send(opponent->user->listener, create_reply(ok, "OPPONENT_TURN"), rep_len, 0);
-                
-            } else {
-                send(current_user->listener, create_reply(ko, "GAME_FAILED"), rep_len, 0);
-                send(opponent->user->listener, create_reply(ko, "GAME_FAILED"), rep_len, 0);
-            }
+            INFORLOG("Waiting for acceptance");
 
         } else {
-            INFORLOG("Received denial!");
-            send(current_user->listener, create_reply(deny, "DENIED"), rep_len, 0);
-        } 
-        
+            WARNING("Failed to create new game");
+            send(current_user->listener, create_reply(ko, "GAME_FAILED"), rep_len, 0);
+            free(myself);
+            free(rival);
+        }
     }
-
-    return newgame;
 }
