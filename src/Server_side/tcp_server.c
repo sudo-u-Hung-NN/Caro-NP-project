@@ -17,7 +17,7 @@ int main(){
 	struct sockaddr_in server; /* server's address information */
 	struct sockaddr_in client; /* client's address information */
 	// pid_t pid;
-	int sin_size;
+	int sin_size = sizeof((struct sockaddr *)&client);;
 
 	if ((listen_sock=socket(AF_INET, SOCK_STREAM, 0)) == -1 ){  /* calls socket() */
 		printf("socket() error\n");
@@ -45,12 +45,14 @@ int main(){
 	int max_threads = 10;
 	int no_threads=0;
     pthread_t threads[max_threads];
+
     while (no_threads < max_threads) {
 		// Connect sock to client_chat_sock
 		if ((client_speaker_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1) {
 			if (errno == EINTR)
 				continue;
-			else{
+			else {
+				printf("errno: %d\n", errno);
 				perror("Error speaker sock");
 				return 0;
 			}
@@ -60,7 +62,8 @@ int main(){
 		if ((client_listener_sock = accept(listen_sock, (struct sockaddr *)&client, &sin_size))==-1){
 			if (errno == EINTR)
 				continue;
-			else{
+			else {
+				printf("errno: %d\n", errno);
 				perror("Error listener sock");
 				return 0;
 			}
@@ -74,7 +77,7 @@ int main(){
 
 		if( pthread_create( &threads[no_threads], NULL ,  &serve , (void*)argus) < 0){
 			perror("Could not create thread");
-			return 1;
+			break;
 		}
 
 		puts("Handler assigned");
@@ -85,7 +88,6 @@ int main(){
     for (k = 0; k < max_threads; k++){
 		pthread_join(threads[k],NULL);
 	}
-
 
 	close(listen_sock);
 	dumpUserTree(root);

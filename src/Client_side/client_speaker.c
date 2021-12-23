@@ -52,9 +52,8 @@ void *client_speaker_handler(void *client_speaker) {
 			if(bytes_sent < 0)
 				perror("\nError: ");
 
-			bzero(buff, BUFF_SIZE);
 		}
-
+		bzero(buff, BUFF_SIZE);
 		free(msg);
     }
 

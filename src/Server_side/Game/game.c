@@ -51,14 +51,14 @@ char* loadGameScreen(Game *game) {
     strcat(screen, "  -----------------------------------------\n");
 
     char row = 65;
-    for (int i = 0; i < SIZE; i++)
+    for (int i = 0; i < SIZE && strlen(screen) < rep_instruct_len - 1; i++)
     {
-        char cell[6] = "";
+        char cell[10] = "";
         sprintf(cell, "%c ", row++);
         strcat(screen, cell);
-        bzero(cell, 6);
+        bzero(cell, 10);
 
-        for (int j = 0; j < SIZE; j++)
+        for (int j = 0; j < SIZE && strlen(screen) < rep_instruct_len - 1; j++)
         {
             sprintf(cell, "| %c ", game->board[i][j]);
             strcat(screen, cell);
