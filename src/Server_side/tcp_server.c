@@ -51,7 +51,7 @@ int main(){
 			if (errno == EINTR)
 				continue;
 			else{
-				perror("\nError");
+				perror("Error speaker sock");
 				return 0;
 			}
 		}
@@ -61,7 +61,7 @@ int main(){
 			if (errno == EINTR)
 				continue;
 			else{
-				perror("\nError");
+				perror("Error listener sock");
 				return 0;
 			}
 		}

@@ -19,8 +19,9 @@ void make_move(Player* current_player, Player *opponent_player, Game* game, mess
                     return;
                 }
                 char *screen = loadGameScreen(game);
-                send(current_player->user->listener, create_reply(ok, screen), sizeof(reply), 0);
-                send(opponent_player->user->listener, create_reply(ok, screen), sizeof(reply), 0);
+                send(current_player->user->listener, create_reply(go, screen), sizeof(reply), 0);
+                send(opponent_player->user->listener, create_reply(go, screen), sizeof(reply), 0);
+                free(screen);
 
             } else {
                 send(current_player->user->listener, create_reply(ko, "INVALID_MOVE"), sizeof(reply), 0);

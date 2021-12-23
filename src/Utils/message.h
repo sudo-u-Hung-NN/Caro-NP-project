@@ -9,7 +9,7 @@
 #include "string.h"
 #include "stdio.h"
 
-#define rep_instruct_len 512
+#define rep_instruct_len 750
 struct message {
     msg_type command;
     msg_data data;

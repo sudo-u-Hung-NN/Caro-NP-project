@@ -18,7 +18,7 @@
 
 
 #define NUM_TRANSITION 19
-#define NUM_TRANSLATE 32
+#define NUM_TRANSLATE 33
 #define NUM_CHATSTORE 20
 #define NUM_SCREENLINE 50
 
@@ -28,7 +28,7 @@
 #define BUFF_SIZE 1024
 
 
-
+char *getStatusName(sts_type status);
 
 void send_command(msg_type command);
 

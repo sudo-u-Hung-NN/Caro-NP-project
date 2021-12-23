@@ -1,5 +1,6 @@
 #include "client_helper.h"
 
+extern sts_type curr_status;
 
 int latest_chat_index = 0;
 int oldest_chat_index = 0;
@@ -47,8 +48,13 @@ void *client_listener_handler(void *client_socket) {
             sprintf(rendered, "\033[1;34mFROM\033[0m %s", translate(rep->instruction));
             printf("%s\n", rendered);
             store_chat(rendered);
+
+        } else if (rep->command == go) {
+            system("clear");
+            printf("%s", rep->instruction);
+
         } else {
-            printf("\033[1;34mSERVER:\033[0m %s", translate(rep->instruction));
+            printf("\033[0;33m%s\033[0m \033[1;34mSERVER:\033[0m %s", getStatusName(curr_status), translate(rep->instruction));
         }
 
         bzero(rep, msg_len);

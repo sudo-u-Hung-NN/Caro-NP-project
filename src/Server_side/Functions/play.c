@@ -23,13 +23,13 @@ Game* process_play(message *msg, User* current_user) {
 
     } else {
         INFORLOG("Sending invitation");
-        char rendered[100];
-        bzero(rendered, 100);
-        sprintf(rendered, "\033[1;36mCHALLENGE\033[0m from %s", current_user->account);
+        char rendered[150];
+        bzero(rendered, 150);
+        sprintf(rendered, "\033[1;36mCHALLENGE\033[0m from %s (use \033[0;33mACCEPT\033[0m or \033[0;33mDENY\033[0m)\n", current_user->account);
         
         // Send challenge to opponent
         send(opponent->user->listener, create_reply(play, rendered), rep_len, 0);
-        
+        send(current_user->listener, create_reply(ok, "CHALLENGE_SENT"), rep_len, 0);
         
         // Waiting for reply
         INFORLOG("Waiting for acceptance");
@@ -58,6 +58,16 @@ Game* process_play(message *msg, User* current_user) {
                 game_root = insert_NodeGame(game_root, newgame);
                 send(current_user->listener, create_reply(ok, "GAME_CREATED_X"), rep_len, 0);
                 send(opponent->user->listener, create_reply(ok, "GAME_CREATED_O"), rep_len, 0);
+
+                char *game_screen = loadGameScreen(newgame);
+                if (game_screen == NULL) {
+                    WARNING("Failed to load game screen");
+                } else {
+                    INFORLOG("Loading game sreen for players");
+                    send(current_user->listener, create_reply(go, game_screen), rep_len, 0);
+                    send(opponent->user->listener, create_reply(go, game_screen), rep_len, 0);
+                    free(game_screen);
+                }
 
                 send(current_user->listener, create_reply(ok, "YOUR_TURN"), rep_len, 0);
                 send(opponent->user->listener, create_reply(ok, "OPPONENT_TURN"), rep_len, 0);

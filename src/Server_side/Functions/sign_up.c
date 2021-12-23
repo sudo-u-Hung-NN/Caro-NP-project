@@ -43,6 +43,8 @@ User* process_sign_up(message *msg, int client_listener_sock, int client_speaker
         inOrderTraversal(root, NULL, 1);
         INFORLOG("Insert done");
 
+        dumpUserTree(root);
+
         INFORLOG("Send REQUEST_ID");
         // send REQUEST_ID
         send(client_listener_sock, create_reply(ok, "REQUEST_ID"), rep_len, 0);

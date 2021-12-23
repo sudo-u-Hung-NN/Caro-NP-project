@@ -7,6 +7,22 @@ extern msg_type recvCommand;
 
 
 struct {
+	sts_type status;
+	char name[10];
+} status_table [4] = {
+	{playing, "playing"},
+	{spectating, "spectate"},
+	{console, "console"},
+	{waiting, "waiting"}
+};
+
+
+char *getStatusName(sts_type status) {
+	return status_table[status].name;
+}
+
+
+struct {
 	sts_type prev_status;
 	msg_type recv_command;
 	msg_type send_command;
@@ -21,16 +37,16 @@ struct {
 	{console,		rematch,			deny,			console},
 	{console,		not_identified,	 	spec,			spectating},
 
-	{waiting,		acpt,			  	not_identified, playing},
-	{waiting,		deny,				not_identified, console},
-	{waiting,		not_identified,	 	cancel,			console},
+	{waiting,		acpt,			  	play, 			playing},
+	{waiting,		deny,				play, 			console},
+	{waiting,		play,	 			cancel,			console},
 
 	{playing,		draw,				acpt,			console},
 	{playing,		draw,				deny,			playing},
-	{playing,		not_identified,	 	draw,			playing},
-	{playing, 		done, 				not_identified,	console},
+	{playing,		play,			 	draw,			playing},
+	{playing, 		done, 				play,			console},
 
-	{spectating,	not_identified,		squit,			console},
+	{spectating,	spec,				squit,			console},
 	{spectating,	play,				acpt,			playing},
 	{spectating,	play,				deny,			spectating},
 	{spectating,	rematch,			acpt,			playing},
@@ -100,6 +116,7 @@ struct {
 	{"LOOP_OPERATOR", "\033[0;35mYou are trying to execute operators on yourself!\033[0m\n"},
 	
 	// Gamming
+	{"CHALLENGE_SENT", "\033[1;34mChallenge sent!\033[0m\n"},
 	{"ACCEPTED", "\033[1;34mYour challenge request is accepted!\033[0m\n"},
 	{"DENIED", "\033[1;35mYour challenge request is denied!\033[0m\n"},
 	{"GAME_CREATED_X", "\033[1;34mThe game is successfully created! You play X\033[0m\n"},

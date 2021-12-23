@@ -95,8 +95,8 @@ char* read_account_file(char *account) {
  * @param current_user the current user
  */
 void process_hist(message *msg, User* current_user) {
-    char self_infor[512];
-    bzero(self_infor, 512);
+    char self_infor[rep_instruct_len];
+    bzero(self_infor, rep_instruct_len);
     sprintf(self_infor, "\nName: %s\nAccount: %s\nId: %d\nListener socket: %d\nSpeaker socket: %d\n",
                 current_user->name, current_user->account, current_user->id, current_user->listener, current_user->speaker);
     
@@ -123,8 +123,8 @@ void process_histp(message *msg, User* current_user) {
     char *account = getData(msg);
     char *history = read_account_file(account);
 
-    char self_infor[512];
-    bzero(self_infor, 512);
+    char self_infor[rep_instruct_len];
+    bzero(self_infor, rep_instruct_len);
 
     User* target = search_NodeUser_withAccount(root, account)->user;
     sprintf(self_infor, "\nName: %s\nAccount: %s\nId: %d\nListener socket: %d\nSpeaker socket: %d\n",

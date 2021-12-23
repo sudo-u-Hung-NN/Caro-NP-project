@@ -6,6 +6,7 @@
 #include "sys/mman.h"
 
 #include "../Users/user.h"
+#include "../../Utils/message.h"
 #include "../../Utils/logger.h"
 
 #define MAX_SPECTATOR 10

@@ -2,9 +2,8 @@
 
 First, create the following folders:
 1. build/
-2. src/
-3. exec/
-4. test/
+2. exec/
+3. test/
 
 ## Folder Tree
 The folder organization should look like this:

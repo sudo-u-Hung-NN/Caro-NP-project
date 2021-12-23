@@ -45,8 +45,8 @@ void loadGame(Game *game, char role, int row, int col) {
 
 char* loadGameScreen(Game *game) {
 
-    char *screen = (char*) malloc(512 * sizeof(char));
-    bzero(screen, 512);
+    char *screen = (char*) malloc(rep_instruct_len * sizeof(char));
+    bzero(screen, rep_instruct_len);
     strcat(screen, "\n    0   1   2   3   4   5   6   7   8   9\n");
     strcat(screen, "  -----------------------------------------\n");
 
