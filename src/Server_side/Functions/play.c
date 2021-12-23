@@ -4,8 +4,8 @@ extern NodeUser *root;
 extern NodeGame *game_root;
 
 
-Player *myself = NULL;
-Player *rival = NULL;
+thread_local Player *myself = NULL;
+thread_local Player *rival = NULL;
 
 
 void process_play(message *msg, User* current_user) {
@@ -33,6 +33,7 @@ void process_play(message *msg, User* current_user) {
         Game *newgame = initGame(myself, rival);
 
         if (newgame != NULL) {
+            newgame->turn = 'X';
             // Link players to game
             myself->current_game = newgame;
             rival->current_game = newgame;

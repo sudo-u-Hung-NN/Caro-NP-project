@@ -15,6 +15,7 @@ void *serve(void *argus) {
     int client_listener_sock = ((struct args*)argus)->client_listener_sock;
     int client_speaker_sock = ((struct args*)argus)->client_speaker_sock;
 	message *msg = (message *) malloc(sizeof(message));
+    
     User *current_user = NULL;
     int bytes_received;
 	

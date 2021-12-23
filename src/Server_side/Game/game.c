@@ -20,8 +20,7 @@ Game *initGame(Player *player1, Player *player2)
     // Game *game = (Game *)malloc(sizeof(Game));
     Game* game = (Game *) mmap(NULL, sizeof(Game), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 
-    if (game == NULL)
-    {
+    if (game == NULL) {
         printf("Can't allocate!\n");
         exit(0);
     }
