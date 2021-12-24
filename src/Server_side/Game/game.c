@@ -31,6 +31,7 @@ Game *initGame(Player *player1, Player *player2)
     game->player2 = player2;
 
     game->number_spectator = 0;
+    game->num_move = 0;
 
     total_game += 1;
     return game;
@@ -129,6 +130,15 @@ int checkWin(Game *game, int row, int col)
         return 1;
 
     return 0;
+}
+
+
+int checkTie(Game *game) {
+    if (game->num_move == SIZE * SIZE) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 

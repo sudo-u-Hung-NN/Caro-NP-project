@@ -30,6 +30,7 @@ void process_go(message *msg, User* current_user) {
                     loadGame(current_game, current_game->turn, row, col);
 
                     current_game->turn = (current_game->turn == 'X') ? 'O' : 'X';
+                    current_game->num_move += 1;
 
                     char board[SIZE * SIZE];
                     memcpy(board, current_game->board, SIZE* SIZE);
@@ -38,13 +39,21 @@ void process_go(message *msg, User* current_user) {
                     send(rival->user->listener, create_reply(scrn, board), rep_len, 0);
 
                     INFORLOG("Here check done");
-                    int done = checkWin(current_game, row, col);
+                    int is_done = checkWin(current_game, row, col);
                     INFORLOG("Check done ok");
 
-                    if (done) {
+                    if (is_done) {
                         send(myself->user->listener, create_reply(done, "WIN"), rep_len, 0);
                         send(rival->user->listener, create_reply(done, "LOSE"), rep_len, 0);
                         INFORLOG("Game completed");
+                        return;
+                    }
+
+                    int is_tie = checkTie(current_game);
+                    if (is_tie) {
+                        send(myself->user->listener, create_reply(done, "TIE"), rep_len, 0);
+                        send(rival->user->listener, create_reply(done, "TIE"), rep_len, 0);
+                        INFORLOG("Game completed in tie");
                         return;
                     }
 

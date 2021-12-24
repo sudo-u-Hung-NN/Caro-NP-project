@@ -17,7 +17,7 @@ int main(){
 	struct sockaddr_in server; /* server's address information */
 	struct sockaddr_in client; /* client's address information */
 	// pid_t pid;
-	int sin_size = sizeof((struct sockaddr *)&client);;
+	int sin_size = sizeof((struct sockaddr *)&client);
 
 	if ((listen_sock=socket(AF_INET, SOCK_STREAM, 0)) == -1 ){  /* calls socket() */
 		printf("socket() error\n");

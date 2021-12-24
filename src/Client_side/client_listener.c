@@ -37,9 +37,9 @@ void loadGameScreen(char *board) {
         printf("%c ", row++);
         for (int j = 0; j < SIZE; j++) {
             if (board[SIZE * i + j] == 'X') {
-                printf("| \033[1;34m%c!\033[0m ", board[SIZE * i + j]);
+                printf("| \033[1;34m%c\033[0m ", board[SIZE * i + j]);
             } else if (board[SIZE * i + j] == 'O') {
-                printf("| \033[1;32m%c!\033[0m ", board[SIZE * i + j]);
+                printf("| \033[1;32m%c\033[0m ", board[SIZE * i + j]);
             } else {
                 printf("| %c ", board[SIZE * i + j]);
             }

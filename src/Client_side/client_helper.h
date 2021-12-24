@@ -17,8 +17,8 @@
 #include "../Utils/message.h"
 
 
-#define NUM_TRANSITION 19
-#define NUM_TRANSLATE 33
+#define NUM_TRANSITION 20
+#define NUM_TRANSLATE 34
 #define NUM_CHATSTORE 20
 #define NUM_SCREENLINE 50
 
@@ -29,10 +29,25 @@
 #define SIZE 10 //Board size
 
 
+/**
+ * @brief Get the Status Name 
+ * @param status 
+ * @return char* 
+ */
 char *getStatusName(sts_type status);
 
+
+/**
+ * @brief This function perform transition when sending message
+ * @param command 
+ */
 void send_command(msg_type command);
 
+
+/**
+ * @brief This function perform transition when receive message
+ * @param command 
+ */
 void recv_command(msg_type command);
 
 

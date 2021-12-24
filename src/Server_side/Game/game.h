@@ -39,8 +39,7 @@ typedef struct Player
 } Player;
 
 
-typedef struct Game
-{
+typedef struct Game {
     int id;
     char board[SIZE][SIZE];
     Player *player1;
@@ -48,6 +47,7 @@ typedef struct Game
     int number_spectator;
     User *spectators[MAX_SPECTATOR];
     char turn; // 'X' or 'Y'
+    int num_move;
 } Game;
 
 
@@ -79,6 +79,8 @@ Game* initGame(Player *player1, Player *player2);
 int isValid(Game *game, int row, int col);
 
 int checkWin(Game *game, int row, int col);
+
+int checkTie(Game *game);
 
 void loadGame(Game *game, char role, int row, int col);
 

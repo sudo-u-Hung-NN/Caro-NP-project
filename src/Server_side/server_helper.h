@@ -87,22 +87,22 @@ void *serve(void *agrus);
  * @brief Process sign up on socket that connects to client.
  * This function is defined in "src/Server_side/Functions/sign_in_up.c"
  * @param msg the requested message from client
- * @param client_sock the sock used for trivial communication
- * @param client_game_sock the sock used for game communication only
+ * @param client_listener_sock the sock used for listening communication only
+ * @param client_speaker_sock the sock used for speaking communication only
  * @return User*
  */
-User* process_sign_up(message *msg, int client_sock, int client_game_sock);
+User* process_sign_up(message *msg, int client_listener_sock, int client_speaker_sock);
 
 
 /**
  * @brief Process login on socket that connects to client.
  * This function is defined in "src/Server_side/Functions/sign_in_up.c"
  * @param msg the requested message from client
- * @param client_sock the sock used for trivial communication
- * @param client_game_sock the sock used for game communication only
+ * @param client_listener_sock the sock used for listening communication only
+ * @param client_speaker_sock the sock used for speaking communication only
  * @return User*
  */
-User* process_sign_in(message *msg, int client_sock, int client_game_sock);
+User* process_sign_in(message *msg, int client_listener_sock, int client_speaker_sock) ;
 
 
 /**
