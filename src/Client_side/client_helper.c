@@ -44,14 +44,14 @@ struct {
 	{playing,		draw,				acpt,			console},
 	{playing,		draw,				deny,			playing},
 	{playing,		play,			 	draw,			playing},
-	{playing, 		done, 				play,			console},
+	{playing, 		done, 				not_identified,	console},
 
 	{spectating,	spec,				squit,			console},
 	{spectating,	play,				acpt,			playing},
 	{spectating,	play,				deny,			spectating},
 	{spectating,	rematch,			acpt,			playing},
 	{spectating,	rematch,			deny,			spectating},
-	{spectating, 	done,				spec,			console}
+	{spectating, 	done,				not_identified,	console}
 };
 
 
@@ -89,7 +89,12 @@ void recv_command(msg_type command) {
 		command == draw ||
 		command == done) {
 			recvCommand = command;
-			apply_transition();
+			if (command == done) {
+				curr_status = console;
+				sendCommand = not_identified;
+				recvCommand = not_identified;
+			} else 
+				apply_transition();
 		}
 }
 
