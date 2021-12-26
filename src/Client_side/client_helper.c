@@ -137,7 +137,12 @@ struct {
 	{"FALSE_FORMAT", "\033[1;35mYour move is of wrong format!\033[0m\n"},
 	{"DRAW_REQUEST", "\033[1;34mYou have received a draw request!\033[0m\n"},
 	{"DRAW",  "\033[1;34mThe game ends tie for both!\033[0m\n"},
-	{"TIE", "\033[1;34mThe game ends tie for both!\033[0m\n"}
+	{"TIE", "\033[1;34mThe game ends tie for both!\033[0m\n"},
+
+	// Cancel
+	{"CANCELED", "\033[1;35mThe invitation is canceled by the challenger!\033[0m\n"},
+	{"NULL_CANCEL", "\033[1;35mThe game is not found!\033[0m\n"},
+	{"INVALID_CANCEL", "\033[1;35mYou're attempting to over-authoritize!\033[0m\n"}
 };
 
 
