@@ -165,18 +165,47 @@ void process_hista(message *msg, User* current_user);
  * @brief This function process play protocol, create new game room
  * @param msg the requested message from client
  * @param current_user the current user
- * @return Game* 
  */
 void process_play(message *msg, User* current_user);
 
+
+/**
+ * @brief This function process go protocol, update game status
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
 void process_go(message *msg, User* current_user);
 
+
+/**
+ * @brief This function process draw request from current user
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
 void process_draw(message *msg, User* current_user);
 
+
+/**
+ * @brief This function process rematch protocol
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
 void process_rematch(message *msg, User* current_user);
 
+
+/**
+ * @brief This function process accept protocol
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
 void process_accept(message *msg, User* current_user);
 
+
+/**
+ * @brief This function process deny protocol
+ * @param msg the requested message from client
+ * @param current_user the current user 
+ */
 void process_deny(message *msg, User* current_user);
 
 
@@ -199,10 +228,28 @@ void process_squit(message *msg, User* current_user);
  */
 void process_chat(message *msg, User* current_user);
 
+
+/**
+ * @brief This function is depreated 
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
 void process_return(message *msg, User* current_user);
 
+
+/**
+ * @brief This function process cancel protocol
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
 void process_cancel(message *msg, User* current_user);
 
+
+/**
+ * @brief This function process quit protocol
+ * @param msg the requested message from client
+ * @param current_user the current user
+ */
 void process_quit(message *msg, User* current_user);
 
 #endif
