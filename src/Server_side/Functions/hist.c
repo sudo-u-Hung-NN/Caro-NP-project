@@ -54,7 +54,7 @@ char* read_account_file(char *account) {
     char filename[50];
     bzero(filename, 50);
 
-    sprintf(filename, "%s/%s.profile", ACCOUNT_PATH, account);
+    sprintf(filename, "%s/%s.hist", ACCOUNT_PATH, account);
     FILE *fptr = fopen(filename, "r");
 
     if (fptr == NULL) {

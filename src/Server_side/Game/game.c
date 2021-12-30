@@ -150,47 +150,6 @@ void get_move(Game *game, char *move, int *row, int *col) {
     } while (!isValid(game, *row, *col));
 }
 
-//Start game
-// void game_play(Game *game)
-// {
-//     initGameBoard(game);
-//     loadGameScreen(game);
-//     char move[3];
-//     int row, col;
-//     int step = 0;
-//     while (step <= 100)
-//     {
-//         get_move(game, move, &row, &col);
-//         step++;
-//         loadGame(game, ROLE_X, row, col);
-//         loadGameScreen(game);
-//         if (checkWin(game, row, col))
-//         {
-//             game->turn = 'O';
-//             game->player1->score += 3;
-//             game->player2->score--;
-//             printf("%s won!\n", game->player1->user->name);
-//             return;
-//         }
-
-//         get_move(game, move, &row, &col);
-//         step++;
-//         loadGame(game, ROLE_O, row, col);
-//         loadGameScreen(game);
-//         if (checkWin(game, row, col))
-//         {
-//             game->turn = 'X';
-//             game->player2->score += 3;
-//             game->player1->score--;
-//             printf("%s won!\n", game->player2->user->name);
-//             return;
-//         }
-//     }
-//     printf("Game draw!\n");
-//     game->player1->score++;
-//     game->player2->score++;
-//     game->turn = 'X';
-// }
 
 // void game_rematch(Game *game)
 // {

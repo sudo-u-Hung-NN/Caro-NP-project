@@ -27,7 +27,7 @@ SERVER_FUNCTIONS_FILE := $(BUILDDIR)/play.o $(BUILDDIR)/accept.o $(BUILDDIR)/den
 
 
 
-SERVER_GAME_FILE := $(BUILDDIR)/game.o $(BUILDDIR)/player.o $(BUILDDIR)/game_tree.o
+SERVER_GAME_FILE := $(BUILDDIR)/game.o $(BUILDDIR)/player.o $(BUILDDIR)/game_tree.o $(BUILDDIR)/spectator.o
 
 SERVERSIDE_REQUIREMENTS := $(SERVER_FUNCTIONS_FILE) $(SERVER_USERS_FILE) $(SERVER_GAME_FILE)
 
@@ -129,6 +129,8 @@ $(BUILDDIR)/player.o: $(SERVER_GAME)/player.c
 $(BUILDDIR)/game_tree.o: $(SERVER_GAME)/game_tree.c
 	$(CC) $(FLAGS) $(SERVER_GAME)/game_tree.c -o $(BUILDDIR)/game_tree.o
 
+$(BUILDDIR)/spectator.o: $(SERVER_GAME)/spectator.c
+	$(CC) $(FLAGS) $(SERVER_GAME)/spectator.c -o $(BUILDDIR)/spectator.o
 
 
 #==========================< Client >===============================

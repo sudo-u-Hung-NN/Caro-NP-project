@@ -9,7 +9,6 @@
 #include "../../Utils/message.h"
 #include "../../Utils/logger.h"
 
-#define MAX_SPECTATOR 10
 #define SIZE 10 //Board size
 
 #define ROW_A 0
@@ -28,6 +27,13 @@
 
 typedef struct Game Game;
 typedef struct Player Player;
+typedef struct Spectator Spectator;
+
+struct Spectator {
+    Game *current_game;
+    User *user;
+    Spectator *next;
+};
 
 typedef struct Player
 {
@@ -45,7 +51,7 @@ typedef struct Game {
     Player *player1;
     Player *player2;
     int number_spectator;
-    User *spectators[MAX_SPECTATOR];
+    Spectator *spectator_head;
     char turn; // 'X' or 'Y'
     int num_move;
 } Game;
@@ -76,34 +82,42 @@ Player* initPlayer(const User *user, char role);
 Game* initGame(Player *player1, Player *player2);
 
 
+/**
+ * @brief Check if the move at row and col is valid
+ * @param game 
+ * @param row 
+ * @param col 
+ * @return int 
+ */
 int isValid(Game *game, int row, int col);
 
+
+/**
+ * @brief Check if the move at row and col ends the game
+ * @param game 
+ * @param row 
+ * @param col 
+ * @return int 
+ */
 int checkWin(Game *game, int row, int col);
 
+
+/**
+ * @brief Check if there are no more space on the board
+ * @param game 
+ * @return int 
+ */
 int checkTie(Game *game);
 
+
+/**
+ * @brief Place the move 
+ * @param game 
+ * @param role 
+ * @param row 
+ * @param col 
+ */
 void loadGame(Game *game, char role, int row, int col);
-
-
-/**
- * @brief This function starts the game
- * @param game 
- */
-// void game_play(Game* game);
-
-
-/**
- * @brief This function renders the board
- * @param game 
- */
-// char* loadGameScreen(Game *game);
-
-
-/**
- * @brief This function calls back 2 players for another game
- * @param game 
- */
-// void game_rematch(Game* game);
 
 
 /**
@@ -132,5 +146,30 @@ NodeGame *search_NodeGame_byId(NodeGame *game_root, int id);
  */
 NodeGame* close_NodeGame_byId(NodeGame* game_root, int id);
 
+
+/**
+ * @brief Insert new spectator into link list
+ * @param current_user 
+ * @param current_game 
+ * @return Spectator* 
+ */
+Spectator *insert_Spectator(User *current_user, Game* current_game);
+
+
+/**
+ * @brief If the spectator use squit, remove spectator from the list
+ * @param current_game 
+ * @param current_user 
+ * @return Spectator* 
+ */
+Spectator *remove_Spectator(Game* current_game, User *current_user);
+
+
+/**
+ * @brief The game is over, free entire spectator list
+ * @param current_game 
+ * @return Spectator* 
+ */
+Spectator *free_Spectator_List(Game* current_game);
 
 #endif
