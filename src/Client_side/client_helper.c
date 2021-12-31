@@ -143,7 +143,12 @@ struct {
 	// Cancel
 	{"CANCELED", "\033[1;35mThe invitation is canceled by the challenger!\033[0m\n"},
 	{"NULL_CANCEL", "\033[1;35mThe game is not found!\033[0m\n"},
-	{"INVALID_CANCEL", "\033[1;35mYou're attempting to over-authoritize!\033[0m\n"}
+	{"INVALID_CANCEL", "\033[1;35mYou're attempting to over-authoritize!\033[0m\n"},
+
+	// Spectation
+	{"NULL_SPEC", "\033[1;35mYou're trying to spectate a closed game!\033[0m\n"},
+	{"NULL_SCHAT", "\033[1;35mYou're trying to chat in spectate mode but in console mode!\033[0m\n"},
+	{"SQUIT_SUCCESS", "\033[1;34mYou have successfully exit spectating!\033[0m\n"}
 };
 
 

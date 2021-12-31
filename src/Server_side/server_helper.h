@@ -216,8 +216,20 @@ void process_deny(message *msg, User* current_user);
  */
 void process_spec(message *msg, User* current_user);
 
+
+/**
+ * @brief This function send chat message to all users in a game
+ * @param msg 
+ * @param current_user 
+ */
 void process_schat(message *msg, User* current_user);
 
+
+/**
+ * @brief This function get an user out of a spectatation mode
+ * @param msg 
+ * @param current_user 
+ */
 void process_squit(message *msg, User* current_user);
 
 
