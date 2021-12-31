@@ -73,13 +73,13 @@ The folder organization should look like this:
 ```
 
 ## How to run code
-1. Run Makefile with:
+1. **Run Makefile** with:
 ```bash
 make clean
 make
 ```
 Then the result should be like this
-```makefile
+```bash
 gcc -Wall -g -c src/Server_side/server_helper.c -o build/server_helper.o
 gcc -Wall -g -c src/Server_side/Functions/play.c -o build/play.o
 gcc -Wall -g -c src/Server_side/Functions/accept.c -o build/accept.o
@@ -115,7 +115,7 @@ gcc -pthread build/tcp_client.o build/client_listener.o build/client_speaker.o b
 gcc -Wall -g -c src/Server_side/Users/test_user.c -o build/test_user.o
 gcc build/test_user.o build/user.o build/utils.o build/error.o build/message.o build/logger.o -o test/test_user
 ```
-2. Run server
+2. **Run server**
 ```bash
 ./exec/server
 ```
@@ -126,7 +126,7 @@ INFOR: src/Server_side/Database/Users.csv
 INFOR: Loading user's database...
 INFOR: Loaded user tree
 ```
-3. Run client
+3. **Run client**
 ```bash
 ./exec/client
 ```
@@ -138,7 +138,8 @@ console SERVER: Please login (LOGIN <account>) or sign up (SIGNUP <account>):
 ```
 
 ## Config the code
-If you make changes to the code, you need not to modify the makefile. However, if you add more files into the source code:
+If you make changes to the code, you need not to modify the makefile. However, if you add more files into the source code, add compile rule follow the patterns given in the Makefile:
+
 ```Makefile
 CC = gcc
 FLAGS = -Wall -g -c
