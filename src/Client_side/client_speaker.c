@@ -40,7 +40,7 @@ void *client_speaker_handler(void *client_speaker) {
 			free(msg);
 			break;
 		} else {
-			send_command(msg->command);
+			send_command_v2(msg->command);
 
 			if (msg->command == chat) {
 				bzero(rendered, BUFF_SIZE);

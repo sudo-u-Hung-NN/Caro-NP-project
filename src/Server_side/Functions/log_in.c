@@ -22,7 +22,7 @@ User* process_sign_in(message *msg, int client_listener_sock, int client_speaker
             return NULL;
         } 
 
-        // send CACC_TRUE
+        // send ACC_TRUE
         INFORLOG("Sending ACC_TRUE");
         send(client_listener_sock, create_reply(ok, "ACC_TRUE"), rep_len, 0);
 
@@ -46,6 +46,7 @@ User* process_sign_in(message *msg, int client_listener_sock, int client_speaker
             found->user->listener = client_listener_sock;
             found->user->speaker = client_speaker_sock;
             return found->user;
+            
         } else {
             INFORLOG("Send PWD_FALSE");
             // send PWD_FALSE

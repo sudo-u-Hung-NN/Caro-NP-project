@@ -4,7 +4,7 @@ extern thread_local Player *myself;
 extern thread_local Player *rival;
 
 
-char* fromLineToData(char *line, char sep) {
+char* fromLineToDataRematch(char *line, char sep) {
     if (line == NULL) {
         return NULL;
     }
@@ -52,7 +52,7 @@ void process_rematch(message *msg, User* current_user) {
         if (opponent != NULL) {
             free(opponent);
         }
-        opponent = fromLineToData(line, sep);
+        opponent = fromLineToDataRematch(line, sep);
     } while ((read = getline(&line, &len, fptr)) != -1);
     fclose(fptr);
     

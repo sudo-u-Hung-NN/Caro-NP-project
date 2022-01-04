@@ -58,6 +58,7 @@ typedef struct Game {
 
 
 typedef struct NodeGame {
+    int playing;
     Game* game;
     struct NodeGame *left;
     struct NodeGame *right;

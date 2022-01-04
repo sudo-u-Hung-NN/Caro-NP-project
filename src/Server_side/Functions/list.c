@@ -47,13 +47,40 @@ void traverse_game(NodeGame *game_root, char* buffer) {
     if (game_root == NULL || strlen(buffer) + 1 > rep_instruct_len) {
         return;
     }
-    char formatted_string[150] = "\0";
+    char formatted_string[200] = "\0";
     traverse_game(game_root->left, buffer);
-    sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %3d\n", 
-                            game_root->game->id, 
-                            game_root->game->player1->user->account,
-                            game_root->game->player2->user->account,
-                            game_root->game->number_spectator);
+    
+    switch (game_root->playing) {
+        case 0:
+            INFORLOG("Here case 0");
+            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%-15s\033[0m\n", 
+                                game_root->game->id, 
+                                game_root->game->player1->user->account,
+                                game_root->game->player2->user->account,
+                                game_root->game->number_spectator,
+                                "PENDING");
+            break;
+        case 1:
+            INFORLOG("Here case 1");
+            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%-15s\033[0m\n", 
+                                game_root->game->id, 
+                                game_root->game->player1->user->account,
+                                game_root->game->player2->user->account,
+                                game_root->game->number_spectator,
+                                "PLAYING");
+            break;
+        case -1:
+            INFORLOG("Here case -1");
+            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%-15s\033[0m\n", 
+                                game_root->game->id, 
+                                "No one",
+                                "No one",
+                                0, 
+                                "CLOSED");
+            break;
+        default:
+            break;
+    }
 
     strcat(buffer, formatted_string);
     traverse_game(game_root->right, buffer);

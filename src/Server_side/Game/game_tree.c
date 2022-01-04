@@ -6,6 +6,7 @@ NodeGame *create_NodeGame(Game *game) {
     // NodeGame *tmp = (NodeGame*) malloc (sizeof(NodeGame));
     NodeGame *tmp = (NodeGame*) mmap (NULL, sizeof(NodeGame), PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 
+    tmp->playing = 0; // 0: Pending; 1: Playing; -1: Closed
     tmp->game = game;
     tmp->left = NULL;
     tmp->right = NULL;
@@ -15,10 +16,13 @@ NodeGame *create_NodeGame(Game *game) {
 
 NodeGame *insert_NodeGame(NodeGame *game_root, Game *game) {
     if (game_root == NULL) {
+
         game_root = create_NodeGame(game);
     } else if (game->id > game_root->game->id) {
+
         game_root->right = insert_NodeGame(game_root->right, game);
     } else if (game->id < game_root->game->id) {
+
         game_root->left = insert_NodeGame(game_root->left, game);
     } else {
         WARNING("Trying to create a game that existed");
@@ -31,9 +35,11 @@ NodeGame *insert_NodeGame(NodeGame *game_root, Game *game) {
 NodeGame *search_NodeGame_byId(NodeGame *game_root, int id) {
     if (game_root == NULL) {
         return NULL;
-    } else if (game_root->game->id > id) {
+    } else if (id > game_root->game->id) {
+        printf("Here right: game id = %d\n", game_root->game->id);
         return search_NodeGame_byId(game_root->right, id);
-    } else if (game_root->game->id < id) {
+    } else if (id < game_root->game->id) {
+        printf("Here left: game id = %d\n", game_root->game->id);
         return search_NodeGame_byId(game_root->left, id);
     } else {
         return game_root;

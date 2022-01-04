@@ -14,6 +14,9 @@ void process_accept(message *msg, User* current_user) {
     int game_id = atoi(getData(msg));
 
     // get game by id
+    char render[50] = "";
+    sprintf(render, "Finding game id <%d>", game_id);
+    INFORLOG(render);
     NodeGame *nodegame = search_NodeGame_byId(game_root, game_id);
 
     if (nodegame == NULL) {
@@ -23,6 +26,7 @@ void process_accept(message *msg, User* current_user) {
     } else {
         Game *opened_game = nodegame->game;
 
+        nodegame->playing = 1;
         myself = opened_game->player2;
         rival = opened_game->player1;
 

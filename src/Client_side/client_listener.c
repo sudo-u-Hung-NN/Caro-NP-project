@@ -64,9 +64,7 @@ void *client_listener_handler(void *client_socket) {
     bzero(screen, SIZE * SIZE);
 
     while ((bytes_received = recv(client_sock, rep, BUFF_SIZE, 0)) > 0) {
-        if (rep->command != ok && rep->command != ko && rep->command != not_identified) {
-            recv_command(rep->command);
-        }
+        recv_command_v2(rep->command);
 
         if (rep->command == chat) {
             bzero(rendered, BUFF_SIZE);
@@ -77,7 +75,7 @@ void *client_listener_handler(void *client_socket) {
         } else if (rep->command == scrn) {
             printf("Received scrn reply\n");
             memcpy(screen, rep->instruction, SIZE * SIZE);
-            system("clear");
+            // system("clear");
             loadGameScreen(screen);
 
         } else {

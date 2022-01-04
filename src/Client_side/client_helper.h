@@ -40,14 +40,14 @@ char *getStatusName(sts_type status);
  * @brief This function perform transition when sending message
  * @param command 
  */
-void send_command(msg_type command);
+void send_command_v2(msg_type command);
 
 
 /**
  * @brief This function perform transition when receive message
  * @param command 
  */
-void recv_command(msg_type command);
+void recv_command_v2(msg_type command);
 
 
 /**

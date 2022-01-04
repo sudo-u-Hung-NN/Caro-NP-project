@@ -2,8 +2,8 @@
 
 
 extern sts_type curr_status;
-extern msg_type sendCommand;
-extern msg_type recvCommand;
+// extern msg_type sendCommand;
+// extern msg_type recvCommand;
 
 
 struct {
@@ -22,80 +22,80 @@ char *getStatusName(sts_type status) {
 }
 
 
-struct {
-	sts_type prev_status;
-	msg_type recv_command;
-	msg_type send_command;
-	sts_type next_status;
+// struct {
+// 	sts_type prev_status;
+// 	msg_type recv_command;
+// 	msg_type send_command;
+// 	sts_type next_status;
 
-} transitions [NUM_TRANSITION] = {
-	{console,		not_identified,	 	play,			waiting},
-	{console,		not_identified,	 	rematch,		waiting},
-	{console,		play,				acpt,			playing},
-	{console,		play,				deny,			console},
-	{console,		rematch,			acpt,			playing},
-	{console,		rematch,			deny,			console},
-	{console,		not_identified,	 	spec,			spectating},
+// } transitions [NUM_TRANSITION] = {
+// 	{console,		not_identified,	 	play,			waiting},
+// 	{console,		not_identified,	 	rematch,		waiting},
+// 	{console,		play,				acpt,			playing},
+// 	{console,		play,				deny,			console},
+// 	{console,		rematch,			acpt,			playing},
+// 	{console,		rematch,			deny,			console},
+// 	{console,		not_identified,	 	spec,			spectating},
 
-	{waiting,		acpt,			  	play, 			playing},
-	{waiting,		deny,				play, 			console},
-	{waiting,		play,	 			cancel,			console},
+// 	{waiting,		acpt,			  	play, 			playing},
+// 	{waiting,		deny,				play, 			console},
+// 	{waiting,		play,	 			cancel,			console},
 
-	{playing,		draw,				acpt,			console},
-	{playing,		draw,				deny,			playing},
-	{playing,		play,			 	draw,			playing},
-	{playing, 		done, 				not_identified,	console},
+// 	{playing,		draw,				draw,			console},
+// 	{playing,		draw,				not_identified,	playing},
+// 	{playing,		play,			 	draw,			playing},
+// 	{playing, 		done, 				not_identified,	console},
 
-	{spectating,	spec,				squit,			console},
-	{spectating,	play,				acpt,			playing},
-	{spectating,	play,				deny,			spectating},
-	{spectating,	rematch,			acpt,			playing},
-	{spectating,	rematch,			deny,			spectating},
-	{spectating, 	done,				not_identified,	console}
-};
+// 	{spectating,	spec,				squit,			console},
+// 	{spectating,	play,				acpt,			playing},
+// 	{spectating,	play,				deny,			spectating},
+// 	{spectating,	rematch,			acpt,			playing},
+// 	{spectating,	rematch,			deny,			spectating},
+// 	{spectating, 	done,				not_identified,	console}
+// };
 
 
-void apply_transition() {
-    for (int i = 0; i < NUM_TRANSITION; i++) {
-        if (transitions[i].prev_status == curr_status && 
-            transitions[i].recv_command == recvCommand &&
-            transitions[i].send_command == sendCommand) {
-            curr_status = transitions[i].next_status;
-        }
-    }
+void send_command_v2(msg_type command) {
+	switch (command)
+	{
+	case play:
+		curr_status = waiting;
+		break;
+	case spec:
+		curr_status = spectating;
+		break;
+	case acpt:
+		curr_status = playing;
+		break;
+	case deny:
+		curr_status = console;
+		break;
+	case cancel:
+		curr_status = console;
+		break;
+	case squit:
+		curr_status = console;
+		break;
+	default:
+		break;
+	}
 }
 
 
-void send_command(msg_type command) {
-	if (command == play ||
-		command == rematch ||
-		command == acpt ||
-		command == deny ||
-		command == cancel ||
-		command == squit ||
-		command == draw ||
-		command == spec) {
-			sendCommand = command;
-			apply_transition();
-		}
-}
-
-
-void recv_command(msg_type command) {
-	if (command == play ||
-		command == rematch ||
-		command == acpt ||
-		command == deny ||
-		command == draw ||
-		command == done) {
-			recvCommand = command;
-			if (command == done) {
-				curr_status = console;
-				sendCommand = not_identified;
-				recvCommand = not_identified;
-			} else 
-				apply_transition();
-		}
+void recv_command_v2(msg_type command) {
+	switch (command)
+	{
+	case deny:
+	case done:
+	case draw:
+		curr_status = console;
+		break;
+	case acpt:
+		curr_status = playing;
+		break;
+	default:
+		break;
+	}
 }
 
 struct {
@@ -113,7 +113,7 @@ struct {
 	{"DUPLICATED", "\033[0;35mYour account is already online!\033[0m\n"}, 
 	{"NULL_RANKING", "\033[0;35mRanking file not found!\033[0m\n"},
 	{"NULL_HISTORY", "\033[0;35mHistory not found or not established yet!\033[0m\n"},
-	{"NULL_ACCOUNT", "\033[0;35mYou are looking for a ghoust account!\033[0m\n"},
+	{"NULL_ACCOUNT", "\033[0;35mYou are looking for a ghost account!\033[0m\n"},
 	{"OFFLINE_ACCOUNT", "\033[0;35mYou are looking for an offline account!\033[0m\n"},
 	{"MESSAGE_SENT", "\033[0;34mMessage sent successfully\033[0m\n"},
 	{"MESSAGE_FAILED", "\033[0;35mFailed to send message!\033[0m\n"},

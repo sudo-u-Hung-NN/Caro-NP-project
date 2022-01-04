@@ -1,7 +1,7 @@
 #include "../server_helper.h"
 
-extern NodeUser *root;
-extern NodeGame *game_root;
+extern NodeUser *root;              // Global
+extern NodeGame *game_root;         // Global
 
 
 thread_local Player *myself = NULL;
