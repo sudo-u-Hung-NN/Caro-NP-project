@@ -6,6 +6,8 @@ int latest_chat_index = 0;
 int oldest_chat_index = 0;
 char ChatScreen[NUM_CHATSTORE][150];
 
+char screen[SIZE * SIZE];
+
 
 void store_chat(char* buff) {
     strcpy(ChatScreen[latest_chat_index], buff);
@@ -60,7 +62,6 @@ void *client_listener_handler(void *client_socket) {
     reply *rep = (reply*) malloc(sizeof(reply));
     bzero(rep, msg_len);
 
-    char screen[SIZE * SIZE];
     bzero(screen, SIZE * SIZE);
 
     while ((bytes_received = recv(client_sock, rep, BUFF_SIZE, 0)) > 0) {
@@ -75,7 +76,7 @@ void *client_listener_handler(void *client_socket) {
         } else if (rep->command == scrn) {
             printf("Received scrn reply\n");
             memcpy(screen, rep->instruction, SIZE * SIZE);
-            // system("clear");
+            system("clear");
             loadGameScreen(screen);
 
         } else {

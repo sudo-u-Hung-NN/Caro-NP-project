@@ -1,6 +1,5 @@
 #include "../server_helper.h"
 
-#define ACCOUNT_PATH "src/Server_side/Database/Accounts"
 
 /**
  * @brief This function read a line and get game record information
@@ -46,7 +45,7 @@ void fromLineToHist(char* input, char sep, int* game_id, char *opponent_account,
  * @param account The user to be checked
  * @return char* 
  */
-char* read_account_file(char *account) {
+char* read_hist_file(char *account) {
     char *history = (char*) malloc(rep_instruct_len * sizeof(char));
     bzero(history, rep_instruct_len);
     history[0] = '\n';
@@ -54,7 +53,7 @@ char* read_account_file(char *account) {
     char filename[50];
     bzero(filename, 50);
 
-    sprintf(filename, "%s/%s.hist", ACCOUNT_PATH, account);
+    sprintf(filename, "%s/%s.hist", HISTORY_PATH, account);
     FILE *fptr = fopen(filename, "r");
 
     if (fptr == NULL) {
@@ -102,7 +101,7 @@ void process_hist(message *msg, User* current_user) {
     
     send(current_user->listener, create_reply(ok, self_infor), sizeof(reply), 0);
 
-    char *history = read_account_file(current_user->account);
+    char *history = read_hist_file(current_user->account);
 
     if(history == NULL) {
         send(current_user->listener, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
@@ -121,7 +120,7 @@ void process_hist(message *msg, User* current_user) {
  */
 void process_histp(message *msg, User* current_user) {
     char *account = getData(msg);
-    char *history = read_account_file(account);
+    char *history = read_hist_file(account);
 
     char self_infor[rep_instruct_len];
     bzero(self_infor, rep_instruct_len);

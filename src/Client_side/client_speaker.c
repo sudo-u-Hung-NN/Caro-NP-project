@@ -1,6 +1,7 @@
 #include "client_helper.h"
 
 extern sts_type curr_status;
+extern char screen[SIZE * SIZE];
 
 
 void *client_speaker_handler(void *client_speaker) {
@@ -28,6 +29,10 @@ void *client_speaker_handler(void *client_speaker) {
 			continue;
 		} else if (strcasecmp(buff, "clear") == 0) {
 			system("clear");
+			continue;
+		} else if(strcasecmp(buff, "scrn") == 0) {
+			system("clear");
+			loadGameScreen(screen);
 			continue;
 		}
 

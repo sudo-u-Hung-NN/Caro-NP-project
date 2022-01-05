@@ -86,5 +86,10 @@ void store_chat(char* buff);
  */
 void display_chatscreen();
 
+/**
+ * @brief This function displays board screen.
+ */
+void loadGameScreen(char *board);
+
 
 #endif

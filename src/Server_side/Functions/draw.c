@@ -28,6 +28,7 @@ void process_draw(message *msg, User* current_user) {
             send(tmp->user->listener, create_reply(done, "The game ends tie"), rep_len, 0);
         }
         
+        store_history(current_user, (rival->user), game);
         INFORLOG("Closing the game");
         // Free players
         free(myself);

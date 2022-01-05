@@ -20,7 +20,7 @@ struct KEY {
   {"spec", spec, {console}, 1, "Type: 'spec' to spectate a currently-playing game"},
   {"schat", schat, {spectating}, 1, "Type: 'schat' to send message to all players in a game. You can only use this command in spectating mode"},
   {"squit", squit, {spectating}, 1, "Type: 'squit' to exit spectating. You can only use this command in spectating mode"},
-  {"hist", hist, {console, playing}, 2, "Type: 'hist' to check your history"},
+  {"hist", hist, {console, playing, spectating}, 3, "Type: 'hist' to check your history"},
   {"histp", histp, {console, spectating, playing}, 3, "Type: 'histp <account>' to check an account's history"},
   {"hista", hista, {console}, 1, "Type: 'hista' to check rankings"},
   {"return", ret, {spectating, waiting}, 2, "Type: 'return' to get back"},

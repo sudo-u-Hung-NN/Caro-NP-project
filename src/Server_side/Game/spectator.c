@@ -20,12 +20,12 @@ Spectator *new_Spectator(User *current_user, Game* current_game) {
  * @param current_game 
  * @return Spectator* 
  */
-Spectator *insert_Spectator(User* cureent_user, Game* current_game) {
+Spectator *insert_Spectator(Spectator* cureent_user, Game* current_game) {
     Spectator *head = current_game->spectator_head;
     if (head == NULL) {
-        head = new_Spectator(cureent_user, current_game);
+        head = cureent_user;
     } else {
-        Spectator *tmp = new_Spectator(cureent_user, current_game);
+        Spectator *tmp = cureent_user;
         tmp->next = head;
         head = tmp;
     }

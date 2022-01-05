@@ -3,6 +3,7 @@
 extern NodeGame *game_root;
 extern NodeUser *root;
 extern thread_local Player *myself;
+extern thread_local Spectator *my_spectator;
 
 
 void process_spec(message *msg, User* current_user) {
@@ -16,21 +17,30 @@ void process_spec(message *msg, User* current_user) {
 
     } else {
         INFORLOG("Insert spectator into game");
-        spec_game->game->spectator_head = insert_Spectator(current_user, spec_game->game);
+        my_spectator = new_Spectator(current_user, spec_game->game);
+        spec_game->game->spectator_head = insert_Spectator(my_spectator, spec_game->game);
 
         char board[SIZE * SIZE];
         memcpy(board, spec_game->game->board, SIZE* SIZE);
         send(current_user->listener, create_reply(scrn, board), rep_len, 0);
+        if( send(current_user->listener, create_reply(ok, "SUCCESS!"), rep_len, 0) < 0) {
+            WARNING("SEND FAILED!");
+        } else {
+            WARNING("ASDFSDFSDF");
+            int temp = send(current_user->listener, create_reply(ok, "SUCCESS!"), rep_len, 0);
+            printf("%d", temp);
+        }
+        
     }
 }
 
 
 void process_schat(message *msg, User* current_user) {
     char *content = getData(msg);
-    if (myself == NULL) {
+    if (my_spectator == NULL) {
         send(current_user->listener, create_reply(ko, "NULL_SCHAT"), sizeof(reply), 0);
     } else {
-        Game *current_game = myself->current_game;
+        Game *current_game = my_spectator->current_game;
         INFORLOG("Sending messages to all people");
         char rendered[rep_instruct_len];
         bzero(rendered, rep_instruct_len);
@@ -54,8 +64,8 @@ void process_schat(message *msg, User* current_user) {
 
 
 void process_squit(message *msg, User* current_user) {
-    if (myself != NULL) {
-        Game *current_game = myself->current_game;
+    if (my_spectator != NULL) {
+        Game *current_game = my_spectator->current_game;
 
         INFORLOG("Removing spectator out of the game");
         current_game->spectator_head = remove_Spectator(current_game, current_user);
@@ -76,7 +86,8 @@ void process_squit(message *msg, User* current_user) {
 
         send(current_user->listener, create_reply(ok, "SQUIT_SUCCESS"), rep_len, 0);
         INFORLOG("Removed spectator");
-
+        remove_Spectator(current_game, current_user);
+    
     } else {
         send(current_user->listener, create_reply(ko, "You're not spectating any games"), sizeof(reply), 0);
     }

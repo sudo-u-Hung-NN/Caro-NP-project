@@ -154,7 +154,7 @@ NodeGame* close_NodeGame_byId(NodeGame* game_root, int id);
  * @param current_game 
  * @return Spectator* 
  */
-Spectator *insert_Spectator(User *current_user, Game* current_game);
+Spectator *insert_Spectator(Spectator *current_user, Game* current_game);
 
 
 /**
@@ -172,5 +172,13 @@ Spectator *remove_Spectator(Game* current_game, User *current_user);
  * @return Spectator* 
  */
 Spectator *free_Spectator_List(Game* current_game);
+
+/**
+ * @brief Create new spectator
+ * @param current_user 
+ * @param current_game 
+ * @return Spectator* 
+ */
+Spectator *new_Spectator(User *current_user, Game* current_game);
 
 #endif

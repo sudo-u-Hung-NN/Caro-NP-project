@@ -6,6 +6,7 @@ extern NodeGame *game_root;         // Global
 
 thread_local Player *myself = NULL;
 thread_local Player *rival = NULL;
+thread_local Spectator *my_spectator = NULL;
 
 
 void process_play(message *msg, User* current_user) {
@@ -17,7 +18,7 @@ void process_play(message *msg, User* current_user) {
 
     if (opponent == NULL) {
         WARNING("Failed to find opponent");
-        send(current_user->listener, create_reply(ko, "NULL_ACCOUNT"), rep_len, 0);
+        send(current_user->listener, create_reply(done, "NULL_ACCOUNT"), rep_len, 0);
 
     } else if (opponent->is_active != 1) {
         WARNING("Trying to challenge an offline opponent");

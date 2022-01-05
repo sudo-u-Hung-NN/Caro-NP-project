@@ -31,6 +31,8 @@
 #define BACKLOG 20
 #define BUFF_SIZE 1024
 
+#define ACCOUNT_PATH "src/Server_side/Database/Accounts"
+#define HISTORY_PATH "src/Server_side/Database/History"
 
 struct args {
     int client_listener_sock;
@@ -263,5 +265,15 @@ void process_cancel(message *msg, User* current_user);
  * @param current_user the current user
  */
 void process_quit(message *msg, User* current_user);
+
+
+/**
+ * @brief This function store game history
+ * 
+ * @param winner 
+ * @param loser 
+ * @param current_game 
+ */
+void store_history(const User *winner, const User *loser, Game* current_game);
 
 #endif

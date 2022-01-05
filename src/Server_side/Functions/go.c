@@ -8,13 +8,13 @@ extern thread_local Player *rival;
 
 void store_history(const User *winner, const User *loser, Game* current_game) {
     char filename[100] = "";
-    sprintf(filename, "Database/Accounts/%s.hist", winner->account);
+    sprintf(filename, "%s/%s.hist",HISTORY_PATH, winner->account);
     FILE* fptr = fopen(filename, "a");
     fprintf(fptr, "%d,%s,%d\n", current_game->id, loser->account, 1);
     fclose(fptr);
 
     bzero(filename, 100);
-    sprintf(filename, "Database/Accounts/%s.hist", loser->account);
+    sprintf(filename, "%s/%s.hist", HISTORY_PATH, loser->account);
     fptr = fopen(filename, "a");
     fprintf(fptr, "%d,%s,%d\n", current_game->id, winner->account, 0);
     fclose(fptr);
