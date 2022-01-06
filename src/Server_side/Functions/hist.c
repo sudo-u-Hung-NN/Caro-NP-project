@@ -137,10 +137,12 @@ void process_histp(message *msg, User* current_user) {
 
         send(current_user->listener, create_reply(ok, self_infor), sizeof(reply), 0);
     }
-
+    DEBUG("Sended ok");
     if(history == NULL) {
+        DEBUG("NULL history");
         send(current_user->listener, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
     } else {
+        DEBUG("show history");
         send(current_user->listener, create_reply(ok, history), sizeof(reply), 0);
         free(history);
     }
