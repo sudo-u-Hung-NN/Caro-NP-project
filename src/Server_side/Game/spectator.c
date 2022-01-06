@@ -51,12 +51,14 @@ Spectator *remove_Spectator(Game* current_game, User *current_user) {
 
     } else {
         Spectator *tmp = head;
-        for (; tmp->next->user != current_user; tmp = tmp->next);
+        for (; (tmp->next != NULL) && (tmp->next->user != current_user); tmp = tmp->next);
         // Here, tmp->next is the one to be deleted
-        Spectator *need_deleted = tmp->next;
-        // Process deleting
-        tmp->next = need_deleted->next;
-        free(need_deleted);
+        if(tmp->next != NULL) {
+            Spectator *need_deleted = tmp->next;
+            // Process deleting
+            tmp->next = need_deleted->next;
+            free(need_deleted);
+        }
     }
 
     return head;

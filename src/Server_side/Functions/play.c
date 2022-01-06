@@ -24,6 +24,10 @@ void process_play(message *msg, User* current_user) {
         WARNING("Trying to challenge an offline opponent");
         send(current_user->listener, create_reply(ko, "OFFLINE_ACCOUNT"), rep_len, 0);
 
+    } else if (opponent->user == current_user) {
+        WARNING("Self challenging detected!");
+        send(current_user->listener, create_reply(done, "LOOP_OPERATOR"), rep_len, 0); 
+
     } else {
         // Init myself
         myself = initPlayer(current_user, 'X');

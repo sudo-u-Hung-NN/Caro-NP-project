@@ -13,7 +13,7 @@ void process_spec(message *msg, User* current_user) {
 
     if (spec_game == NULL) {
         WARNING("Request to spectate a null game");
-        send(current_user->listener, create_reply(ko, "NULL_SPEC"), rep_len, 0);
+        send(current_user->listener, create_reply(done, "NULL_SPEC"), rep_len, 0);
 
     } else {
         INFORLOG("Insert spectator into game");
@@ -65,8 +65,10 @@ void process_squit(message *msg, User* current_user) {
         Game *current_game = my_spectator->current_game;
 
         INFORLOG("Removing spectator out of the game");
+        if(current_game == NULL) {
+            WARNING("Current game null");
+        }
         current_game->spectator_head = remove_Spectator(current_game, current_user);
-
         // Notify
         char rendered[rep_instruct_len];
         bzero(rendered, rep_instruct_len);
@@ -80,12 +82,14 @@ void process_squit(message *msg, User* current_user) {
         for (Spectator *tmp = current_game->spectator_head; tmp != NULL; tmp = tmp->next) {
             send(tmp->user->listener, create_reply(ok, rendered), rep_len, 0);
         }
-
         send(current_user->listener, create_reply(done, "SQUIT_SUCCESS"), rep_len, 0);
         INFORLOG("Removed spectator");
-        remove_Spectator(current_game, current_user);
         current_game->number_spectator--;
-    
+        if(my_spectator != NULL) {
+            WARNING("My spectator not null, make null");
+            // free(my_spectator);
+            my_spectator = NULL;
+        }
     } else {
         send(current_user->listener, create_reply(done, "You're not spectating any games"), sizeof(reply), 0);
     }

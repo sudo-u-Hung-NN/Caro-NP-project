@@ -70,15 +70,18 @@ void process_go(message *msg, User* current_user) {
                         INFORLOG("Game completed");
 
                         char result[100] = "";
-                        sprintf(result, "%s won", current_user->account);
+                        sprintf(result, "%s won\n", current_user->account);
 
-                        // Notify spectators
+                        // Notify and auto squit spectators
                         for (Spectator *tmp = current_game->spectator_head; tmp != NULL; tmp = tmp->next) {
-                            send(tmp->user->listener, create_reply(done, result), rep_len, 0);
+                            send(tmp->user->listener, create_reply(ok, result), rep_len, 0);
+                            msg->command = squit;
+                            INFORLOG("Processing squit for spectators");
+                            process_squit(msg, tmp->user);
                         }
 
                         // Free spectator list
-                        free_Spectator_List(current_game);
+                        // free_Spectator_List(current_game);
 
                         // Store history
                         INFORLOG("Storing history...");
@@ -87,10 +90,22 @@ void process_go(message *msg, User* current_user) {
 
                         INFORLOG("Closing the game");
                         // Free players
+                        INFORLOG("Free myself");
                         free(myself);
+                        INFORLOG("Free rival");
                         free(rival);
-                        game_root = close_NodeGame_byId(game_root, current_game->id);
-                        free(current_game);
+
+                        // Free spectators
+                        INFORLOG("Free spectator");
+                        free_Spectator_List(current_game);
+
+                        // Set game to closed
+                        NodeGame *game = search_NodeGame_byId(game_root, current_game->id);
+                        if (game == NULL) {
+                            WARNING("Trying to close a null game");
+                        } else {
+                            game->playing = -1;
+                        }       
                         INFORLOG("Game closed");
                         return;
                     }
