@@ -5,7 +5,10 @@ User* process_sign_up(message *msg, int client_listener_sock, int client_speaker
     User *newUser = NULL;
 
     // process message to get account
-    char *account = getData(msg);
+    char account[50] = "";
+    strcpy(account, getData(msg));
+    INFORLOG("Process sign up for account: ");
+    INFORLOG(account);
 
     // Search User with account
     INFORLOG("Checking valid ...");
@@ -28,13 +31,17 @@ User* process_sign_up(message *msg, int client_listener_sock, int client_speaker
 
         // process message to get password
         // displayMessage(msg, "Received message");
-        char *password = getData(msg);
+        char password[50] = "";
+        strcpy(password, getData(msg));
+        INFORLOG("Process sign up for password: ");
+        INFORLOG(password);
 
         // create USer
         int number_user = 0;
         INFORLOG("Generate id...");
         inOrderTraversal(root, &number_user, 0);
         INFORLOG("Creating new user...");
+        printf("Account: %s, Password: %s\n", account, password);
         newUser = create_User(number_user, "#newUser", account, password);
 
         INFORLOG("Insert user into tree");

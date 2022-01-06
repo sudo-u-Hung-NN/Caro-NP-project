@@ -10,8 +10,8 @@ struct KEY {
 } keywords[MSG_TYPE_LEN] = {
   {"play", play, {console}, 1, "Type: 'play <account>' to challenge other players"},
   {"go", go, {playing}, 1, "Type: 'go <A5>' to place your move to cell A5. You can only use this command in play mode"},
-  {"accept", acpt, {console, playing, spectating}, 3, "Type: 'accept' to accept challenge invitation from other"},
-  {"deny", deny, {console, playing, spectating}, 3, "Type: 'deny' to decline challenge invitation from other"},
+  {"accept", acpt, {console, spectating}, 2, "Type: 'accept' to accept challenge invitation from other"},
+  {"deny", deny, {console, spectating}, 2, "Type: 'deny' to decline challenge invitation from other"},
   {"cancel", cancel, {waiting}, 1, "Type: 'cancel' to cancel challenge invitation to other"},
   {"draw", draw, {playing}, 1, "Type: 'draw' to send draw request to opponent. You can only use this command in play mode"},
   {"rematch", rematch, {console}, 1, "Type: 'rematch' to re-challenge your previous opponent"},
