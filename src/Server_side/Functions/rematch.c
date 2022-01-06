@@ -22,11 +22,10 @@ char* fromLineToDataRematch(char *line, char sep) {
         strcat(data, cut);
     }
     game_id = atoi(data);
-
     char *opponent = (char*) malloc (100 * sizeof(char));
     bzero(opponent, 100);
     bzero(data, sizeof(data));
-    for(; line[i] != sep; i++) {
+    for(i=i+1; line[i] != sep; i++) {
         cut[0] = line[i];
         cut[1] = '\0';
         strcat(data, cut);
@@ -38,8 +37,14 @@ char* fromLineToDataRematch(char *line, char sep) {
 
 void process_rematch(message *msg, User* current_user) {
     char filename[100] = "";
-    sprintf(filename, "Database/Accounts/%s.hist", current_user->account);
+    sprintf(filename, "%s/%s.hist", HISTORY_PATH, current_user->account);
+    INFORLOG(filename);
     FILE* fptr = fopen(filename, "r");
+    if(fptr == NULL) {
+        WARNING("Invalid ramatch!");
+        send(current_user->listener, create_reply(done, "INVALID_REMATCH"), sizeof(reply), 0);
+        return;
+    }
     
     char *line = NULL;
     char *opponent = NULL;
@@ -49,15 +54,29 @@ void process_rematch(message *msg, User* current_user) {
     ssize_t read;
 
     do {
+        read = getline(&line, &len, fptr);
         if (opponent != NULL) {
             free(opponent);
         }
         opponent = fromLineToDataRematch(line, sep);
-    } while ((read = getline(&line, &len, fptr)) != -1);
+
+        if(opponent == NULL) {
+            return;
+        } else {
+            INFORLOG(opponent);
+        }
+    } while (read < 2);
     fclose(fptr);
     
     INFORLOG("Redirecting message command, data...");
     msg->command = play;
+    
+    if(opponent == NULL) {
+        WARNING("Null opponent!");
+        return;
+    } else {
+        INFORLOG(opponent);
+    }
     strcpy(msg->data.data, opponent);
 
     INFORLOG("Triggering process_play procedure...");

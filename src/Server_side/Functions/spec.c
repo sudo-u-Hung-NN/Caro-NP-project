@@ -25,11 +25,12 @@ void process_spec(message *msg, User* current_user) {
         send(current_user->listener, create_reply(scrn, board), rep_len, 0);
         if( send(current_user->listener, create_reply(ok, "SUCCESS!"), rep_len, 0) < 0) {
             WARNING("SEND FAILED!");
-        } else {
-            WARNING("ASDFSDFSDF");
-            int temp = send(current_user->listener, create_reply(ok, "SUCCESS!"), rep_len, 0);
-            printf("%d", temp);
-        }
+        } 
+        // else {
+        //     WARNING("ASDFSDFSDF");
+        //     int temp = send(current_user->listener, create_reply(ok, "SUCCESS!"), rep_len, 0);
+        //     printf("%d", temp);
+        // }
         
     }
 }

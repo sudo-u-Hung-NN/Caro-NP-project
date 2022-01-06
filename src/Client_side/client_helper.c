@@ -76,6 +76,9 @@ void send_command_v2(msg_type command) {
 	case squit:
 		curr_status = console;
 		break;
+	case rematch:
+		curr_status = waiting;
+		break;
 	default:
 		break;
 	}
