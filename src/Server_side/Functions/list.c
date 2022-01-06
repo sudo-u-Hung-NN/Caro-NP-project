@@ -4,15 +4,15 @@ extern NodeUser* root;
 extern NodeGame* game_root;
 
 void traverse(NodeUser *root, char* buffer) {
-    if (root == NULL || strlen(buffer) + 1 > rep_instruct_len) {
+    if (root == NULL || strlen(buffer) + 150 > rep_instruct_len) {
         return;
     }
     char formatted_string[150] = "\0";
     traverse(root->left, buffer);
     if (root->is_active) {
-        sprintf(formatted_string, "%3d \033[0;32m%-15s\033[0m %-15s \033[1;34m%-5s\033[0m\n", root->user->id, root->user->account, root->user->name, "ONLINE");
+        sprintf(formatted_string, "%3d \033[0;32m%-10s\033[0m %-10s \033[1;34m%-5s\033[0m\n", root->user->id, root->user->account, root->user->name, "ONLINE");
     } else {
-        sprintf(formatted_string, "%3d \033[0;32m%-15s\033[0m %-15s \033[0;31m%-5s\033[0m\n", root->user->id, root->user->account, root->user->name, "OFFLINE");
+        sprintf(formatted_string, "%3d \033[0;32m%-10s\033[0m %-10s \033[0;31m%-5s\033[0m\n", root->user->id, root->user->account, root->user->name, "OFFLINE");
     }
     
     strcat(buffer, formatted_string);

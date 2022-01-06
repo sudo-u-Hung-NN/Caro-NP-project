@@ -47,6 +47,9 @@ void fromLineToHist(char* input, char sep, int* game_id, char *opponent_account,
  */
 char* read_hist_file(char *account) {
     char *history = (char*) malloc(rep_instruct_len * sizeof(char));
+    if(history == NULL) {
+        WARNING("Null history");
+    }
     bzero(history, rep_instruct_len);
     history[0] = '\n';
 
@@ -67,9 +70,8 @@ char* read_hist_file(char *account) {
 
         char rendered_line[150];
 
-        while ((fgets(line, 100, fptr) != NULL) && strlen(history) < rep_instruct_len - 1) {
+        while ((fgets(line, 100, fptr) != NULL) && strlen(history) < rep_instruct_len - 150) {
             fromLineToHist(line, ',', &game_id, opponent_account, &win);
-
             bzero(line, 100);
             bzero(rendered_line, 150);
             
@@ -82,6 +84,7 @@ char* read_hist_file(char *account) {
         }
 
         fclose(fptr);
+        DEBUG("Return history");
         return history;
     }
 }
@@ -100,10 +103,11 @@ void process_hist(message *msg, User* current_user) {
                 current_user->name, current_user->account, current_user->id, current_user->listener, current_user->speaker);
     
     send(current_user->listener, create_reply(ok, self_infor), sizeof(reply), 0);
-
+    DEBUG("Here 106");
     char *history = read_hist_file(current_user->account);
-
+    DEBUG("Here 108");
     if(history == NULL) {
+        DEBUG("Here 110: NULL");
         send(current_user->listener, create_reply(ko, "NULL_HISTORY"), sizeof(reply), 0);
     } else {
         send(current_user->listener, create_reply(ok, history), sizeof(reply), 0);

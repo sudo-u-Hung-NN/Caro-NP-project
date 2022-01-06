@@ -21,18 +21,25 @@ void process_accept(message *msg, User* current_user) {
 
     if (nodegame == NULL) {
         WARNING("Accept a non-existing game");
-        send(current_user->listener, create_reply(ko, "GAME_FAILED"), rep_len, 0);
+        send(current_user->listener, create_reply(done, "GAME_FAILED"), rep_len, 0);
 
     } else {
         Game *opened_game = nodegame->game;
 
-        nodegame->playing = 1;
         myself = opened_game->player2;
         rival = opened_game->player1;
 
         if (myself == rival) {
             WARNING("What the heck");
+        } else if (current_user != opened_game->player2->user){
+            WARNING("Accept into wrong game");
+            send(current_user->listener, create_reply(done, "Accept into wrong game\n"), rep_len, 0);
+            myself = NULL;
+            rival = NULL;
+            return;
         }
+
+        nodegame->playing = 1;
 
         // notice the sender
         send(rival->user->listener, create_reply(acpt, "ACCEPTED"), rep_len, 0);
