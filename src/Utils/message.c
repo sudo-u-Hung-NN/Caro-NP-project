@@ -16,7 +16,7 @@ struct KEY {
   {"draw", draw, {playing}, 1, "Type: 'draw' to send draw request to opponent. You can only use this command in play mode"},
   {"rematch", rematch, {console}, 1, "Type: 'rematch' to re-challenge your previous opponent"},
   {"chat", chat, {console, playing, spectating, waiting}, 4, "Type: 'chat <account> <content>' to send message to an ONLINE account"},
-  {"quit", quit, {console, playing, spectating, waiting}, 4, "Type: 'quit' to turn off the application"},
+  {"quit", quit, {console, spectating}, 2, "Type: 'quit' to turn off the application"},
   {"spec", spec, {console}, 1, "Type: 'spec' to spectate a currently-playing game"},
   {"schat", schat, {spectating}, 1, "Type: 'schat' to send message to all players in a game. You can only use this command in spectating mode"},
   {"squit", squit, {spectating}, 1, "Type: 'squit' to exit spectating. You can only use this command in spectating mode"},

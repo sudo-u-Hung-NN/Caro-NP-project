@@ -19,6 +19,7 @@ void process_spec(message *msg, User* current_user) {
         INFORLOG("Insert spectator into game");
         my_spectator = new_Spectator(current_user, spec_game->game);
         spec_game->game->spectator_head = insert_Spectator(my_spectator, spec_game->game);
+        spec_game->game->number_spectator++;
 
         char board[SIZE * SIZE];
         memcpy(board, spec_game->game->board, SIZE* SIZE);
@@ -26,11 +27,6 @@ void process_spec(message *msg, User* current_user) {
         if( send(current_user->listener, create_reply(ok, "SUCCESS!"), rep_len, 0) < 0) {
             WARNING("SEND FAILED!");
         } 
-        // else {
-        //     WARNING("ASDFSDFSDF");
-        //     int temp = send(current_user->listener, create_reply(ok, "SUCCESS!"), rep_len, 0);
-        //     printf("%d", temp);
-        // }
         
     }
 }
@@ -77,7 +73,7 @@ void process_squit(message *msg, User* current_user) {
         size_t rep_len = sizeof(reply);
 
         // Send message to players
-        sprintf(rendered, "Spectator \033[1;32m%s\033[0m: %s", current_user->account, "has left the game!");
+        sprintf(rendered, "Spectator \033[1;32m%s\033[0m: %s", current_user->account, "has left the game!\n");
         send(current_game->player1->user->listener, create_reply(ok, rendered), rep_len, 0);
         send(current_game->player2->user->listener, create_reply(ok, rendered), rep_len, 0);
 
@@ -85,11 +81,12 @@ void process_squit(message *msg, User* current_user) {
             send(tmp->user->listener, create_reply(ok, rendered), rep_len, 0);
         }
 
-        send(current_user->listener, create_reply(ok, "SQUIT_SUCCESS"), rep_len, 0);
+        send(current_user->listener, create_reply(done, "SQUIT_SUCCESS"), rep_len, 0);
         INFORLOG("Removed spectator");
         remove_Spectator(current_game, current_user);
+        current_game->number_spectator--;
     
     } else {
-        send(current_user->listener, create_reply(ko, "You're not spectating any games"), sizeof(reply), 0);
+        send(current_user->listener, create_reply(done, "You're not spectating any games"), sizeof(reply), 0);
     }
 }

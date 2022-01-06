@@ -52,8 +52,7 @@ void traverse_game(NodeGame *game_root, char* buffer) {
     
     switch (game_root->playing) {
         case 0:
-            INFORLOG("Here case 0");
-            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%-15s\033[0m\n", 
+            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%9s\033[0m\n", 
                                 game_root->game->id, 
                                 game_root->game->player1->user->account,
                                 game_root->game->player2->user->account,
@@ -61,8 +60,7 @@ void traverse_game(NodeGame *game_root, char* buffer) {
                                 "PENDING");
             break;
         case 1:
-            INFORLOG("Here case 1");
-            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%-15s\033[0m\n", 
+            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%9s\033[0m\n", 
                                 game_root->game->id, 
                                 game_root->game->player1->user->account,
                                 game_root->game->player2->user->account,
@@ -70,8 +68,7 @@ void traverse_game(NodeGame *game_root, char* buffer) {
                                 "PLAYING");
             break;
         case -1:
-            INFORLOG("Here case -1");
-            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%-15s\033[0m\n", 
+            sprintf(formatted_string, "%3d \033[1;32m%-15s\033[0m \033[1;32m%-15s\033[0m %-3d\033[1;32m%9s\033[0m\n", 
                                 game_root->game->id, 
                                 "No one",
                                 "No one",
@@ -99,7 +96,7 @@ void process_listg(message *msg, User* current_user) {
     bzero(list, rep_instruct_len);
 
     char formatted_string[128] = "\0";
-    sprintf(formatted_string, "\n%3s %-15s %-15s %5s\n", "Id", "Player1", "Player2", "Specs");
+    sprintf(formatted_string, "\n%3s %-15s %-15s %5s %10s\n", "Id", "Player1", "Player2", "Specs", "Status");
     strcat(list, formatted_string);
 
     traverse_game(game_root, list);

@@ -38,7 +38,6 @@ char* fromLineToDataRematch(char *line, char sep) {
 void process_rematch(message *msg, User* current_user) {
     char filename[100] = "";
     sprintf(filename, "%s/%s.hist", HISTORY_PATH, current_user->account);
-    INFORLOG(filename);
     FILE* fptr = fopen(filename, "r");
     if(fptr == NULL) {
         WARNING("Invalid ramatch!");
@@ -62,9 +61,7 @@ void process_rematch(message *msg, User* current_user) {
 
         if(opponent == NULL) {
             return;
-        } else {
-            INFORLOG(opponent);
-        }
+        } 
     } while (read < 2);
     fclose(fptr);
     
@@ -74,9 +71,7 @@ void process_rematch(message *msg, User* current_user) {
     if(opponent == NULL) {
         WARNING("Null opponent!");
         return;
-    } else {
-        INFORLOG(opponent);
-    }
+    } 
     strcpy(msg->data.data, opponent);
 
     INFORLOG("Triggering process_play procedure...");
