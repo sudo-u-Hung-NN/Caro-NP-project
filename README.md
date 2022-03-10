@@ -1,3 +1,6 @@
+# Claim
+This project was scored A+ and awarded best project in network programming lecture IT4062
+
 # Caro-NP-project
 
 First, create the following folders:
